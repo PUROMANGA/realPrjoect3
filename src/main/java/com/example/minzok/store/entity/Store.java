@@ -34,4 +34,5 @@ public class Store extends BaseEntity {
     @Column(nullable = false)
     private LocalDateTime closeTime;
 
+    private int Minimum_order_amount;
 }
