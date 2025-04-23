@@ -1,9 +1,9 @@
-package com.example.minzok.global.auth;
+package com.example.minzok.auth.service;
 
+import com.example.minzok.auth.entity.MyUserDetail;
 import com.example.minzok.member.entity.Member;
 import com.example.minzok.member.repository.MemberRepository;
 import lombok.RequiredArgsConstructor;
-import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;

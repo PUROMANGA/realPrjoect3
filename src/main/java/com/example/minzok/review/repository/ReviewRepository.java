@@ -2,9 +2,8 @@ package com.example.minzok.review.repository;
 
 import com.example.minzok.review.entity.Review;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.stereotype.Repository;
 
-public interface ReviewRepository extends JpaRepository<Review, Integer> {
-
-
-
+@Repository
+public interface ReviewRepository extends JpaRepository<Review, Long> {
 }

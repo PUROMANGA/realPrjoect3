@@ -1,4 +1,4 @@
-package com.example.minzok.global.auth;
+package com.example.minzok.auth.entity;
 
 import com.example.minzok.member.entity.Member;
 import com.fasterxml.jackson.annotation.JsonIgnore;

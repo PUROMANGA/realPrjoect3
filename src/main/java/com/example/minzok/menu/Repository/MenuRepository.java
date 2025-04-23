@@ -1,4 +1,4 @@
-package Menu.Repository;
+package com.example.minzok.menu.Repository;
 
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;

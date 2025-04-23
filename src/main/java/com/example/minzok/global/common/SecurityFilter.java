@@ -1,10 +1,9 @@
-package com.example.minzok.global.filter;
+package com.example.minzok.global.common;
 
-import com.example.minzok.global.auth.JwtUtil;
-import com.example.minzok.global.auth.MyUserDetail;
-import com.example.minzok.global.auth.MyUserDetailService;
+import com.example.minzok.global.jwt.JwtUtil;
+import com.example.minzok.auth.entity.MyUserDetail;
+import com.example.minzok.auth.service.MyUserDetailService;
 import io.jsonwebtoken.Claims;
-import io.jsonwebtoken.JwtException;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
@@ -12,11 +11,9 @@ import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.util.StringUtils;
 import org.springframework.web.filter.OncePerRequestFilter;
 
 import java.io.IOException;
-import java.util.jar.JarException;
 
 
 @RequiredArgsConstructor
