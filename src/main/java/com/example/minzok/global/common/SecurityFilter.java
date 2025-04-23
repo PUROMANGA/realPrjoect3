@@ -10,8 +10,8 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.filter.OncePerRequestFilter;
-import com.example.minzok.global.auth.JwtUtil;
-import com.example.minzok.global.auth.MyUserDetail;
+import com.example.minzok.global.jwt.JwtUtil;
+import com.example.minzok.global.jwt.MyUserDetail;
 
 import java.io.IOException;
 

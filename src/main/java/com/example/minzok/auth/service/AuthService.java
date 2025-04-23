@@ -5,8 +5,7 @@ import com.example.minzok.addresss.enums.AddressType;
 import com.example.minzok.auth.dto.request.LoginRequestDto;
 import com.example.minzok.auth.dto.request.SignUpRequestDto;
 import com.example.minzok.auth.dto.response.TokenResponseDto;
-import com.example.minzok.global.auth.JwtUtil;
-import com.example.minzok.global.common.SecurityConfig;
+import com.example.minzok.global.jwt.JwtUtil;
 import com.example.minzok.member.entity.Member;
 import com.example.minzok.member.enums.UserRole;
 import com.example.minzok.member.repository.MemberRepository;
@@ -22,6 +21,7 @@ public class AuthService {
 
     private final MemberRepository memberRepository;
     private final PasswordEncoder passwordEncoder;
+    private final BlackListTokenService blackListTokenService;
     private final JwtUtil jwtUtil;
 
 
@@ -73,6 +73,13 @@ public class AuthService {
         return new TokenResponseDto(bearerToken);
     }
 
+    @Transactional
+    public void logout(String token) {
+        if (token != null && token.startsWith("Bearer ")) {
+            token = jwtUtil.substringToken(token);
+            blackListTokenService.addToBlacklist(token);
+        }
+    }
 
 }
 
