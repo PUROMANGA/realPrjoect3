@@ -1,8 +1,11 @@
 package com.example.minzok.member.entity;
 
 import com.example.minzok.global.base_entity.BaseEntity;
+import com.example.minzok.member.enums.UserRole;
 import jakarta.persistence.*;
 import lombok.Getter;
+
+import java.time.LocalDate;
 
 
 @Entity
@@ -22,7 +25,7 @@ public class Member extends BaseEntity {
 
     @Column(nullable = false)
     @Enumerated(EnumType.STRING)
-    private String userRole;
+    private UserRole userRole;
 
     @Column(nullable = false)
     private String name;
@@ -31,7 +34,7 @@ public class Member extends BaseEntity {
     private String nickname;
 
     @Column(nullable = false)
-    private String birth;
+    private LocalDate birth;
 
     @Column(nullable = false)
     private String address;
@@ -43,10 +46,10 @@ public class Member extends BaseEntity {
     private Member(
             String email,
             String password,
-            String userRole,
+            UserRole userRole,
             String name,
             String nickname,
-            String birth,
+            LocalDate birth,
             String address
     ) {
         this.email = email;
@@ -61,10 +64,10 @@ public class Member extends BaseEntity {
     public static Member of (
             String email,
             String password,
-            String userRole,
+            UserRole userRole,
             String name,
             String nickname,
-            String birth,
+            LocalDate birth,
             String address
     ) {
         return new Member(email, password, userRole, name, nickname, birth, address);
