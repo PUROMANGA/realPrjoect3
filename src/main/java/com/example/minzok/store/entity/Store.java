@@ -4,6 +4,7 @@ import com.example.minzok.global.base_entity.BaseEntity;
 import com.example.minzok.member.entity.Member;
 import com.example.minzok.store.dto.StoreRequestDto;
 import jakarta.persistence.*;
+import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotBlank;
 import lombok.*;
 
@@ -45,5 +46,9 @@ public class Store extends BaseEntity {
         this.openTime = openTime;
         this.closeTime = closeTime;
         this.Minimum_order_amount = minimum_order_amount;
+    }
+
+    public Store(String storeName, String storeContent, LocalTime openTime, LocalTime closeTime, int minimumOrderAmount) {
+        super();
     }
 }

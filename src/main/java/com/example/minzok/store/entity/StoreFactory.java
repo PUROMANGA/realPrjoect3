@@ -14,4 +14,13 @@ public class StoreFactory {
                 member.getId()
         );
     }
+
+    public static Store update(StoreRequestDto storeRequestDto) {
+        return new Store(storeRequestDto.getStore_name(),
+                storeRequestDto.getStore_content(),
+                storeRequestDto.getOpenTime(),
+                storeRequestDto.getCloseTime(),
+                storeRequestDto.getMinimum_order_amount());
+
+    }
 }

@@ -14,6 +14,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import com.example.minzok.global.auth.MyUserDetail;
 
 @Service
 @Slf4j
@@ -34,21 +35,30 @@ public class StoreServiceImpl implements StoreService {
 
     @Transactional
     @Override
-    public StoreResponseDto createStoreService(StoreRequestDto storeRequestDto, Long memberId) {
-        Member member = memberRepository.findById(memberId).orElseThrow(() -> new CustomNullPointerException(ExceptionCode.CANT_FIND_MEMBER));
+    public StoreResponseDto createStoreService(StoreRequestDto storeRequestDto, String email) {
+        Member member = memberRepository.findMemberByEmail(email).orElseThrow(() -> new CustomNullPointerException(ExceptionCode.CANT_FIND_MEMBER));
         Store store = StoreFactory.storeFactory(storeRequestDto, member);
         return new StoreResponseDto(store);
     }
 
-    @Override
-    public StoreResponseDto patchStore(StoreRequestDto storeRequestDto, Long StoreId, Long memberId) {
-        Store store = storeRepository.findById(StoreId).orElseThrow(() -> new CustomNullPointerException(ExceptionCode.CANT_FIND_STORE)); // 테스트 예정
-        Member member = memberRepository.findById(memberId).orElseThrow(() -> new CustomNullPointerException(ExceptionCode.CANT_FIND_MEMBER));
+    /**
+     * 입력받은 sotreId의 유무를 확인하고, 있다면 수정해줍니다.
+     * @param storeRequestDto
+     * @param storeId
+     * @param email
+     * @return
+     */
 
-        if(!member.getId().equals(memberId)) {
+    @Override
+    public StoreResponseDto patchStore(StoreRequestDto storeRequestDto, Long storeId, String email) {
+        storeRepository.findById(storeId).orElseThrow(() -> new CustomNullPointerException(ExceptionCode.CANT_FIND_STORE));
+        Member member = memberRepository.findMemberByEmail(email).orElseThrow(() -> new CustomNullPointerException(ExceptionCode.CANT_FIND_MEMBER));
+
+        if(!member.getEmail().equals(email)) {
             throw new CustomRuntimeException(ExceptionCode.NO_EDIT_PERMISSION);
         }
 
-        StoreFactory.update(storeRequestDto);
+        Store updated = StoreFactory.update(storeRequestDto);
+        return new StoreResponseDto(storeRepository.save(updated));
     }
 }

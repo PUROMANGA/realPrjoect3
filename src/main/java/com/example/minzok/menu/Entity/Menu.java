@@ -1,6 +1,8 @@
 package com.example.minzok.menu.Entity;
 
 import com.example.minzok.global.base_entity.BaseEntity;
+import com.example.minzok.order.entity.OrderMenu;
+import com.example.minzok.store.entity.Store;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
