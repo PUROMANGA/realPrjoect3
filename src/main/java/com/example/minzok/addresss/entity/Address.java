@@ -1,0 +1,58 @@
+package com.example.minzok.addresss.entity;
+
+import com.example.minzok.addresss.enums.AddressType;
+import com.example.minzok.global.base_entity.BaseEntity;
+import com.example.minzok.member.entity.Member;
+import jakarta.persistence.*;
+import lombok.Getter;
+
+import java.time.LocalDate;
+
+@Getter
+@Entity
+@Table(name = "address", uniqueConstraints = @UniqueConstraint(
+        columnNames = {"member_id", "address_type"},
+        name = "uk_member_address_type")
+)
+public class Address extends BaseEntity {
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
+
+    @Column(nullable = false)
+    private String lotNumberAddress;
+
+    @Column(nullable = false)
+    private String detailAddress;
+
+    @Column
+    @Enumerated(EnumType.STRING)
+    private AddressType addressType;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn
+    private Member member;
+
+    protected Address (){}
+
+    private Address(String lotNumberAddress, String detailAddress){
+        this.lotNumberAddress = lotNumberAddress;
+        this.detailAddress = detailAddress;
+    }
+
+    private void initMember(Member member){
+        this.member = member;
+    }
+
+    public Address of(String lotNumberAddress, String detailAddress, Member member ){
+        Address address = new Address(lotNumberAddress, detailAddress);
+        address.initMember(member);
+        return address;
+    }
+
+    public String getAddressInfo(){
+        return lotNumberAddress + " " + detailAddress;
+    }
+
+}
