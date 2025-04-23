@@ -1,4 +1,4 @@
-package Menu.Entity;
+package com.example.minzok.menu.Entity;
 
 import com.example.minzok.global.base_entity.BaseEntity;
 import jakarta.persistence.*;

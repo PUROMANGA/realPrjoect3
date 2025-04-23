@@ -1,7 +1,7 @@
-package Menu.Controller;
+package com.example.minzok.menu.Controller;
 
 
-import Menu.Service.MenuService;
+import com.example.minzok.menu.Service.MenuService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.RestController;
 

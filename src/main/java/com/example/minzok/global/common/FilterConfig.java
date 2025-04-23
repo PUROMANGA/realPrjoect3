@@ -1,4 +1,4 @@
-package com.example.minzok.global.config;
+package com.example.minzok.global.common;
 
 import com.example.minzok.global.auth.JwtUtil;
 import com.example.minzok.global.auth.MyUserDetailService;
