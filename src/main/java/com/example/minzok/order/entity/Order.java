@@ -1,5 +1,8 @@
 package com.example.minzok.order.entity;
 
+import com.example.minzok.global.base_entity.BaseEntity;
+import com.example.minzok.member.entity.Member;
+import com.example.minzok.store.entity.Store;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -10,21 +13,21 @@ import java.time.LocalDateTime;
 
 @Entity
 @Getter
-@Setter
+@Table(name = "orders") // order는 예약어라서 orders로 설정.
 @NoArgsConstructor
-public class Order {
+public class Order extends BaseEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long orderId;
+    private Long Id;
 
-//    @ManyToOne(fetch = FetchType.LAZY)
-//    @JoinColumn(name = "member_id")
-//    private Member member;
-//
-//    @ManyToOne(fetch = FetchType.LAZY)
-//    @JoinColumn(name = "store_id")
-//    private Store store;
-//
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "member_id")
+    private Member member;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "store_id")
+    private Store store;
+
 //    @ManyToOne(fetch = FetchType.LAZY)
 //    @JoinColumn(name = "menu_id")
 //    private Menu menu;
