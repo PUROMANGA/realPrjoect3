@@ -9,6 +9,8 @@ import lombok.NoArgsConstructor;
 
 import java.awt.*;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 @Table(name = "orders") // order는 예약어라서 orders로 설정.
@@ -27,31 +29,31 @@ public class Order extends BaseEntity {
     @JoinColumn(name = "store_id")
     private Store store;
 
-//    @ManyToOne(fetch = FetchType.LAZY)
-//    @JoinColumn(name = "menu_id")
-//    private Menu menu;
+    // order-menus 중간 테이블과 1:N 관계
+    @OneToMany(mappedBy = "order", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<OrderMenu> orderMenus = new ArrayList<>();
 
     private int totalPrice;
-    private int quantity;
-
     private LocalDateTime orderTime;
     private LocalDateTime statusChangedTime;
 
     @Enumerated(EnumType.STRING)
     private OrderStatus orderStatus;
 
-    public void changeStatus(OrderStatus orderStatus){
-        this.orderStatus = orderStatus;
-        this.statusChangedTime = LocalDateTime.now();
-    }
-
-    // Long memberId, Long storeId, Long menuId 추가 해야 됨.
-    public Order(int totalPrice, int quantity){
-
-        this.totalPrice = totalPrice;
-        this.quantity = quantity;
+    public Order(Member member, Store store){
+        this.member = member;
+        this.store = store;
         this.orderTime = LocalDateTime.now();
         this.statusChangedTime = this.orderTime; // 처음 주문 시 동일하다.
         this.orderStatus = OrderStatus.WAITING;
+    }
+
+    public void addOrderMenu(OrderMenu orderMenu){
+        this.orderMenus.add(orderMenu);
+    }
+
+    public void changeStatus(OrderStatus orderStatus){
+        this.orderStatus = orderStatus;
+        this.statusChangedTime = LocalDateTime.now();
     }
 }
