@@ -4,10 +4,12 @@ import com.example.minzok.auth.dto.request.LoginRequestDto;
 import com.example.minzok.auth.dto.request.SignUpRequestDto;
 import com.example.minzok.auth.dto.response.TokenResponseDto;
 import com.example.minzok.auth.service.AuthService;
+import jakarta.servlet.http.HttpServletResponse;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestHeader;
@@ -32,9 +34,11 @@ public class AuthController {
     @PostMapping("/logout")
     public ResponseEntity<Void> logout(@RequestHeader("Authorization") String token) {
         authService.logout(token);
-        return ResponseEntity.ok().build();
-    }
 
+        SecurityContextHolder.clearContext();
+
+        return new ResponseEntity<>( null , HttpStatus.OK);
+    }
 
 
 

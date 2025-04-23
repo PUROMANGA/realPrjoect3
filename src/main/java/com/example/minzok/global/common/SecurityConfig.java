@@ -33,7 +33,6 @@ public class SecurityConfig {
                 .csrf(csrf -> csrf.disable())
                 .sessionManagement(this::configureSession)
                 .authorizeHttpRequests(this::configureAuthorization)
-                .logout(this::configureLogout)
                 .addFilterBefore(new SecurityFilter(jwtUtil, myUserDetailService), UsernamePasswordAuthenticationFilter.class)
                 .build();
     }
@@ -51,16 +50,16 @@ public class SecurityConfig {
                 .anyRequest().authenticated();
     }
 
-    private void configureLogout(LogoutConfigurer<HttpSecurity> logout) {
-        logout.logoutUrl("/logout")
-                .logoutSuccessHandler((request, response, authentication) -> {
-                    response.setStatus(200);
-                    response.sendRedirect("/login");
-                })
-                .invalidateHttpSession(true)
-                .deleteCookies("JSESSIONID")
-                .clearAuthentication(true);
-    }
+//    private void configureLogout(LogoutConfigurer<HttpSecurity> logout) {
+//        logout.logoutUrl("/logout")
+//                .logoutSuccessHandler((request, response, authentication) -> {
+//                    response.setStatus(200);
+//                    response.sendRedirect("/login");
+//                })
+//                .invalidateHttpSession(true)
+//                .deleteCookies("JSESSIONID")
+//                .clearAuthentication(true);
+//    }
 
     @Bean
     public PasswordEncoder passwordEncoder() {
