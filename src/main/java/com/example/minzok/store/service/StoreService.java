@@ -6,4 +6,6 @@ import com.example.minzok.store.dto.StoreResponseDto;
 public interface StoreService {
 
     public StoreResponseDto createStoreService(StoreRequestDto storeRequestDto, Long memberId);
+
+    public StoreResponseDto patchStore(StoreRequestDto storeRequestDto, Long StoreId, Long memberId);
 }

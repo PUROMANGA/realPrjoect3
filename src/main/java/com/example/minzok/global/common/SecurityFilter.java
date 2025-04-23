@@ -1,7 +1,5 @@
 package com.example.minzok.global.common;
 
-import com.example.minzok.global.jwt.JwtUtil;
-import com.example.minzok.auth.entity.MyUserDetail;
 import com.example.minzok.auth.service.MyUserDetailService;
 import io.jsonwebtoken.Claims;
 import jakarta.servlet.FilterChain;
@@ -12,6 +10,8 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.filter.OncePerRequestFilter;
+import com.example.minzok.global.auth.JwtUtil;
+import com.example.minzok.global.auth.MyUserDetail;
 
 import java.io.IOException;
 
@@ -43,8 +43,6 @@ public class SecurityFilter extends OncePerRequestFilter {
         SecurityContextHolder.getContext().setAuthentication(authentication);
 
         filterChain.doFilter(request, response);
-
-
     }
 
 }

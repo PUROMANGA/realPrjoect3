@@ -1,8 +1,7 @@
 package com.example.minzok.global.common;
 
+import com.example.minzok.auth.service.MyUserDetailService;
 import com.example.minzok.global.auth.JwtUtil;
-import com.example.minzok.global.auth.MyUserDetailService;
-import com.example.minzok.global.filter.SecurityFilter;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;

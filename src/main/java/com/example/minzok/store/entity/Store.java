@@ -1,20 +1,19 @@
 package com.example.minzok.store.entity;
 
 import com.example.minzok.global.base_entity.BaseEntity;
+import com.example.minzok.member.entity.Member;
+import com.example.minzok.store.dto.StoreRequestDto;
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
-import lombok.RequiredArgsConstructor;
+import jakarta.validation.constraints.NotBlank;
+import lombok.*;
 
 import java.time.LocalDateTime;
+import java.time.LocalTime;
 
 @Entity
-@Data
+@Getter
 @RequiredArgsConstructor
-@NoArgsConstructor
 @AllArgsConstructor
-@Table(name = "Store")
 
 public class Store extends BaseEntity {
 
@@ -29,14 +28,22 @@ public class Store extends BaseEntity {
     private String Store_content;
 
     @Column(nullable = false)
-    private LocalDateTime openTime;
+    private LocalTime openTime;
 
     @Column(nullable = false)
-    private LocalDateTime closeTime;
+    private LocalTime closeTime;
+
+    private int Minimum_order_amount;
 
     @Enumerated(EnumType.STRING)
     @Column(nullable = false)
     private StoreStatus storeStatus;
 
-    private int Minimum_order_amount;
+    public Store(String store_name, String store_content, LocalTime openTime, LocalTime closeTime, int minimum_order_amount, Long id) {
+        this.Store_name = store_name;
+        this.Store_content = store_content;
+        this.openTime = openTime;
+        this.closeTime = closeTime;
+        this.Minimum_order_amount = minimum_order_amount;
+    }
 }
