@@ -34,5 +34,9 @@ public class Store extends BaseEntity {
     @Column(nullable = false)
     private LocalDateTime closeTime;
 
+    @Enumerated(EnumType.STRING)
+    @Column(nullable = false)
+    private StoreStatus storeStatus;
+
     private int Minimum_order_amount;
 }

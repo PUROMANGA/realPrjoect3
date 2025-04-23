@@ -1,12 +1,9 @@
 package com.example.minzok.store.service;
 
-import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
-import org.springframework.stereotype.Service;
+import com.example.minzok.store.dto.StoreRequestDto;
+import com.example.minzok.store.dto.StoreResponseDto;
 
-@Service
-@Slf4j
-@RequiredArgsConstructor
+public interface StoreService {
 
-public class StoreService {
+    public StoreResponseDto createStoreService(StoreRequestDto storeRequestDto, Long memberId);
 }
