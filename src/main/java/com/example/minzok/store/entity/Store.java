@@ -12,7 +12,6 @@ import java.time.LocalDateTime;
 @Entity
 @Data
 @RequiredArgsConstructor
-@NoArgsConstructor
 @AllArgsConstructor
 @Table(name = "Store")
 
