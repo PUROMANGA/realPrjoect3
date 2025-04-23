@@ -1,13 +1,14 @@
 package com.example.minzok.store.entity;
 
 import com.example.minzok.global.base_entity.BaseEntity;
+import com.example.minzok.menu.Entity.Menu;
 import com.example.minzok.store.dto.StoreRequestDto;
 import com.example.minzok.addresss.entity.Address;
 import jakarta.persistence.*;
 import lombok.*;
-
-import java.time.LocalDateTime;
 import java.time.LocalTime;
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 @Getter
@@ -38,10 +39,6 @@ public class Store extends BaseEntity {
     @Column(nullable = false)
     private StoreStatus storeStatus;
 
-    @OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
-    @JoinColumn(name = "address_id")
-    private Address address;
-
     public Store(String store_name, String store_content, LocalTime openTime, LocalTime closeTime, int minimum_order_amount, Long id) {
         this.Store_name = store_name;
         this.Store_content = store_content;
@@ -56,9 +53,5 @@ public class Store extends BaseEntity {
         this.openTime = storeRequestDto.getOpenTime();
         this.closeTime = storeRequestDto.getCloseTime();
         this.Minimum_order_amount = storeRequestDto.getMinimum_order_amount();
-    }
-
-    public void setAddress(Address address) {
-        this.address = address;
     }
 }
