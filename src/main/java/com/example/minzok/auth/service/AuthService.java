@@ -59,6 +59,20 @@ public class AuthService {
         return new TokenResponseDto(bearerToken);
     }
 
+    @Transactional
+    public TokenResponseDto login(LoginRequestDto dto){
+
+        Member member = memberRepository.findMemberByEmailOrElseThrow(dto.getEmail());
+
+        if(!passwordEncoder.matches(dto.getPassword(), member.getPassword())){
+            throw new RuntimeException();
+        }
+
+        String bearerToken = jwtUtil.createToken(member.getEmail());
+
+        return new TokenResponseDto(bearerToken);
+    }
+
 
 }
 
