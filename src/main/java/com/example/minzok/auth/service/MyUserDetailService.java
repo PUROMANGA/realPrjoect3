@@ -10,7 +10,7 @@ import com.example.minzok.global.auth.MyUserDetail;
 
 @Service
 @RequiredArgsConstructor
-public class MyUserDetailService implements UserDetailsService {
+public class  MyUserDetailService implements UserDetailsService {
 
     private final MemberRepository memberRepository;
 

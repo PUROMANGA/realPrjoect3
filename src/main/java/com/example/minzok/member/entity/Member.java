@@ -1,11 +1,14 @@
 package com.example.minzok.member.entity;
 
+import com.example.minzok.addresss.entity.Address;
 import com.example.minzok.global.base_entity.BaseEntity;
 import com.example.minzok.member.enums.UserRole;
 import jakarta.persistence.*;
 import lombok.Getter;
 
 import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.List;
 
 
 @Entity
@@ -36,8 +39,8 @@ public class Member extends BaseEntity {
     @Column(nullable = false)
     private LocalDate birth;
 
-    @Column(nullable = false)
-    private String address;
+    @OneToMany(mappedBy = "member", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<Address> address = new ArrayList<>();
 
     protected Member(){
     }
@@ -49,8 +52,7 @@ public class Member extends BaseEntity {
             UserRole userRole,
             String name,
             String nickname,
-            LocalDate birth,
-            String address
+            LocalDate birth
     ) {
         this.email = email;
         this.password = password;
@@ -58,7 +60,6 @@ public class Member extends BaseEntity {
         this.name = name;
         this.nickname = nickname;
         this.birth = birth;
-        this.address = address;
     }
 
     public static Member of (
@@ -67,10 +68,9 @@ public class Member extends BaseEntity {
             UserRole userRole,
             String name,
             String nickname,
-            LocalDate birth,
-            String address
+            LocalDate birth
     ) {
-        return new Member(email, password, userRole, name, nickname, birth, address);
+        return new Member(email, password, userRole, name, nickname, birth);
     }
 
 
