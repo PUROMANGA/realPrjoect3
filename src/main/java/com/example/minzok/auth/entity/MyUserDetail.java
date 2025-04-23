@@ -1,5 +1,7 @@
 package com.example.minzok.auth.entity;
 
+import com.example.minzok.addresss.entity.Address;
+import com.example.minzok.addresss.enums.AddressType;
 import com.example.minzok.member.entity.Member;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import org.springframework.security.core.GrantedAuthority;
@@ -13,9 +15,15 @@ import java.util.List;
 public class MyUserDetail implements UserDetails {
 
     private final Member member;
+    private final String address;
 
-    public MyUserDetail(Member member) {
+    public MyUserDetail(Member member){
         this.member = member;
+        this.address = member.getAddress().stream()
+                .filter(addr -> addr.getAddressType() == AddressType.DEFAULT)
+                .findFirst()
+                .map(Address::getAddressInfo)
+                .orElse(null);
     }
 
     public LocalDate getBirthDate(){
@@ -23,7 +31,7 @@ public class MyUserDetail implements UserDetails {
     }
 
     public String getAddress(){
-        return member.getAddress();
+        return address;
     }
 
     public String getNickname(){
