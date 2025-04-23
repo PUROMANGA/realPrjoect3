@@ -5,6 +5,7 @@ import com.example.minzok.global.base_entity.BaseEntity;
 import com.example.minzok.member.enums.UserRole;
 import jakarta.persistence.*;
 import lombok.Getter;
+import org.springframework.security.crypto.password.PasswordEncoder;
 
 import java.time.LocalDate;
 import java.util.ArrayList;
@@ -40,7 +41,7 @@ public class Member extends BaseEntity {
     private LocalDate birth;
 
     @OneToMany(mappedBy = "member", cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<Address> address = new ArrayList<>();
+    private List<Address> addresses = new ArrayList<>();
 
     protected Member(){
     }
@@ -71,6 +72,12 @@ public class Member extends BaseEntity {
             LocalDate birth
     ) {
         return new Member(email, password, userRole, name, nickname, birth);
+    }
+
+    public void validatePassword(String rawPassword, PasswordEncoder passwordEncoder) {
+        if (!passwordEncoder.matches(rawPassword, this.password)) {
+            throw new RuntimeException();
+        }
     }
 
 
