@@ -80,7 +80,6 @@ public class StoreServiceTest {
                 "SAM",
                 "nickname",
                 LocalDate.of(1995, 4, 24),
-                "주소"
         );
 
         //when
