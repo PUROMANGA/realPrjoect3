@@ -1,12 +1,14 @@
 package com.example.minzok.menu.Entity;
 
 import com.example.minzok.global.base_entity.BaseEntity;
+import com.example.minzok.order.entity.OrderMenu;
+import com.example.minzok.store.entity.Store;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import org.apache.catalina.Store;
 
 import java.util.ArrayList;
+import java.util.List;
 
 @Getter
 @Entity
@@ -20,7 +22,7 @@ public class Menu extends BaseEntity {
     private Long id;
 
     @Column(nullable = false)
-    private String menu_name;
+    private String name;
 
     @Column(nullable = false)
     private Long price;
@@ -33,20 +35,16 @@ public class Menu extends BaseEntity {
     private Store store;
 
     /**
-     * 리뷰 연관관계
+     * 주문 - 메뉴 중간 테이블과의 관계
      */
 
-    @OneToMany(mappedBy = "toMenu", cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<Reviews> reviews = New ArrayList<>();
+    @OneToMany(mappedBy = "menu", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<OrderMenu> orderMenu = new ArrayList<>();
 
-    public Menu(Name name ,Menu_name menu_name, Rating rating, Contents contents) {
+    public Menu(String name , Long price, String description, Store store) {
             this.name = name;
-            this.menu_name = menu_name;
-            this.rating = rating;
-            this.contents = contents;
-    }
-
-    public void update(menuRequestDto dto) {
-        this.contents = dto.getContents();
+            this.price = price;
+            this.description = description;
+            this.store = store;
     }
 }
