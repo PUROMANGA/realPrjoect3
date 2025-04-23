@@ -1,7 +1,6 @@
 package com.example.minzok.store.service;
 
 import com.example.minzok.global.error.CustomNullPointerException;
-import com.example.minzok.global.error.CustomRuntimeException;
 import com.example.minzok.global.error.ExceptionCode;
 import com.example.minzok.member.entity.Member;
 import com.example.minzok.member.repository.MemberRepository;
@@ -9,12 +8,12 @@ import com.example.minzok.store.dto.StoreRequestDto;
 import com.example.minzok.store.dto.StoreResponseDto;
 import com.example.minzok.store.entity.Store;
 import com.example.minzok.store.entity.StoreFactory;
+import com.example.minzok.store.handler.StoreServiceHandler;
 import com.example.minzok.store.repository.StoreRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import com.example.minzok.global.auth.MyUserDetail;
 
 @Service
 @Slf4j
@@ -24,6 +23,7 @@ public class StoreServiceImpl implements StoreService {
 
     private final StoreRepository storeRepository;
     private final MemberRepository memberRepository;
+    private final StoreServiceHandler storeServiceHandler;
 
     /**
      * 입력받은 memberid로 member을 찾아주고, member와 입력받은 storeRequestDto로 Store를 저장합니다.
@@ -49,16 +49,25 @@ public class StoreServiceImpl implements StoreService {
      * @return
      */
 
+    @Transactional
     @Override
     public StoreResponseDto patchStore(StoreRequestDto storeRequestDto, Long storeId, String email) {
-        storeRepository.findById(storeId).orElseThrow(() -> new CustomNullPointerException(ExceptionCode.CANT_FIND_STORE));
-        Member member = memberRepository.findMemberByEmail(email).orElseThrow(() -> new CustomNullPointerException(ExceptionCode.CANT_FIND_MEMBER));
+        Store foundStore = storeServiceHandler.foundStoreAndException(storeId, email);
+        foundStore.update(storeRequestDto);
+        return new StoreResponseDto(storeRepository.save(foundStore));
+    }
 
-        if(!member.getEmail().equals(email)) {
-            throw new CustomRuntimeException(ExceptionCode.NO_EDIT_PERMISSION);
-        }
+    /**
+     * 입력받은 storeId의 유무를 확인하고, 있다면 삭제합니다.
+     * @param storeId
+     * @param myUserDetail
+     * @return
+     */
 
-        Store updated = StoreFactory.update(storeRequestDto);
-        return new StoreResponseDto(storeRepository.save(updated));
+    @Transactional
+    @Override
+    public void deleteStoreService(Long storeId, String email) {
+        Store foundStore = storeServiceHandler.foundStoreAndException(storeId, email);
+        storeRepository.delete(foundStore);
     }
 }

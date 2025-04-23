@@ -8,4 +8,6 @@ public interface StoreService {
     public StoreResponseDto createStoreService(StoreRequestDto storeRequestDto, String email);
 
     public StoreResponseDto patchStore(StoreRequestDto storeRequestDto, Long storeId, String email);
+
+    void deleteStoreService(Long storeId, String email);
 }

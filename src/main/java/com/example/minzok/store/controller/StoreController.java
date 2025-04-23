@@ -31,7 +31,8 @@ public class StoreController {
      */
 
     @PostMapping
-    public ResponseEntity<StoreResponseDto> createStore(@RequestBody StoreRequestDto storeRequestDto, @AuthenticationPrincipal MyUserDetail myUserDetail) {
+    public ResponseEntity<StoreResponseDto> createStore(@RequestBody StoreRequestDto storeRequestDto,
+                                                        @AuthenticationPrincipal MyUserDetail myUserDetail) {
         StoreResponseDto createStore = storeService.createStoreService(storeRequestDto, myUserDetail.getUsername());
         return ResponseEntity.ok(createStore);
     }
@@ -51,6 +52,17 @@ public class StoreController {
         return ResponseEntity.ok(storeService.patchStore(storeRequestDto,storeId, myUserDetail.getUsername()));
     }
 
+    /**
+     * 입력받은 storeId의 유무를 확인하고, 있다면 삭제합니다.
+     * @param storeId
+     * @param myUserDetail
+     * @return
+     */
 
-
+    @DeleteMapping("/{storeId}")
+    public ResponseEntity<Void> deleteStore(@PathVariable Long storeId,
+                                                        @AuthenticationPrincipal MyUserDetail myUserDetail) {
+        storeService.deleteStoreService(storeId, myUserDetail.getUsername());
+        return ResponseEntity.ok().build();
+    }
 }

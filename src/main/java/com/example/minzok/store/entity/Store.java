@@ -48,7 +48,11 @@ public class Store extends BaseEntity {
         this.Minimum_order_amount = minimum_order_amount;
     }
 
-    public Store(String storeName, String storeContent, LocalTime openTime, LocalTime closeTime, int minimumOrderAmount) {
-        super();
+    public void update(StoreRequestDto storeRequestDto) {
+        this.Store_name = storeRequestDto.getStore_name(),
+        this.Store_content = storeRequestDto.getStore_content(),
+        this.openTime = storeRequestDto.getOpenTime(),
+        this.closeTime = storeRequestDto.getCloseTime(),
+        this.Minimum_order_amount = storeRequestDto.getMinimum_order_amount());
     }
 }
