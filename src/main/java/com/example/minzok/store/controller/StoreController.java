@@ -2,15 +2,22 @@ package com.example.minzok.store.controller;
 
 
 import com.example.minzok.member.repository.MemberRepository;
+import com.example.minzok.store.dto.StoreMenuDto;
 import com.example.minzok.store.dto.StoreRequestDto;
 import com.example.minzok.store.dto.StoreResponseDto;
 import com.example.minzok.store.service.StoreServiceImpl;
+import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Slice;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 import com.example.minzok.global.auth.MyUserDetail;
+
+import static org.springframework.data.domain.Sort.Direction.DESC;
 
 @RestController
 @RequestMapping("/store")
@@ -64,5 +71,32 @@ public class StoreController {
                                                         @AuthenticationPrincipal MyUserDetail myUserDetail) {
         storeService.deleteStoreService(storeId, myUserDetail.getUsername());
         return ResponseEntity.ok().build();
+    }
+
+    /**
+     * 특정 KeyWord가 들어간 메뉴의 이름을 전체조회
+     * @param keyword
+     * @param pageable
+     * @return
+     */
+
+    @GetMapping
+    public ResponseEntity<Slice<StoreResponseDto>> findStorePage
+            (@RequestParam String keyword,
+             @PageableDefault(size = 10, sort = "creatTime", direction = DESC) Pageable pageable) {
+        return ResponseEntity.ok(storeService.findStorePage(keyword, pageable));
+    }
+
+    /**
+     * 특정 가게를 조회하면 모든 메뉴가 같이 나옴
+     * @param storeId
+     * @return
+     */
+
+    @GetMapping("/{storeId}")
+    public ResponseEntity<Slice<StoreResponseDto>> findOneStore
+    (@PathVariable Long storeId,
+     @PageableDefault(size = 10, sort = "creatTime", direction = DESC)Pageable pageable) {
+        return ResponseEntity.ok(storeService.findOneStore(storeId, pageable));
     }
 }

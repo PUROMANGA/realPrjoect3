@@ -1,6 +1,7 @@
 package com.example.minzok.store.dto;
 
 import com.example.minzok.member.entity.Member;
+import com.example.minzok.menu.Entity.Menu;
 import com.example.minzok.store.entity.Store;
 import lombok.Data;
 
@@ -19,6 +20,7 @@ public class StoreResponseDto {
     private LocalDateTime creatTime;
     private LocalDateTime modifiedTime;
     private boolean withdrawn;
+    private String menuName;
 
     public StoreResponseDto(Store store) {
         this.id = store.getId();
@@ -29,5 +31,17 @@ public class StoreResponseDto {
         this.Minimum_order_amount = store.getMinimum_order_amount();
         this.creatTime = store.getCreatTime();
         this.modifiedTime = store.getModifiedTime();
+    }
+
+    public StoreResponseDto(Store store, Menu menu) {
+        this.id = store.getId();
+        this.Store_name = store.getStore_name();
+        this.Store_content = store.getStore_content();
+        this.openTime = store.getOpenTime();
+        this.closeTime = store.getCloseTime();
+        this.Minimum_order_amount = store.getMinimum_order_amount();
+        this.creatTime = store.getCreatTime();
+        this.modifiedTime = store.getModifiedTime();
+        this.menuName = menu.getName();
     }
 }
