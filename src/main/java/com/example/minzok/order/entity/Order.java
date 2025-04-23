@@ -6,14 +6,13 @@ import com.example.minzok.store.entity.Store;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import lombok.Setter;
 
 import java.awt.*;
 import java.time.LocalDateTime;
 
 @Entity
-@Getter
 @Table(name = "orders") // order는 예약어라서 orders로 설정.
+@Getter
 @NoArgsConstructor
 public class Order extends BaseEntity {
     @Id
@@ -41,8 +40,14 @@ public class Order extends BaseEntity {
     @Enumerated(EnumType.STRING)
     private OrderStatus orderStatus;
 
+    public void changeStatus(OrderStatus orderStatus){
+        this.orderStatus = orderStatus;
+        this.statusChangedTime = LocalDateTime.now();
+    }
+
     // Long memberId, Long storeId, Long menuId 추가 해야 됨.
     public Order(int totalPrice, int quantity){
+
         this.totalPrice = totalPrice;
         this.quantity = quantity;
         this.orderTime = LocalDateTime.now();

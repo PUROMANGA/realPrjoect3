@@ -5,12 +5,15 @@ import lombok.Getter;
 
 import java.time.LocalDateTime;
 
-// 주문 생성 응답
-@Getter @Builder
-public class OrderResponseDto {
+// 주문 상세 응답
+@Getter
+@Builder
+public class OrderDetailResponseDto {
     private Long orderId;
     private Long storeId;
+    private String menuName;
+    private int quantity;
     private int totalPrice;
-    private String status;
+    private String orderStatus;
     private LocalDateTime orderTime;
 }
