@@ -1,11 +1,8 @@
 package com.example.minzok.store.entity;
 
 import com.example.minzok.global.base_entity.BaseEntity;
-import com.example.minzok.member.entity.Member;
 import com.example.minzok.store.dto.StoreRequestDto;
 import jakarta.persistence.*;
-import jakarta.validation.constraints.Min;
-import jakarta.validation.constraints.NotBlank;
 import lombok.*;
 
 import java.time.LocalDateTime;
@@ -49,10 +46,10 @@ public class Store extends BaseEntity {
     }
 
     public void update(StoreRequestDto storeRequestDto) {
-        this.Store_name = storeRequestDto.getStore_name(),
-        this.Store_content = storeRequestDto.getStore_content(),
-        this.openTime = storeRequestDto.getOpenTime(),
-        this.closeTime = storeRequestDto.getCloseTime(),
-        this.Minimum_order_amount = storeRequestDto.getMinimum_order_amount());
+        this.Store_name = storeRequestDto.getStore_name();
+        this.Store_content = storeRequestDto.getStore_content();
+        this.openTime = storeRequestDto.getOpenTime();
+        this.closeTime = storeRequestDto.getCloseTime();
+        this.Minimum_order_amount = storeRequestDto.getMinimum_order_amount();
     }
 }
