@@ -38,4 +38,12 @@ public class Review extends BaseEntity {
     @JoinColumn(name = "order_id")
     private Order order;
 
+    public Review(String contents, int rating) {
+        this.contents = contents;
+        this.rating = rating;
+    }
+
+    public Review() {
+
+    }
 }
