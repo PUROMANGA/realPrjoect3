@@ -24,5 +24,5 @@ public interface StoreRepository extends JpaRepository<Store, Long>, CustomStore
 
     List<Store> findByStoreStatusNot(StoreStatus storeStatus);
 
-    int countByEmail(String email);
+    int countByMemberEmail(String email);
 }

@@ -121,7 +121,7 @@ public class StoreServiceTest {
 
         //given
         given(memberRepository.findMemberByEmail(anyString())).willReturn(Optional.of(member));
-        given(storeRepository.countByEmail(anyString())).willReturn(4);
+        given(storeRepository.countByMemberEmail(anyString())).willReturn(4);
 
         //when
         CustomRuntimeException exception = assertThrows(CustomRuntimeException.class, () -> {
@@ -142,7 +142,7 @@ public class StoreServiceTest {
 
         //given
         given(memberRepository.findMemberByEmail(anyString())).willReturn(Optional.of(member));
-        given(storeRepository.countByEmail(anyString())).willReturn(3);
+        given(storeRepository.countByMemberEmail(anyString())).willReturn(3);
         member.setUserRole(UserRole.USER);
 
         //when
@@ -164,7 +164,7 @@ public class StoreServiceTest {
 
         //given
         given(memberRepository.findMemberByEmail(anyString())).willReturn(Optional.of(member));
-        given(storeRepository.countByEmail(anyString())).willReturn(3);
+        given(storeRepository.countByMemberEmail(anyString())).willReturn(3);
         given(storeRepository.save(any(Store.class))).willReturn(store);
         member.setUserRole(UserRole.MANAGER);
 
