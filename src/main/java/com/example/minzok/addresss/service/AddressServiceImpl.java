@@ -88,6 +88,12 @@ public class AddressServiceImpl implements AddressService {
         return addressList.stream().map(AddressResponseDto::toDto).toList();
     }
 
+    /**
+     * 지정된 주소 삭제
+     * 해당 유저의 주소가 1개밖에 없을때, 지우려는 주소가 대표 주소일때 예외가 발생합니다.
+     * @param id
+     * @param myUserDetail
+     */
     @Transactional
     @Override
     public void deleteAddress(Long id, MyUserDetail myUserDetail) {
@@ -107,6 +113,12 @@ public class AddressServiceImpl implements AddressService {
         addressRepository.delete(address);
     }
 
+    /**
+     * 주소의 주인이 접속 회원과 일치하는지 확인하는 매서드
+     * @param addressId
+     * @param email
+     * @return
+     */
     @Override
     public boolean matchMember(Long addressId, String email) {
         return addressRepository.findById(addressId)
