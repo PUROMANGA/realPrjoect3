@@ -33,7 +33,11 @@ public class SecurityConfig {
                 .csrf(csrf -> csrf.disable())
                 .sessionManagement(this::configureSession)
                 .authorizeHttpRequests(this::configureAuthorization)
-                .addFilterBefore(new SecurityFilter(jwtUtil, myUserDetailService), UsernamePasswordAuthenticationFilter.class)
+                .addFilterBefore(new SecurityFilter(
+                        jwtUtil,
+                        myUserDetailService,
+                        blackListTokenService
+                ), UsernamePasswordAuthenticationFilter.class)
                 .build();
     }
 
