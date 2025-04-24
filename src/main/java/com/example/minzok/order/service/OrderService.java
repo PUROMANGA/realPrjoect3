@@ -1,9 +1,12 @@
 package com.example.minzok.order.service;
 
+import com.example.minzok.global.error.CustomRuntimeException;
+import com.example.minzok.global.error.ExceptionCode;
 import com.example.minzok.member.entity.Member;
 import com.example.minzok.member.repository.MemberRepository;
 import com.example.minzok.menu.Entity.Menu;
 import com.example.minzok.menu.Repository.MenuRepository;
+import com.example.minzok.order.aop.OrderLogging;
 import com.example.minzok.order.dto.request.OrderRequestDto;
 import com.example.minzok.order.dto.request.OrderStatusRequestDto;
 import com.example.minzok.order.dto.response.OrderDetailResponseDto;
@@ -19,6 +22,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -35,22 +39,31 @@ public class OrderService {
     private final OrderRepository orderRepository;
 
     // 주문 생성
-    // 꼭 수정해줘야 함.
+    @OrderLogging
     @Transactional
     public OrderResponseDto createOrder(Long memberId, OrderRequestDto orderRequestDto) {
         Member member = memberRepository.findById(memberId)
-                .orElseThrow();
+                .orElseThrow(() -> new CustomRuntimeException(ExceptionCode.CANT_FIND_MEMBER));
 
         Store store = storeRepository.findById(orderRequestDto.getStoreId())
-                .orElseThrow();
+                .orElseThrow(()-> new CustomRuntimeException(ExceptionCode.CANT_FIND_STORE));
 
         Menu menu = menuRepository.findById(orderRequestDto.getMenuId())
-                .orElseThrow();
+                .orElseThrow(() -> new CustomRuntimeException(ExceptionCode.CANT_FIND_MENU));
 
-//        // 최소 금액 설정
-//        int mininum = 5000;
-//        if (mininum <store.getMinimum_order_amount()){
-//        // 영업 시간 체크 로직 추가
+        int quantity = orderRequestDto.getQuantity();
+        Long totalPrice = menu.getPrice() * quantity;
+
+        // 1. 최소 주문 금액 예외처리
+        if (totalPrice < store.getMinimumOrderAmount()) {
+            throw new CustomRuntimeException(ExceptionCode.MINIMUM_ORDER_AMOUNT);
+        }
+
+        // 2. 가게 오픈/마감 시간 예외처리
+        LocalTime now = LocalTime.now();
+        if (now.isBefore(store.getOpenTime()) || now.isAfter(store.getCloseTime())) {
+            throw new CustomRuntimeException(ExceptionCode.NOT_STORE_TIME);
+        }
 
         // 주문 메뉴 생성
         OrderMenu orderMenu = OrderMenu.builder()
@@ -71,19 +84,19 @@ public class OrderService {
                 .price(menu.getPrice())
                 .build();
 
-//        return OrderStatusResponseDto.builder()
-//                .orderId(order.getId())
-//                .storeId(store.getId())
-//                .totalPrice(order.getTotalPrice())
-//                .orderStatus(order.getOrderStatus().name())
-//                .orderTime(order.getOrderTime())
-//                .menus(List.of(menuDto))
-//                .build();
-        return null;
+        return OrderResponseDto.builder()
+                .orderId(order.getId())
+                .storeId(store.getId())
+                .totalPrice(order.getTotalPrice())
+                .orderStatus(order.getOrderStatus().name())
+                .orderTime(order.getOrderTime())
+                .menus(List.of(menuDto))
+                .build();
 
     }
 
     // 주문 상태 변경
+    @OrderLogging
     @Transactional
     public OrderStatusResponseDto changeOrderStatus(Long orderId, OrderStatusRequestDto dto){
         Order order = orderRepository.findById(orderId).orElseThrow();
@@ -101,23 +114,23 @@ public class OrderService {
     에 해당하는 클래스를 정의해야 함. menuName, quantity, price.
     */
 
-//    @Transactional
-//    public OrderDetailResponseDto getOrderDetail(Long orderId){
-//        Order order = orderRepository.findById(orderId).orElseThrow();
-//
-//        return OrderDetailResponseDto.builder()
-//                .orderId(order.getId())
-//                .storeId(order.getStore().getId())
-//                .totalPrice(order.getTotalPrice())
-//                .orderStatus(order.getOrderStatus().name())
-//                .orderTime(order.getOrderTime())
-//                .menuName(order.getOrderMenus().stream()
-//                        .map(om -> OrderDetailResponseDto.MenuDetailDto.builder()
-//                                .menuName(om.getMenu().getName())
-//                                .quantity(om.getQuantity())
-//                                .price(om.getMenu().getPrice())
-//                                .build())
-//                        .collect(Collectors.toList()))
-//                .build();
-//    }
+    @Transactional
+    public OrderDetailResponseDto getOrderDetail(Long orderId){
+        Order order = orderRepository.findById(orderId).orElseThrow();
+
+        return OrderDetailResponseDto.builder()
+                .orderId(order.getId())
+                .storeId(order.getStore().getId())
+                .totalPrice(Long.valueOf(order.getTotalPrice()))
+                .orderStatus(order.getOrderStatus().name())
+                .orderTime(order.getOrderTime())
+                .menus(order.getOrderMenus().stream()
+                        .map(om -> OrderDetailResponseDto.MenuDetailDto.builder()
+                                .menuName(om.getMenu().getName())
+                                .quantity(om.getQuantity())
+                                .price(om.getMenu().getPrice())
+                                .build())
+                        .collect(Collectors.toList()))
+                .build();
+    }
 }

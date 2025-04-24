@@ -38,11 +38,11 @@ public class OrderController {
         return ResponseEntity.ok(response);
     }
 
-//    // 주문 상세 조회
-//    @GetMapping("/{orderId}")
-//    public ResponseEntity<OrderDetailResponseDto> getOrderDetail(@PathVariable Long orderId) {
-//        OrderDetailResponseDto response = orderService.getOrderDetail(orderId);
-//        return ResponseEntity.ok(response);
-//    }
+    // 주문 상세 조회
+    @GetMapping("/{orderId}")
+    public ResponseEntity<OrderDetailResponseDto> getOrderDetail(@PathVariable Long orderId) {
+        OrderDetailResponseDto response = orderService.getOrderDetail(orderId);
+        return ResponseEntity.ok(response);
+    }
 
 }
