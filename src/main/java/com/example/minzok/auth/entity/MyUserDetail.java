@@ -42,6 +42,10 @@ public class MyUserDetail implements UserDetails {
         return member.getName();
     }
 
+    public Long getMemberId(){
+        return member.getId();
+    }
+
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {

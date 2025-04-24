@@ -2,6 +2,8 @@ package com.example.minzok.member.entity;
 
 import com.example.minzok.addresss.entity.Address;
 import com.example.minzok.global.base_entity.BaseEntity;
+import com.example.minzok.global.error.CustomRuntimeException;
+import com.example.minzok.global.error.ExceptionCode;
 import com.example.minzok.member.enums.UserRole;
 import jakarta.persistence.*;
 import lombok.Getter;
@@ -78,7 +80,7 @@ public class Member extends BaseEntity {
 
     public void validatePassword(String rawPassword, PasswordEncoder passwordEncoder) {
         if (!passwordEncoder.matches(rawPassword, this.password)) {
-            throw new RuntimeException();
+            throw new CustomRuntimeException(ExceptionCode.LOGIN_FAILED);
         }
     }
 
