@@ -13,6 +13,7 @@ import org.springframework.data.domain.Slice;
 import org.springframework.data.web.PageableDefault;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import com.example.minzok.global.jwt.MyUserDetail;
 
@@ -37,7 +38,7 @@ public class StoreController {
      */
 
     @PostMapping
-    public ResponseEntity<StoreResponseDto> createStore(@RequestBody StoreRequestDto storeRequestDto,
+    public ResponseEntity<StoreResponseDto> createStore(@RequestBody @Validated StoreRequestDto storeRequestDto,
                                                         @AuthenticationPrincipal MyUserDetail myUserDetail) {
         StoreResponseDto createStore = storeService.createStoreService(storeRequestDto, myUserDetail.getUsername());
         return ResponseEntity.ok(createStore);
@@ -52,7 +53,7 @@ public class StoreController {
      */
 
     @PatchMapping ("/{storeId}")
-    public ResponseEntity<StoreResponseDto> patchStore(@RequestBody StoreRequestDto storeRequestDto,
+    public ResponseEntity<StoreResponseDto> patchStore(@RequestBody @Validated StoreRequestDto storeRequestDto,
                                                        @PathVariable Long storeId,
                                                        @AuthenticationPrincipal MyUserDetail myUserDetail) {
         return ResponseEntity.ok(storeService.patchStore(storeRequestDto,storeId, myUserDetail.getUsername()));
