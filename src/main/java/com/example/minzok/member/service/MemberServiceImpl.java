@@ -6,22 +6,25 @@ import com.example.minzok.addresss.repository.AddressRepository;
 import com.example.minzok.global.error.CustomRuntimeException;
 import com.example.minzok.global.error.ExceptionCode;
 import com.example.minzok.global.jwt.MyUserDetail;
+import com.example.minzok.member.dto.request.MemberDeleteRequestDto;
+import com.example.minzok.member.dto.request.MemberUpdateRequestDto;
 import com.example.minzok.member.dto.response.MemberStoreOrderCountDto;
 import com.example.minzok.member.dto.response.MyMemberResponseDto;
 import com.example.minzok.member.dto.response.OtherMemberResponseDto;
 import com.example.minzok.member.entity.Member;
 import com.example.minzok.member.repository.MemberRepository;
-import com.example.minzok.order.entity.Order;
 import com.example.minzok.order.entity.OrderStatus;
 import com.example.minzok.order.repository.OrderRepository;
 import com.example.minzok.store.entity.Store;
 import com.example.minzok.store.entity.StoreStatus;
 import com.example.minzok.store.repository.StoreRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
-import java.util.stream.Collectors;
+import java.util.Objects;
 
 @Service
 @RequiredArgsConstructor
@@ -31,6 +34,7 @@ public class MemberServiceImpl implements MemberService {
     private final StoreRepository storeRepository;
     private final OrderRepository orderRepository;
     private final AddressRepository addressRepository;
+    private final PasswordEncoder passwordEncoder;
 
 
     @Override
@@ -81,4 +85,58 @@ public class MemberServiceImpl implements MemberService {
                 other.getCreatTime(),
                 memberStoreOrderCountDtoList);
     }
+
+    @Transactional
+    @Override
+    public MyMemberResponseDto updateMember(
+            Long id,
+            MyUserDetail myUserDetail,
+            MemberUpdateRequestDto dto
+    ) {
+
+        if(!Objects.equals(dto.getNewPassword(), dto.getNewPasswordCheck())){
+            throw new CustomRuntimeException(ExceptionCode.PASSWORD_MISMATCH);
+        }
+
+        Member member = memberRepository.findMemberByEmailOrElseThrow(myUserDetail.getUsername());
+        member.validatePassword(dto.getOldPassword(), passwordEncoder);
+
+        member.updateMember(passwordEncoder.encode(dto.getNewPassword()), dto.getNickname(), dto.getBirth());
+
+        Address address = addressRepository.findAddressByAddressTypeAndMember_Email(AddressType.DEFAULT, myUserDetail.getUsername());
+
+        return new MyMemberResponseDto(
+                member.getId(),
+                member.getEmail(),
+                member.getUserRole().toString(),
+                member.getName(),
+                member.getNickname(),
+                member.getBirth(),
+                address.getAddressInfo(),
+                member.getCreatTime(),
+                member.getModifiedTime()
+        );
+    }
+
+    @Override
+    public void deleteMember(MyUserDetail myUserDetail, MemberDeleteRequestDto dto) {
+        Member member = memberRepository.findMemberByEmailOrElseThrow(myUserDetail.getUsername());
+        member.validatePassword(dto.getPassword(), passwordEncoder);
+        memberRepository.delete(member);
+    }
+
+    /**
+     * 해당 아이디의 유저가 접속 회원과 일치하는지 확인하는 매서드
+     * @param userId
+     * @param email
+     * @return
+     */
+    @Override
+    public boolean matchMember(Long userId, String email) {
+        return memberRepository.findById(userId)
+                .map(member -> member.getEmail().equals(email))
+                .orElse(false);
+    }
+
+
 }

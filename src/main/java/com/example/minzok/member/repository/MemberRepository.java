@@ -23,9 +23,6 @@ public interface MemberRepository extends JpaRepository<Member, Long> {
 
     default Member findMemberByEmailOrElseThrow(String email){
         Member member = findMemberByEmail(email).orElseThrow(() -> new UsernameNotFoundException("해당 회원이 없습니다."));
-        if(member.isWithdrawn()){
-            throw new RuntimeException();
-        }
         return member;
     }
 }

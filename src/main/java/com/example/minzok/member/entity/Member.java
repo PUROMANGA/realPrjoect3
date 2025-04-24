@@ -8,6 +8,8 @@ import com.example.minzok.member.enums.UserRole;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
+import org.hibernate.annotations.SQLDelete;
+import org.hibernate.annotations.Where;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
 import java.time.LocalDate;
@@ -17,8 +19,9 @@ import java.util.List;
 
 @Entity
 @Getter
-@Setter
 @Table(name = "members")
+@SQLDelete(sql = "UPDATE member SET withdrawn = true WHERE id = ?")
+@Where(clause = "withdrawn = false")
 public class Member extends BaseEntity {
 
     @Id
@@ -81,6 +84,22 @@ public class Member extends BaseEntity {
     public void validatePassword(String rawPassword, PasswordEncoder passwordEncoder) {
         if (!passwordEncoder.matches(rawPassword, this.password)) {
             throw new CustomRuntimeException(ExceptionCode.LOGIN_FAILED);
+        }
+    }
+
+    public void updateMember (
+            String newPassword,
+            String nickname,
+            LocalDate birth
+    ){
+        if(newPassword != null){
+            this.password = newPassword;
+        }
+        if (nickname != null && !nickname.trim().isEmpty()) {
+            this.nickname = nickname;
+        }
+        if (birth != null) {
+            this.birth = birth;
         }
     }
 
