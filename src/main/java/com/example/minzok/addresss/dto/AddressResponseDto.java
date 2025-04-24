@@ -1,13 +1,32 @@
 package com.example.minzok.addresss.dto;
 
+import com.example.minzok.addresss.entity.Address;
+import lombok.Getter;
+
+@Getter
 public class AddressResponseDto {
 
-    private String email;
+    private final Long id;
 
-    private String fullAddress;
+    private final String email;
 
-    public AddressResponseDto(String email, String fullAddress) {
+    private final String fullAddress;
+
+    private final String addressType;
+
+    public AddressResponseDto(Long id, String email, String fullAddress, String addressType) {
+        this.id = id;
         this.email = email;
         this.fullAddress = fullAddress;
+        this.addressType =addressType;
+    }
+
+    public static AddressResponseDto toDto (Address address){
+        return new AddressResponseDto(
+                address.getId(),
+                address.getMember().getEmail(),
+                address.getAddressInfo(),
+                address.getAddressType().toString()
+                );
     }
 }
