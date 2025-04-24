@@ -15,6 +15,9 @@ public interface ReviewRepository extends JpaRepository<Review, Long> {
     @Query(value = "select id, contents, rating, store_id, creat_time, modified_time from minzok.reviews where rating between ? and ? order by creat_time desc", nativeQuery = true)
     List<Review> searchFindByRating(int min, int max);
 
+    @Query(value = "select id, contents, rating, store_id, creat_time, modified_time from minzok.reviews where rating store_id = ? order by creat_time desc", nativeQuery = true)
+    List<Review> findAllByStoreId(Long storeId);
+
     default Review findByIdOrElseThrow(Long id) {
         return findById(id).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "해당 아이디를 찾을 수 없습니다." + id));
     }
