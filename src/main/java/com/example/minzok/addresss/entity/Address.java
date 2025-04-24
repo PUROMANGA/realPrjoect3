@@ -56,4 +56,8 @@ public class Address extends BaseEntity {
         return lotNumberAddress + " " + detailAddress;
     }
 
+    public void updateAddressType(AddressType addressType){
+        this.addressType = addressType;
+    }
+
 }

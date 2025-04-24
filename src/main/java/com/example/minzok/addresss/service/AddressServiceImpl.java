@@ -14,6 +14,8 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.List;
+
 @Service
 @RequiredArgsConstructor
 public class AddressServiceImpl implements AddressService {
@@ -44,8 +46,48 @@ public class AddressServiceImpl implements AddressService {
 
         addressRepository.save(address);
 
-        return new AddressResponseDto(member.getEmail(), address.getAddressInfo());
+        return new AddressResponseDto(address.getId(), member.getEmail(), address.getAddressInfo(), address.getAddressType().toString());
 
+    }
+
+    @Override
+    public List<AddressResponseDto> findAddressByMember(MyUserDetail myUserDetail) {
+        return addressRepository.findAddressByMember_Email(myUserDetail.getUsername()).stream().map(AddressResponseDto::toDto).toList();
+    }
+
+    @Transactional
+    @Override
+    public List<AddressResponseDto> updateAddressType(Long id, MyUserDetail myUserDetail) {
+
+
+
+        List<Address> addressList = addressRepository.findAddressByMember_Email(myUserDetail.getUsername());
+
+        for (Address address : addressList) {
+            if (address.getId().equals(id)) {
+                address.updateAddressType(AddressType.DEFAULT);
+            } else {
+                address.updateAddressType(AddressType.NORMAL);
+            }
+        }
+
+        return addressList.stream().map(AddressResponseDto::toDto).toList();
+    }
+
+    @Transactional
+    @Override
+    public void deleteAddress(Long id) {
+
+        Address address = addressRepository.findAddressByIdOrElseThrow(id);
+
+        addressRepository.delete(address);
+    }
+
+    @Override
+    public boolean matchMember(Long addressId, String email) {
+        return addressRepository.findById(addressId)
+                .map(addr -> addr.getMember().getEmail().equals(email))
+                .orElse(false);
     }
 
 
