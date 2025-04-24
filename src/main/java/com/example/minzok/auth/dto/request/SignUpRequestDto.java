@@ -1,6 +1,8 @@
 package com.example.minzok.auth.dto.request;
 
 import com.example.minzok.member.enums.UserRole;
+import jakarta.validation.constraints.Email;
+import jakarta.validation.constraints.NotBlank;
 import lombok.Getter;
 
 import java.time.LocalDate;
@@ -8,22 +10,32 @@ import java.time.LocalDate;
 @Getter
 public class SignUpRequestDto {
 
+    @NotBlank
+    @Email
     private String email;
 
+    @NotBlank
     private String password;
 
+    @NotBlank
     private String passwordCheck;
 
+    @NotBlank
     private String userRole;
 
+    @NotBlank
     private String name;
 
+    @NotBlank
     private String nickname;
 
+    @NotBlank
     private LocalDate birth;
 
+    @NotBlank
     private String lotNumberAddress;
 
+    @NotBlank
     private String detailAddress;
 
     public SignUpRequestDto() {
