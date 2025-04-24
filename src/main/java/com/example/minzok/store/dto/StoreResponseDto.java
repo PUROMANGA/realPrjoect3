@@ -1,8 +1,8 @@
 package com.example.minzok.store.dto;
 
-import com.example.minzok.member.entity.Member;
 import com.example.minzok.menu.Entity.Menu;
 import com.example.minzok.store.entity.Store;
+import com.example.minzok.store.entity.StoreStatus;
 import lombok.Data;
 
 import java.time.LocalDateTime;
@@ -12,36 +12,37 @@ import java.time.LocalTime;
 
 public class StoreResponseDto {
     private Long id;
-    private String Store_name;
-    private String Store_content;
+    private String storeName;
+    private String storeContent;
     private LocalTime openTime;
     private LocalTime closeTime;
-    private int Minimum_order_amount;
+    private int minimumOrderAmount;
     private LocalDateTime creatTime;
     private LocalDateTime modifiedTime;
-    private boolean withdrawn;
+    private StoreStatus storeStatus;
     private String menuName;
 
     public StoreResponseDto(Store store) {
         this.id = store.getId();
-        this.Store_name = store.getStore_name();
-        this.Store_content = store.getStore_content();
+        this.storeName = store.getStoreName();
+        this.storeContent = store.getStoreContent();
         this.openTime = store.getOpenTime();
         this.closeTime = store.getCloseTime();
-        this.Minimum_order_amount = store.getMinimum_order_amount();
+        this.minimumOrderAmount = store.getMinimumOrderAmount();
         this.creatTime = store.getCreatTime();
         this.modifiedTime = store.getModifiedTime();
     }
 
     public StoreResponseDto(Store store, Menu menu) {
         this.id = store.getId();
-        this.Store_name = store.getStore_name();
-        this.Store_content = store.getStore_content();
+        this.storeName = store.getStoreName();
+        this.storeContent = store.getStoreContent();
         this.openTime = store.getOpenTime();
         this.closeTime = store.getCloseTime();
-        this.Minimum_order_amount = store.getMinimum_order_amount();
+        this.minimumOrderAmount = store.getMinimumOrderAmount();
         this.creatTime = store.getCreatTime();
         this.modifiedTime = store.getModifiedTime();
+        this.storeStatus = store.getStoreStatus();
         this.menuName = menu.getName();
     }
 }

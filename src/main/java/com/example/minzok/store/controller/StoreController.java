@@ -2,11 +2,9 @@ package com.example.minzok.store.controller;
 
 
 import com.example.minzok.member.repository.MemberRepository;
-import com.example.minzok.store.dto.StoreMenuDto;
 import com.example.minzok.store.dto.StoreRequestDto;
 import com.example.minzok.store.dto.StoreResponseDto;
 import com.example.minzok.store.service.StoreServiceImpl;
-import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Pageable;
@@ -20,7 +18,7 @@ import com.example.minzok.global.auth.MyUserDetail;
 import static org.springframework.data.domain.Sort.Direction.DESC;
 
 @RestController
-@RequestMapping("/store")
+@RequestMapping("/stores")
 @RequiredArgsConstructor
 @Slf4j
 
@@ -74,7 +72,7 @@ public class StoreController {
     }
 
     /**
-     * 특정 KeyWord가 들어간 메뉴의 이름을 전체조회
+     * 특정 KeyWord가 들어간 메뉴의 이름을 가지고 있는 가게를 조회
      * @param keyword
      * @param pageable
      * @return

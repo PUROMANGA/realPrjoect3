@@ -1,21 +1,17 @@
 package com.example.minzok.store.repository;
 
 import com.example.minzok.menu.Entity.QMenu;
-import com.example.minzok.store.dto.StoreMenuDto;
 import com.example.minzok.store.dto.StoreResponseDto;
 import com.example.minzok.store.entity.QStore;
-import com.example.minzok.store.entity.Store;
+import com.example.minzok.store.entity.StoreStatus;
 import com.querydsl.core.types.Projections;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import lombok.RequiredArgsConstructor;
-import org.springframework.context.annotation.Primary;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Slice;
 import org.springframework.data.domain.SliceImpl;
 
 import java.util.List;
-
-import static org.springframework.data.jpa.domain.AbstractPersistable_.id;
 
 @RequiredArgsConstructor
 
@@ -32,20 +28,20 @@ public class StoreRepositoryImpl implements CustomStoreRepository {
         List<StoreResponseDto> content = jpaQueryFactory
                 .select(Projections.constructor(StoreResponseDto.class,
                         store.id,
-                        store.Store_name,
-                        store.Store_content,
+                        store.storeName,
+                        store.storeContent,
                         store.openTime,
                         store.closeTime,
-                        store.Minimum_order_amount,
+                        store.minimumOrderAmount,
                         store.creatTime,
                         store.modifiedTime,
-                        store.withdrawn,
+                        store.storeStatus,
                         menu.name
                 ))
                 .from(store)
                 .leftJoin(store.menus, menu)
                 .where(store.id.eq(storeId)
-                        .and(store.withdrawn.eq(false))
+                        .and(store.storeStatus.eq(StoreStatus.OPEN))
                 )
                 .offset(pageable.getOffset())
                 .limit(pageable.getPageSize() + 1)

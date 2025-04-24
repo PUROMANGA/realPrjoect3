@@ -1,10 +1,8 @@
 package com.example.minzok.store.dto;
 
 import jakarta.validation.constraints.Min;
-import lombok.AllArgsConstructor;
 import lombok.Data;
 
-import java.time.LocalDateTime;
 import java.time.LocalTime;
 
 import jakarta.validation.constraints.NotBlank;
@@ -17,10 +15,10 @@ import org.springframework.format.annotation.DateTimeFormat;
 public class StoreRequestDto {
 
     @NotBlank(message = "내용을 입력해주세요")
-    private String Store_name;
+    private String storeName;
 
     @NotBlank(message = "내용을 입력해주세요")
-    private String Store_content;
+    private String storeContent;
 
     @DateTimeFormat(pattern = "HH:mm")
     private LocalTime openTime;
@@ -29,13 +27,13 @@ public class StoreRequestDto {
     private LocalTime closeTime;
 
     @Min(value = 1, message = "최소 주문 금액은 1 이상이어야 합니다")
-    private int Minimum_order_amount;
+    private int minimumOrderAmount;
 
-    public StoreRequestDto(String store_name, String store_content, LocalTime openTime, LocalTime closeTime, int minimum_order_amount) {
-        this.Store_name = store_name;
-        this.Store_content = store_content;
+    public StoreRequestDto(String storeName, String storeContent, LocalTime openTime, LocalTime closeTime, int minimumOrderAmount) {
+        this.storeName = storeName;
+        this.storeContent = storeContent;
         this.openTime = openTime;
         this.closeTime = closeTime;
-        this.Minimum_order_amount = minimum_order_amount;
+        this.minimumOrderAmount = minimumOrderAmount;
     }
 }
