@@ -2,8 +2,7 @@ package com.example.minzok.addresss.service;
 
 import com.example.minzok.addresss.dto.AddressRequestDto;
 import com.example.minzok.addresss.dto.AddressResponseDto;
-import com.example.minzok.addresss.entity.Address;
-import com.example.minzok.global.jwt.MyUserDetail;
+import com.example.minzok.auth.entity.MyUserDetail;
 
 import java.util.List;
 

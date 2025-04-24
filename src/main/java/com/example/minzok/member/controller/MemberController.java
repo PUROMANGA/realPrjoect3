@@ -1,11 +1,10 @@
 package com.example.minzok.member.controller;
 
-import com.example.minzok.global.jwt.MyUserDetail;
+import com.example.minzok.auth.entity.MyUserDetail;
 import com.example.minzok.member.dto.request.MemberDeleteRequestDto;
 import com.example.minzok.member.dto.request.MemberUpdateRequestDto;
 import com.example.minzok.member.dto.response.MyMemberResponseDto;
 import com.example.minzok.member.dto.response.OtherMemberResponseDto;
-import com.example.minzok.member.entity.Member;
 import com.example.minzok.member.service.MemberService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;

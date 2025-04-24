@@ -1,6 +1,6 @@
 package com.example.minzok.member.service;
 
-import com.example.minzok.global.jwt.MyUserDetail;
+import com.example.minzok.auth.entity.MyUserDetail;
 import com.example.minzok.member.dto.request.MemberDeleteRequestDto;
 import com.example.minzok.member.dto.request.MemberUpdateRequestDto;
 import com.example.minzok.member.dto.response.MyMemberResponseDto;

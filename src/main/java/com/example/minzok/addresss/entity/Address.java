@@ -49,6 +49,7 @@ public class Address extends BaseEntity {
     public static Address of(String lotNumberAddress, String detailAddress, AddressType addressType, Member member ){
         Address address = new Address(lotNumberAddress, detailAddress, addressType);
         address.initMember(member);
+        member.getAddresses().add(address);
         return address;
     }
 

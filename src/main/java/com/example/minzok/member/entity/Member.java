@@ -47,7 +47,7 @@ public class Member extends BaseEntity {
     @Column(nullable = false)
     private LocalDate birth;
 
-    @OneToMany(mappedBy = "member", cascade = CascadeType.ALL, orphanRemoval = true)
+    @OneToMany(mappedBy = "member", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
     private List<Address> addresses = new ArrayList<>();
 
     /**

@@ -11,13 +11,12 @@ import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
-import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.filter.OncePerRequestFilter;
 import com.example.minzok.global.jwt.JwtUtil;
-import com.example.minzok.global.jwt.MyUserDetail;
+import com.example.minzok.auth.entity.MyUserDetail;
 
 import java.io.IOException;
 import java.util.List;
@@ -67,7 +66,7 @@ public class SecurityFilter extends OncePerRequestFilter {
 
             Claims claims = jwtUtil.extractClaims(token);
 
-            String email = claims.get("email", String.class);
+            String email = claims.getSubject();
             MyUserDetail myUserDetail1 = myUserDetailService.loadUserByUsername(email);
 
             UsernamePasswordAuthenticationToken authentication =

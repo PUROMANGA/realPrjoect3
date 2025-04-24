@@ -6,7 +6,8 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
-import com.example.minzok.global.jwt.MyUserDetail;
+import com.example.minzok.auth.entity.MyUserDetail;
+import org.springframework.transaction.annotation.Transactional;
 
 @Service
 @RequiredArgsConstructor
@@ -21,9 +22,12 @@ public class  MyUserDetailService implements UserDetailsService {
      * @throws UsernameNotFoundException
      */
     @Override
+    @Transactional
     public MyUserDetail loadUserByUsername(String email) throws UsernameNotFoundException {
+
         Member member = memberRepository.findMemberByEmailOrElseThrow(email);
-        return new MyUserDetail(member);
+        MyUserDetail myUserDetail = new MyUserDetail(member);
+        return myUserDetail;
     }
 
 }
