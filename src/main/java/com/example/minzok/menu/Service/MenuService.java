@@ -10,6 +10,7 @@ import com.example.minzok.menu.Dto.Response.MenuResponseDto;
 import com.example.minzok.menu.Entity.Menu;
 import com.example.minzok.menu.Entity.MenuStatus;
 import com.example.minzok.menu.Repository.MenuRepository;
+import com.example.minzok.menu.common.MenuHandler;
 import com.example.minzok.store.entity.Store;
 import com.example.minzok.store.repository.StoreRepository;
 import jakarta.transaction.Transactional;
@@ -24,6 +25,7 @@ public class MenuService {
     private final MenuRepository menuRepository;
     private final MemberRepository memberRepository;
     private final StoreRepository storeRepository;
+    private final MenuHandler menuHandler;
 
     /**
      * 메뉴등록
@@ -34,16 +36,9 @@ public class MenuService {
 
     @Transactional
     public MenuResponseDto createdMenuService(MenuRequestDto menuRequestDto, Long storeId, String email) {
-
-        Member member = memberRepository.findMemberByEmail(email).orElseThrow(() -> new RuntimeException("유저 정보가 없습니다."));
-
-        if(!member.getEmail().equals(email)) {
-            throw new CustomRuntimeException(ExceptionCode.NO_EDIT_PERMISSION);
-        }
-
+        menuHandler.findMemberAndException(email);
         Store store = storeRepository.findById(storeId).orElseThrow(() -> new RuntimeException("가게가 없습니다"));
         Menu menu = new Menu(menuRequestDto, store);
-
         return new MenuResponseDto(menuRepository.save(menu));
     }
 
@@ -57,15 +52,9 @@ public class MenuService {
 
     @Transactional
     public MenuResponseDto findModifyMenuService(MenuRequestDto menuRequestDto, Long storeId, Long menuId, String email) {
-        Member member = memberRepository.findMemberByEmail(email).orElseThrow(() -> new RuntimeException("유저 정보가 없습니다."));
-
-        if(!member.getEmail().equals(email)) {
-            throw new CustomRuntimeException(ExceptionCode.NO_EDIT_PERMISSION);
-        }
-
+        menuHandler.findMemberAndException(email);
         storeRepository.findById(storeId).orElseThrow(() -> new RuntimeException("가게가 없습니다"));
         Menu menu = menuRepository.findById(menuId).orElseThrow(() -> new RuntimeException("메뉴가 없습니다"));
-
         menu.update(menuRequestDto);
         return new MenuResponseDto(menuRepository.save(menu));
     }
@@ -77,18 +66,10 @@ public class MenuService {
      */
 
     public void deleteMenuService(Long menuid, Long storeId, String email) {
-        Member member = memberRepository.findMemberByEmail(email).orElseThrow(() -> new RuntimeException("유저 정보가 없습니다."));
-
-        if(!member.getEmail().equals(email)) {
-            throw new CustomRuntimeException(ExceptionCode.NO_EDIT_PERMISSION);
-        }
-
+        menuHandler.findMemberAndException(email);
         storeRepository.findById(storeId).orElseThrow(() -> new RuntimeException("가게가 없습니다"));
-
         Menu menu = menuRepository.findById(menuid).orElseThrow(() -> new RuntimeException("메뉴가 없습니다"));
-
         menu.setMenuStatus(MenuStatus.DELETE);
-
         menuRepository.save(menu);
     }
 

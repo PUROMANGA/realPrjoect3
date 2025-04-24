@@ -45,9 +45,14 @@ public class Member extends BaseEntity {
     @OneToMany(mappedBy = "member", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Address> addresses = new ArrayList<>();
 
+    /**
+     * 사장님이 가게 몇 개씩 들고 있는지 체크하는 변수
+     */
+    @Column(nullable = false)
+    private int storeCount;
+
     protected Member(){
     }
-
 
     private Member(
             String email,
@@ -80,6 +85,14 @@ public class Member extends BaseEntity {
         if (!passwordEncoder.matches(rawPassword, this.password)) {
             throw new RuntimeException();
         }
+    }
+
+    /**
+     * 테스트용 멤버 이메일
+     */
+
+    public Member(String email) {
+        this.email = email;
     }
 
 
