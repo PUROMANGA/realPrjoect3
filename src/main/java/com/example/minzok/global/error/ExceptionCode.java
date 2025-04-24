@@ -25,7 +25,7 @@ public enum ExceptionCode implements ErrorCode{
     ADDRESS_MAX_EXCEEDED(HttpStatus.BAD_REQUEST, "주소는 5개를 초과하여 저장할 수 없습니다."),
     ADDRESS_MIN_EXCEEDED(HttpStatus.BAD_REQUEST, "주소는 1개 이상이여야 합니다."),
     ADDRESS_DEFAULT_NOT_DELETED(HttpStatus.BAD_REQUEST, "대표 주소는 삭제할 수 없습니다."),
-    NOT_FIND_KEYWORD(HttpStatus.FORBIDDEN, "검색 결과가 없습니다.");
+    NOT_FIND_KEYWORD(HttpStatus.FORBIDDEN, "검색 결과가 없습니다."),
     ADDRESS_OVER(HttpStatus.BAD_REQUEST, "주소는 5개를 초과하여 저장할 수 없습니다."),
     NOT_FIND_KEYWORD(HttpStatus.FORBIDDEN, "검색 결과가 없습니다."),
     TOO_MANY_STORES(HttpStatus.BAD_REQUEST, "3개 이상의 가게를 만들 수 없습니다.");
