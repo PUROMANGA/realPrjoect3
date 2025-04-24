@@ -71,15 +71,15 @@ public class OrderService {
                 .price(menu.getPrice())
                 .build();
 
-//        return OrderStatusResponseDto.builder()
-//                .orderId(order.getId())
-//                .storeId(store.getId())
-//                .totalPrice(order.getTotalPrice())
-//                .orderStatus(order.getOrderStatus().name())
-//                .orderTime(order.getOrderTime())
-//                .menus(List.of(menuDto))
-//                .build();
-        return null;
+        return OrderResponseDto.builder()
+                .orderId(order.getId())
+                .storeId(store.getId())
+                .totalPrice(order.getTotalPrice())
+                .orderStatus(order.getOrderStatus().name())
+                .orderTime(order.getOrderTime())
+                .menus(List.of(menuDto))
+                .build();
+
 
     }
 
@@ -101,23 +101,23 @@ public class OrderService {
     에 해당하는 클래스를 정의해야 함. menuName, quantity, price.
     */
 
-//    @Transactional
-//    public OrderDetailResponseDto getOrderDetail(Long orderId){
-//        Order order = orderRepository.findById(orderId).orElseThrow();
-//
-//        return OrderDetailResponseDto.builder()
-//                .orderId(order.getId())
-//                .storeId(order.getStore().getId())
-//                .totalPrice(order.getTotalPrice())
-//                .orderStatus(order.getOrderStatus().name())
-//                .orderTime(order.getOrderTime())
-//                .menuName(order.getOrderMenus().stream()
-//                        .map(om -> OrderDetailResponseDto.MenuDetailDto.builder()
-//                                .menuName(om.getMenu().getName())
-//                                .quantity(om.getQuantity())
-//                                .price(om.getMenu().getPrice())
-//                                .build())
-//                        .collect(Collectors.toList()))
-//                .build();
-//    }
+    @Transactional
+    public OrderDetailResponseDto getOrderDetail(Long orderId){
+        Order order = orderRepository.findById(orderId).orElseThrow();
+
+        return OrderDetailResponseDto.builder()
+                .orderId(order.getId())
+                .storeId(order.getStore().getId())
+                .totalPrice(Long.valueOf(order.getTotalPrice()))
+                .orderStatus(order.getOrderStatus().name())
+                .orderTime(order.getOrderTime())
+                .menus(order.getOrderMenus().stream()
+                        .map(om -> OrderDetailResponseDto.MenuDetailDto.builder()
+                                .menuName(om.getMenu().getName())
+                                .quantity(om.getQuantity())
+                                .price(om.getMenu().getPrice())
+                                .build())
+                        .collect(Collectors.toList()))
+                .build();
+    }
 }
