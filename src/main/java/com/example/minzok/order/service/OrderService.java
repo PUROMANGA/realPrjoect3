@@ -1,9 +1,12 @@
 package com.example.minzok.order.service;
 
+import com.example.minzok.global.error.CustomRuntimeException;
+import com.example.minzok.global.error.ExceptionCode;
 import com.example.minzok.member.entity.Member;
 import com.example.minzok.member.repository.MemberRepository;
 import com.example.minzok.menu.Entity.Menu;
 import com.example.minzok.menu.Repository.MenuRepository;
+import com.example.minzok.order.aop.OrderLogging;
 import com.example.minzok.order.dto.request.OrderRequestDto;
 import com.example.minzok.order.dto.request.OrderStatusRequestDto;
 import com.example.minzok.order.dto.response.OrderDetailResponseDto;
@@ -19,6 +22,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -35,22 +39,31 @@ public class OrderService {
     private final OrderRepository orderRepository;
 
     // 주문 생성
-    // 꼭 수정해줘야 함.
+    @OrderLogging
     @Transactional
     public OrderResponseDto createOrder(Long memberId, OrderRequestDto orderRequestDto) {
         Member member = memberRepository.findById(memberId)
-                .orElseThrow();
+                .orElseThrow(() -> new CustomRuntimeException(ExceptionCode.CANT_FIND_MEMBER));
 
         Store store = storeRepository.findById(orderRequestDto.getStoreId())
-                .orElseThrow();
+                .orElseThrow(()-> new CustomRuntimeException(ExceptionCode.CANT_FIND_STORE));
 
         Menu menu = menuRepository.findById(orderRequestDto.getMenuId())
-                .orElseThrow();
+                .orElseThrow(() -> new CustomRuntimeException(ExceptionCode.CANT_FIND_MENU));
 
-//        // 최소 금액 설정
-//        int mininum = 5000;
-//        if (mininum <store.getMinimum_order_amount()){
-//        // 영업 시간 체크 로직 추가
+        int quantity = orderRequestDto.getQuantity();
+        Long totalPrice = menu.getPrice() * quantity;
+
+        // 1. 최소 주문 금액 예외처리
+        if (totalPrice < store.getMinimum_order_amount()) {
+            throw new CustomRuntimeException(ExceptionCode.MINIMUM_ORDER_AMOUNT);
+        }
+
+        // 2. 가게 오픈/마감 시간 예외처리
+        LocalTime now = LocalTime.now();
+        if (now.isBefore(store.getOpenTime()) || now.isAfter(store.getCloseTime())) {
+            throw new CustomRuntimeException(ExceptionCode.NOT_STORE_TIME);
+        }
 
         // 주문 메뉴 생성
         OrderMenu orderMenu = OrderMenu.builder()
@@ -80,10 +93,10 @@ public class OrderService {
                 .menus(List.of(menuDto))
                 .build();
 
-
     }
 
     // 주문 상태 변경
+    @OrderLogging
     @Transactional
     public OrderStatusResponseDto changeOrderStatus(Long orderId, OrderStatusRequestDto dto){
         Order order = orderRepository.findById(orderId).orElseThrow();
