@@ -20,6 +20,7 @@ import com.example.minzok.global.jwt.JwtUtil;
 import com.example.minzok.global.jwt.MyUserDetail;
 
 import java.io.IOException;
+import java.util.List;
 
 @Slf4j
 @RequiredArgsConstructor
@@ -29,12 +30,21 @@ public class SecurityFilter extends OncePerRequestFilter {
     private final MyUserDetailService myUserDetailService;
     private final BlackListTokenService blackListTokenService;
 
+    private static final List<String> WHITE_LIST = List.of("/login", "/signup");
+
     @Override
     protected void doFilterInternal(
             HttpServletRequest request,
             HttpServletResponse response,
             FilterChain filterChain
     ) throws ServletException, IOException {
+
+        String requestURI = request.getRequestURI();
+
+        if (WHITE_LIST.stream().anyMatch(requestURI::startsWith)) {
+            filterChain.doFilter(request, response);
+            return;
+        }
 
         try {
             String authToken = request.getHeader("Authorization");
@@ -68,4 +78,6 @@ public class SecurityFilter extends OncePerRequestFilter {
             response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, "인증 처리 중 서버 오류 발생");
         }
     }
+
+
 }
