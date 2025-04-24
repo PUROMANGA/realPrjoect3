@@ -17,9 +17,10 @@ import java.util.List;
 @Getter
 @NoArgsConstructor
 public class Order extends BaseEntity {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long Id;
+    private Long id;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "member_id")
@@ -40,16 +41,27 @@ public class Order extends BaseEntity {
     @Enumerated(EnumType.STRING)
     private OrderStatus orderStatus;
 
-    public Order(Member member, Store store){
+    public Order(Member member, Store store, List<OrderMenu> orderMenus){
         this.member = member;
         this.store = store;
         this.orderTime = LocalDateTime.now();
         this.statusChangedTime = this.orderTime; // 처음 주문 시 동일하다.
         this.orderStatus = OrderStatus.WAITING;
+        calculateTotalPrice();
+    }
+
+    // 총 금액 계산 로직 추가
+    private void calculateTotalPrice() {
+        this.totalPrice = orderMenus.stream()
+                .mapToInt(om ->
+                        Math.toIntExact(om.getMenu().getPrice() * om.getQuantity()))
+                .sum();
     }
 
     public void addOrderMenu(OrderMenu orderMenu){
         this.orderMenus.add(orderMenu);
+        orderMenu.setOrder(this); // 양방향 연관관계 설정.
+        calculateTotalPrice();
     }
 
     public void changeStatus(OrderStatus orderStatus){
