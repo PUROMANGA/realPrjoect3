@@ -12,7 +12,7 @@ public interface AddressService {
     AddressResponseDto createAddress(AddressRequestDto dto, MyUserDetail myUserDetail);
     List<AddressResponseDto> findAddressByMember(MyUserDetail myUserDetail);
     List<AddressResponseDto> updateAddressType(Long id, MyUserDetail myUserDetail);
-    void deleteAddress(Long id);
+    void deleteAddress(Long id, MyUserDetail myUserDetail);
     boolean matchMember (Long id, String email);
 
 
