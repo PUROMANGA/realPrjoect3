@@ -1,6 +1,5 @@
 package com.example.minzok.store.service;
 
-import com.example.minzok.store.dto.StoreMenuDto;
 import com.example.minzok.store.dto.StoreRequestDto;
 import com.example.minzok.store.dto.StoreResponseDto;
 import org.springframework.data.domain.Pageable;

@@ -1,21 +1,20 @@
 package com.example.minzok.store.service;
 
 import com.example.minzok.global.error.CustomNullPointerException;
+import com.example.minzok.global.error.CustomRuntimeException;
 import com.example.minzok.global.error.ExceptionCode;
 import com.example.minzok.member.entity.Member;
 import com.example.minzok.member.repository.MemberRepository;
 import com.example.minzok.menu.Repository.MenuRepository;
-import com.example.minzok.store.dto.StoreMenuDto;
 import com.example.minzok.store.dto.StoreRequestDto;
 import com.example.minzok.store.dto.StoreResponseDto;
 import com.example.minzok.store.entity.Store;
 import com.example.minzok.store.entity.StoreFactory;
+import com.example.minzok.store.entity.StoreStatus;
 import com.example.minzok.store.handler.StoreServiceHandler;
-import com.example.minzok.store.repository.CustomStoreRepository;
 import com.example.minzok.store.repository.StoreRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Slice;
 import org.springframework.stereotype.Service;
@@ -46,7 +45,8 @@ public class StoreServiceImpl implements StoreService {
     public StoreResponseDto createStoreService(StoreRequestDto storeRequestDto, String email) {
         Member member = memberRepository.findMemberByEmail(email).orElseThrow(() -> new CustomNullPointerException(ExceptionCode.CANT_FIND_MEMBER));
         Store store = StoreFactory.storeFactory(storeRequestDto, member);
-        return new StoreResponseDto(store);
+        Store savedStore = storeRepository.save(store);
+        return new StoreResponseDto(savedStore);
     }
 
     /**
@@ -76,11 +76,12 @@ public class StoreServiceImpl implements StoreService {
     @Override
     public void deleteStoreService(Long storeId, String email) {
         Store foundStore = storeServiceHandler.foundStoreAndException(storeId, email);
-        storeRepository.delete(foundStore);
+        foundStore.setStoreStatus(StoreStatus.CRUSH);
+        storeRepository.save(foundStore);
     }
 
     /**
-     * 특정 KeyWord가 들어간 메뉴의 이름을 전체조회
+     * 특정 KeyWord가 들어간 메뉴의 이름을 가지고 있는 가게를 조회
      * @param keyword
      * @param pageable
      * @return
@@ -90,12 +91,28 @@ public class StoreServiceImpl implements StoreService {
     @Override
     public Slice<StoreResponseDto> findStorePage(String keyword, Pageable pageable) {
         Slice<Store> store = storeRepository.storeNameFindByKeyword(keyword, pageable);
+
+        if(store.isEmpty()) {
+            throw new CustomRuntimeException(ExceptionCode.NOT_FIND_KEYWORD);
+        }
         return store.map(StoreResponseDto::new);
     }
 
+    /**
+     * 특정 가게를 조회하면 모든 메뉴가 같이 나옴
+     * @param storeId
+     * @return
+     */
+
+    @Transactional(readOnly = true)
     @Override
     public Slice<StoreResponseDto> findOneStore(Long storeId, Pageable pageable) {
         Slice<StoreResponseDto> findStore = storeRepository.menuFindById(storeId, pageable);
-        return findStore;
+
+        if(findStore.isEmpty()) {
+            throw new CustomRuntimeException(ExceptionCode.CANT_FIND_STORE);
+        }
+
+        return storeRepository.menuFindById(storeId, pageable);
     }
 }
