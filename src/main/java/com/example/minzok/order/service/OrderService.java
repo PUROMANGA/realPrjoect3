@@ -55,7 +55,7 @@ public class OrderService {
         Long totalPrice = menu.getPrice() * quantity;
 
         // 1. 최소 주문 금액 예외처리
-        if (totalPrice < store.getMinimum_order_amount()) {
+        if (totalPrice < store.getMinimumOrderAmount()) {
             throw new CustomRuntimeException(ExceptionCode.MINIMUM_ORDER_AMOUNT);
         }
 
