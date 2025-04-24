@@ -21,12 +21,14 @@ public class Common {
     @Scheduled(cron = "0 */10 * * * *")
     public void updateWithDrawStatus() {
 
-        List<Store> stores = storeRepository.findByWithdrawnIsFalse();
+        List<Store> stores = storeRepository.findByStoreStatusNot(StoreStatus.CLOSED);
         LocalTime now = LocalTime.now();
 
         for(Store store : stores) {
             if(now.isBefore(store.getOpenTime()) || now.isAfter(store.getCloseTime())) {
                 store.setStoreStatus(StoreStatus.CLOSED);
+            } else {
+                store.setStoreStatus(StoreStatus.OPEN);
             }
         }
 
