@@ -1,5 +1,7 @@
 package com.example.minzok.review.service;
 
+import com.example.minzok.global.error.CustomRuntimeException;
+import com.example.minzok.global.error.ExceptionCode;
 import com.example.minzok.member.entity.Member;
 import com.example.minzok.member.repository.MemberRepository;
 import com.example.minzok.review.dto.response.ReviewResponseDto;
@@ -33,6 +35,10 @@ public class ReviewService {
         return reviewRepository.findAll().stream().map(ReviewResponseDto::toDto).toList();
     }
 
+    public List<ReviewResponseDto> findAllByStoreId(Long storeId) {
+        return reviewRepository.findAllByStoreId(storeId).stream().map(ReviewResponseDto::toDto).toList();
+    }
+
     public List<ReviewResponseDto> searchFindByRating(int min, int max) {
         return reviewRepository.searchFindByRating(min, max).stream().map(ReviewResponseDto::toDto).toList();
     }
@@ -46,19 +52,28 @@ public class ReviewService {
     }
 
     @Transactional
-    public ReviewResponseDto updateReview(Long id, String contents, int rating) {
+    public ReviewResponseDto updateReview(Long id, String contents, int rating, String memberEmail) {
 
 
         Review findReview = reviewRepository.findByIdOrElseThrow(id);
-        Optional<Member> findMember = memberRepository.findMemberByEmail(findReview.getMember().getEmail());
+        Optional<Member> findMember = memberRepository.findMemberByEmail(memberEmail);
+
+        if(!findReview.getMember().getEmail().equals(memberEmail)) {
+            throw new CustomRuntimeException(ExceptionCode.REVIEW_UPDATE_UNAUTHORIZED);
+        }
 
         findReview.updateReview(id, contents, rating);
 
         return new ReviewResponseDto(id, contents, rating, findReview.getCreatTime(), findReview.getModifiedTime());
     }
 
-    public void deleteReview(Long id) {
+    public void deleteReview(Long id, String memberEmail) {
         Review findReview = reviewRepository.findByIdOrElseThrow(id);
+        Optional<Member> findMember = memberRepository.findMemberByEmail(memberEmail);
+
+        if(!findReview.getMember().getEmail().equals(memberEmail)) {
+            throw new CustomRuntimeException(ExceptionCode.REVIEW_DELETE_UNAUTHORIZED);
+        }
 
         reviewRepository.delete(findReview);
     }
