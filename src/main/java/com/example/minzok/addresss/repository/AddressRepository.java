@@ -13,6 +13,7 @@ public interface AddressRepository extends JpaRepository<Address, Long> {
     int countAddressByWithdrawnIsFalseAndMember_Email(String email);
 
     List<Address> findAddressByMember_Email(String email);
+    Address findAddressByAddressTypeAndMember_Email(AddressType addressType, String email);
 
     default Address findAddressByIdOrElseThrow(Long id){
         return findById(id).orElseThrow(() -> new CustomNullPointerException(ExceptionCode.CANT_FIND_ADDRESS));
