@@ -47,7 +47,7 @@ public class StoreServiceImpl implements StoreService {
     public StoreResponseDto createStoreService(StoreRequestDto storeRequestDto, String email) {
         Member member = memberRepository.findMemberByEmail(email).orElseThrow(() -> new CustomNullPointerException(ExceptionCode.CANT_FIND_MEMBER));
 
-        int countStore = storeRepository.countByEmail(email);
+        int countStore = storeRepository.countByMemberEmail(email);
 
         if(countStore >= 4) {
             throw new CustomRuntimeException(ExceptionCode.TOO_MANY_STORES);
