@@ -33,17 +33,4 @@ public class StoreResponseDto {
         this.creatTime = store.getCreatTime();
         this.modifiedTime = store.getModifiedTime();
     }
-
-    public StoreResponseDto(Store store, Menu menu) {
-        this.id = store.getId();
-        this.storeName = store.getStoreName();
-        this.storeContent = store.getStoreContent();
-        this.openTime = store.getOpenTime();
-        this.closeTime = store.getCloseTime();
-        this.minimumOrderAmount = store.getMinimumOrderAmount();
-        this.creatTime = store.getCreatTime();
-        this.modifiedTime = store.getModifiedTime();
-        this.storeStatus = store.getStoreStatus();
-        this.menuName = menu.getName();
-    }
 }
