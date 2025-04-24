@@ -23,7 +23,6 @@ import java.io.IOException;
 import java.util.List;
 
 @Slf4j
-@RequiredArgsConstructor
 public class SecurityFilter extends OncePerRequestFilter {
 
     private final JwtUtil jwtUtil;
@@ -31,6 +30,12 @@ public class SecurityFilter extends OncePerRequestFilter {
     private final BlackListTokenService blackListTokenService;
 
     private static final List<String> WHITE_LIST = List.of("/login", "/signup");
+
+    public SecurityFilter(JwtUtil jwtUtil, MyUserDetailService myUserDetailService, BlackListTokenService blackListTokenService) {
+        this.jwtUtil = jwtUtil;
+        this.myUserDetailService = myUserDetailService;
+        this.blackListTokenService = blackListTokenService;
+    }
 
     @Override
     protected void doFilterInternal(
@@ -40,14 +45,15 @@ public class SecurityFilter extends OncePerRequestFilter {
     ) throws ServletException, IOException {
 
         String requestURI = request.getRequestURI();
-        filterChain.doFilter(request, response);
-        return;
-    }
-
-        try {
-        String authToken = request.getHeader("Authorization");
 
         if (WHITE_LIST.stream().anyMatch(requestURI::startsWith)) {
+            filterChain.doFilter(request, response);
+            return;
+        }
+
+        try {
+            String authToken = request.getHeader("Authorization");
+
 
             String token = jwtUtil.substringToken(authToken);
 

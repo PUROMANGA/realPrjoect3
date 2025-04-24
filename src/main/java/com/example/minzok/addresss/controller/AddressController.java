@@ -23,6 +23,12 @@ public class AddressController {
 
     private final AddressService addressService;
 
+    /**
+     * 로그인한 유저 기반 주소 저장
+     * @param dto
+     * @param myUserDetail
+     * @return
+     */
     @PostMapping
     public ResponseEntity<AddressResponseDto> createAddress (
             @Valid @RequestBody AddressRequestDto dto,
@@ -31,18 +37,37 @@ public class AddressController {
         return new ResponseEntity<>(addressService.createAddress(dto, myUserDetail), HttpStatus.CREATED);
     }
 
+    /**
+     * 주소 리스트 조회
+     * @param myUserDetail
+     * @return
+     */
     @GetMapping
     public ResponseEntity<List<AddressResponseDto>> findAddress(@AuthenticationPrincipal MyUserDetail myUserDetail)
     {
         return new ResponseEntity<>(addressService.findAddressByMember(myUserDetail), HttpStatus.OK);
     }
 
+    /**
+     * 자기 자신의 주소만 가능
+     * 지정된 주소를 대표주소로 변경 나머지는 일반주소로 변경
+     * @param addressId
+     * @param myUserDetail
+     * @return
+     */
     @PreAuthorize("@addressServiceImpl.matchMember(#addressId, principal.username)")
     @PatchMapping("/{addressId}")
     public ResponseEntity<List<AddressResponseDto>> updateAddressType(@PathVariable Long addressId, @AuthenticationPrincipal MyUserDetail myUserDetail){
         return new ResponseEntity<>(addressService.updateAddressType(addressId, myUserDetail), HttpStatus.OK);
     }
 
+    /**
+     * 자기 자신 혹은 관리자만 가능
+     * 지정된 주소 삭제
+     * @param addressId
+     * @param myUserDetail
+     * @return
+     */
     @PreAuthorize("hasRole('ADMIN') or @addressServiceImpl.matchMember(#addressId, principal.username)")
     @DeleteMapping("/{addressId}")
     public ResponseEntity<Map<String, String>> deleteAddress(@PathVariable Long addressId, @AuthenticationPrincipal MyUserDetail myUserDetail){
