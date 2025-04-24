@@ -28,6 +28,9 @@ public enum ExceptionCode implements ErrorCode{
     NOT_FIND_KEYWORD(HttpStatus.FORBIDDEN, "검색 결과가 없습니다."),
     ADDRESS_OVER(HttpStatus.BAD_REQUEST, "주소는 5개를 초과하여 저장할 수 없습니다."),
     NOT_FIND_KEYWORD(HttpStatus.FORBIDDEN, "검색 결과가 없습니다."),
+    REVIEW_NOT_FOUND(HttpStatus.NOT_FOUND, "해당 리뷰가 존재하지 않습니다."),
+    REVIEW_UPDATE_UNAUTHORIZED(HttpStatus.UNAUTHORIZED, "해당 리뷰의 작성자만 수정할 수 있습니다."),
+    REVIEW_DELETE_UNAUTHORIZED(HttpStatus.UNAUTHORIZED, "해당 리뷰의 작성자만 삭제할 수 있습니다."),
     TOO_MANY_STORES(HttpStatus.BAD_REQUEST, "3개 이상의 가게를 만들 수 없습니다.");
 
     private final HttpStatus httpStatus;
