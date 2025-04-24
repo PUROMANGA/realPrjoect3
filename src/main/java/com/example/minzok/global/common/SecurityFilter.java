@@ -40,14 +40,14 @@ public class SecurityFilter extends OncePerRequestFilter {
     ) throws ServletException, IOException {
 
         String requestURI = request.getRequestURI();
-
-        if (WHITE_LIST.stream().anyMatch(requestURI::startsWith)) {
-            filterChain.doFilter(request, response);
-            return;
-        }
+        filterChain.doFilter(request, response);
+        return;
+    }
 
         try {
-            String authToken = request.getHeader("Authorization");
+        String authToken = request.getHeader("Authorization");
+
+        if (WHITE_LIST.stream().anyMatch(requestURI::startsWith)) {
 
             String token = jwtUtil.substringToken(authToken);
 
@@ -78,6 +78,4 @@ public class SecurityFilter extends OncePerRequestFilter {
             response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, "인증 처리 중 서버 오류 발생");
         }
     }
-
-
 }

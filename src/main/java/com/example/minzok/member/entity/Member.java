@@ -5,6 +5,7 @@ import com.example.minzok.global.base_entity.BaseEntity;
 import com.example.minzok.member.enums.UserRole;
 import jakarta.persistence.*;
 import lombok.Getter;
+import lombok.Setter;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
 import java.time.LocalDate;
@@ -14,6 +15,7 @@ import java.util.List;
 
 @Entity
 @Getter
+@Setter
 @Table(name = "members")
 public class Member extends BaseEntity {
 

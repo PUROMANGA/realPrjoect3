@@ -7,6 +7,7 @@ import com.example.minzok.store.dto.StoreResponseDto;
 import com.example.minzok.store.service.StoreServiceImpl;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.coyote.Response;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Slice;
 import org.springframework.data.web.PageableDefault;
@@ -97,4 +98,5 @@ public class StoreController {
      @PageableDefault(size = 10, sort = "creatTime", direction = DESC)Pageable pageable) {
         return ResponseEntity.ok(storeService.findOneStore(storeId, pageable));
     }
+
 }

@@ -15,21 +15,4 @@ public class StoreFactory {
                 member
         );
     }
-
-    public static Store createStore(StoreRequestDto storeRequestDto) {
-        return new Store(
-            storeRequestDto.getStore_name(),
-            storeRequestDto.getStore_content(),
-            storeRequestDto.getOpenTime(),
-            storeRequestDto.getCloseTime(),
-            storeRequestDto.getMinimum_order_amount(),
-            null
-        );
-    }
-
-    public static Store createStoreWithAddress(StoreRequestDto storeRequestDto, Address address) {
-        Store store = createStore(storeRequestDto);
-        store.setAddress(address);
-        return store;
-    }
 }

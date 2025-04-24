@@ -2,8 +2,10 @@ package com.example.minzok.store.service;
 
 import com.example.minzok.global.error.CustomNullPointerException;
 import com.example.minzok.global.error.CustomRuntimeException;
+import com.example.minzok.global.error.ErrorCode;
 import com.example.minzok.global.error.ExceptionCode;
 import com.example.minzok.member.entity.Member;
+import com.example.minzok.member.enums.UserRole;
 import com.example.minzok.member.repository.MemberRepository;
 import com.example.minzok.menu.Repository.MenuRepository;
 import com.example.minzok.store.dto.StoreRequestDto;
@@ -44,6 +46,17 @@ public class StoreServiceImpl implements StoreService {
     @Override
     public StoreResponseDto createStoreService(StoreRequestDto storeRequestDto, String email) {
         Member member = memberRepository.findMemberByEmail(email).orElseThrow(() -> new CustomNullPointerException(ExceptionCode.CANT_FIND_MEMBER));
+
+        int countStore = storeRepository.countByEmail(email);
+
+        if(countStore >= 4) {
+            throw new CustomRuntimeException(ExceptionCode.TOO_MANY_STORES);
+        }
+
+        if(member.getUserRole().equals(UserRole.USER)) {
+            throw new CustomRuntimeException(ExceptionCode.NO_HAVE_PERMISSION);
+        }
+
         Store store = StoreFactory.storeFactory(storeRequestDto, member);
         Store savedStore = storeRepository.save(store);
         return new StoreResponseDto(savedStore);

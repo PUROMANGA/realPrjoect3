@@ -25,6 +25,7 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Slice;
 import org.springframework.data.domain.SliceImpl;
+import org.springframework.test.util.ReflectionTestUtils;
 
 import java.time.LocalDate;
 import java.time.LocalTime;
@@ -111,6 +112,49 @@ public class StoreServiceTest {
     }
 
     /**
+     * createStoreService : 실패 테스트2
+     */
+
+    @Test
+    @DisplayName("가게를 3개 초과로 등록하려면 예외 발생")
+    public void limitStore(){
+
+        //given
+        given(memberRepository.findMemberByEmail(anyString())).willReturn(Optional.of(member));
+        given(storeRepository.countByEmail(anyString())).willReturn(4);
+
+        //when
+        CustomRuntimeException exception = assertThrows(CustomRuntimeException.class, () -> {
+            storeService.createStoreService(storeRequestDto, member.getEmail());
+        });
+
+        //then
+        assertEquals(ExceptionCode.TOO_MANY_STORES.getMessage(), exception.getMessage());
+    }
+
+    /**
+     * createStoreService : 실패 테스트3
+     */
+
+    @Test
+    @DisplayName("등록하려는 유저가 권한이 USER일 경우")
+    public void userCantHaveAuth(){
+
+        //given
+        given(memberRepository.findMemberByEmail(anyString())).willReturn(Optional.of(member));
+        given(storeRepository.countByEmail(anyString())).willReturn(3);
+        member.setUserRole(UserRole.USER);
+
+        //when
+        CustomRuntimeException exception = assertThrows(CustomRuntimeException.class, () -> {
+            storeService.createStoreService(storeRequestDto, member.getEmail());
+        });
+
+        //then
+        assertEquals(ExceptionCode.NO_HAVE_PERMISSION.getMessage(), exception.getMessage());
+    }
+
+    /**
      * createStoreService : 성공 테스트
      */
 
@@ -119,11 +163,12 @@ public class StoreServiceTest {
     public void canPostStore() {
 
         //given
-
         given(memberRepository.findMemberByEmail(anyString())).willReturn(Optional.of(member));
+        given(storeRepository.countByEmail(anyString())).willReturn(3);
+        given(storeRepository.save(any(Store.class))).willReturn(store);
+        member.setUserRole(UserRole.MANAGER);
 
         //when
-
         StoreResponseDto result = storeService.createStoreService(storeRequestDto, member.getEmail());
 
         //then

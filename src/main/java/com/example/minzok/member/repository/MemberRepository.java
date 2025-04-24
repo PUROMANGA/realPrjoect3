@@ -1,6 +1,7 @@
 package com.example.minzok.member.repository;
 
 import com.example.minzok.member.entity.Member;
+import com.example.minzok.member.enums.UserRole;
 import jakarta.validation.groups.Default;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -21,5 +22,4 @@ public interface MemberRepository extends JpaRepository<Member, Long> {
         }
         return member;
     }
-
 }

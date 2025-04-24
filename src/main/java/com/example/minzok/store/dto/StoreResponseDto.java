@@ -21,6 +21,7 @@ public class StoreResponseDto {
     private LocalDateTime modifiedTime;
     private StoreStatus storeStatus;
     private String menuName;
+    private int countStore;
 
     public StoreResponseDto(Store store) {
         this.id = store.getId();

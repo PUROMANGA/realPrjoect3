@@ -6,6 +6,8 @@ import com.example.minzok.menu.Entity.Menu;
 import com.example.minzok.store.dto.StoreRequestDto;
 import jakarta.persistence.*;
 import lombok.*;
+import org.springframework.web.bind.annotation.PostMapping;
+
 import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.List;

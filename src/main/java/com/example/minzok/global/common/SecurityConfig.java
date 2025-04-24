@@ -48,7 +48,7 @@ public class SecurityConfig {
     private void configureAuthorization(AuthorizeHttpRequestsConfigurer<HttpSecurity>.AuthorizationManagerRequestMatcherRegistry auth) {
         auth
                 .requestMatchers("/login", "/signup").permitAll()
-                .requestMatchers("/profile", "/store").hasAnyRole("MANAGER", "ADMIN")
+                .requestMatchers("/profile","/stores").hasAnyRole("MANAGER", "ADMIN")
                 .requestMatchers("/").hasAnyRole("USER", "ADMIN")
                 .requestMatchers("/admin/**").hasRole("ADMIN")
                 .anyRequest().authenticated();

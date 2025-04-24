@@ -1,5 +1,6 @@
 package com.example.minzok.store.repository;
 
+import com.example.minzok.member.entity.Member;
 import com.example.minzok.store.entity.Store;
 import com.example.minzok.store.entity.StoreStatus;
 import org.springframework.data.domain.Pageable;
@@ -22,4 +23,6 @@ public interface StoreRepository extends JpaRepository<Store, Long>, CustomStore
     Slice<Store> storeNameFindByKeyword(String keyword, Pageable pageable);
 
     List<Store> findByStoreStatusNot(StoreStatus storeStatus);
+
+    int countByEmail(String email);
 }
