@@ -45,8 +45,8 @@ public class AddressController {
 
     @PreAuthorize("hasRole('ADMIN') or @addressServiceImpl.matchMember(#addressId, principal.username)")
     @DeleteMapping("/{addressId}")
-    public ResponseEntity<Map<String, String>> deleteAddress(@PathVariable Long addressId){
-        addressService.deleteAddress(addressId);
+    public ResponseEntity<Map<String, String>> deleteAddress(@PathVariable Long addressId, @AuthenticationPrincipal MyUserDetail myUserDetail){
+        addressService.deleteAddress(addressId, myUserDetail);
         return new ResponseEntity<>(Map.of("message", "선택하신 주소가 삭제되었습니다."),HttpStatus.OK);
     }
 }
