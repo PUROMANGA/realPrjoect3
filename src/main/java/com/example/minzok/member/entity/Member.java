@@ -116,6 +116,10 @@ public class Member extends BaseEntity {
         this.email = email;
     }
 
+    public void setStoreCount(int count){
+        this.storeCount=count;
+    }
+
 
 
 }
