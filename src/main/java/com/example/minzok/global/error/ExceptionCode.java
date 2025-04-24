@@ -13,6 +13,7 @@ public enum ExceptionCode implements ErrorCode{
     CANT_FIND_MEMBER(HttpStatus.NOT_FOUND, "해당 유저를 찾을 수 없습니다."),
     CANT_FIND_STORE(HttpStatus.NOT_FOUND, "해당 가게를 찾을 수 없습니다."),
     CANT_FIND_ADDRESS(HttpStatus.NOT_FOUND, "해당 주소를 찾을 수 없습니다."),
+    CANT_FIND_MENU(HttpStatus.NOT_FOUND, "해당 메뉴를 찾을 수 없습니다."),
     NO_EDIT_PERMISSION(HttpStatus.FORBIDDEN, "수정 권한이 없습니다."),
     NO_HAVE_PERMISSION(HttpStatus.FORBIDDEN, "권한이 없습니다."),
     DUPLICATE_EMAIL(HttpStatus.CONFLICT, "이미 사용 중인 이메일입니다."),
@@ -32,6 +33,9 @@ public enum ExceptionCode implements ErrorCode{
     REVIEW_UPDATE_UNAUTHORIZED(HttpStatus.UNAUTHORIZED, "해당 리뷰의 작성자만 수정할 수 있습니다."),
     REVIEW_DELETE_UNAUTHORIZED(HttpStatus.UNAUTHORIZED, "해당 리뷰의 작성자만 삭제할 수 있습니다."),
     TOO_MANY_STORES(HttpStatus.BAD_REQUEST, "3개 이상의 가게를 만들 수 없습니다.");
+    TOKEN_BLACKLISTED(HttpStatus.UNAUTHORIZED, "로그아웃된 토큰입니다."),
+    MINIMUM_ORDER_AMOUNT(HttpStatus.NOT_FOUND, "최소금액을 만족하지 못했습니다."),
+    NOT_STORE_TIME(HttpStatus.NOT_FOUND, "가게 영업시간이 아닙니다.");
 
     private final HttpStatus httpStatus;
     private final String message;
