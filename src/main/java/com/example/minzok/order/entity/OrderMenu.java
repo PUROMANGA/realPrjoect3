@@ -32,5 +32,6 @@ public class OrderMenu {
     // 연관관계 편의 메서드
     public void setOrder(Order order) {
         this.order = order;
+        order.getOrderMenus().add(this);
     }
 }
