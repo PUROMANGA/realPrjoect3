@@ -58,6 +58,7 @@ public class StoreServiceImpl implements StoreService {
         }
 
         Store store = StoreFactory.storeFactory(storeRequestDto, member);
+        store.setStoreStatus(StoreStatus.OPEN);
         Store savedStore = storeRepository.save(store);
         member.increaseStoreCount();
 
