@@ -26,8 +26,7 @@ public class  MyUserDetailService implements UserDetailsService {
     public MyUserDetail loadUserByUsername(String email) throws UsernameNotFoundException {
 
         Member member = memberRepository.findMemberByEmailOrElseThrow(email);
-        MyUserDetail myUserDetail = new MyUserDetail(member);
-        return myUserDetail;
+        return new MyUserDetail(member);
     }
 
 }

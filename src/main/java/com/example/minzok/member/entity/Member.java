@@ -54,7 +54,7 @@ public class Member extends BaseEntity {
      * 사장님이 가게 몇 개씩 들고 있는지 체크하는 변수
      */
     @Column(nullable = false)
-    private int storeCount;
+    private int storeCount = 0;
 
     protected Member(){
     }
@@ -116,8 +116,15 @@ public class Member extends BaseEntity {
         this.email = email;
     }
 
-    public void setStoreCount(int count){
-        this.storeCount=count;
+    public void increaseStoreCount() {
+         storeCount++;
+    }
+
+    public void decreaseStoreCount() {
+        if(storeCount == 0){
+            throw new RuntimeException();
+        }
+         storeCount--;
     }
 
 

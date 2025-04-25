@@ -59,7 +59,7 @@ public class StoreServiceImpl implements StoreService {
 
         Store store = StoreFactory.storeFactory(storeRequestDto, member);
         Store savedStore = storeRepository.save(store);
-        member.setStoreCount(member.getStoreCount() +1);
+        member.increaseStoreCount();
 
         return new StoreResponseDto(savedStore);
     }
@@ -93,7 +93,7 @@ public class StoreServiceImpl implements StoreService {
         Store foundStore = storeServiceHandler.foundStoreAndException(storeId, email);
         Member member = memberRepository.findMemberByEmail(email).orElseThrow(() -> new CustomRuntimeException(ExceptionCode.CANT_FIND_MEMBER));
         foundStore.setStoreStatus(StoreStatus.CRUSH);
-        member.setStoreCount(member.getStoreCount() - 1);
+        member.decreaseStoreCount();
         storeRepository.save(foundStore);
     }
 

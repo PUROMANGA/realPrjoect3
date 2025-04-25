@@ -51,7 +51,7 @@ public class StoreServiceHandlerTest {
     Member member = Member.of(
             "example@email.com",
             "pw1234",
-            UserRole.USER,
+            UserRole.MANAGER,
             "SAM",
             "nickname",
             LocalDate.of(1995, 4, 24)
@@ -77,8 +77,8 @@ public class StoreServiceHandlerTest {
     public void cantFindStore() {
 
         //given
-
         given(storeRepository.findById(anyLong())).willReturn(Optional.empty());
+        given(memberRepository.findMemberByEmail(anyString())).willReturn(Optional.of(member));
 
         //when
 
@@ -101,7 +101,6 @@ public class StoreServiceHandlerTest {
 
         //given
 
-        given(storeRepository.findById(anyLong())).willReturn(Optional.of(store));
         given(memberRepository.findMemberByEmail(anyString())).willReturn(Optional.empty());
 
         //when
@@ -126,16 +125,17 @@ public class StoreServiceHandlerTest {
         //given
 
         given(storeRepository.findById(anyLong())).willReturn(Optional.of(store));
-        given(memberRepository.findMemberByEmail(anyString())).willReturn(Optional.of(member));
 
         Member anotherMember = Member.of(
                 "anotherexample@email.com",
                 "pw1234",
-                UserRole.USER,
+                UserRole.MANAGER,
                 "SAM",
                 "nickname",
                 LocalDate.of(1995, 4, 24)
         );
+
+        given(memberRepository.findMemberByEmail(anyString())).willReturn(Optional.of(anotherMember));
 
         //when
 
@@ -158,7 +158,6 @@ public class StoreServiceHandlerTest {
 
         //given
 
-        Store store = new Store();
 
         given(storeRepository.findById(anyLong())).willReturn(Optional.of(store));
         given(memberRepository.findMemberByEmail(anyString())).willReturn(Optional.of(member));
