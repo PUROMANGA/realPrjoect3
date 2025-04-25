@@ -2,6 +2,7 @@ package com.example.minzok.menu.Entity;
 
 import com.example.minzok.global.base_entity.BaseEntity;
 import com.example.minzok.member.entity.Member;
+import com.example.minzok.menu.Dto.Request.MenuChangeStauts;
 import com.example.minzok.menu.Dto.Request.MenuRequestDto;
 import com.example.minzok.order.entity.OrderMenu;
 import com.example.minzok.store.entity.Store;
@@ -50,10 +51,11 @@ public class Menu extends BaseEntity {
         this.store = store;
     }
 
-    public void update(MenuRequestDto menuRequestDto) {
-        this.name = menuRequestDto.getName();
-        this.price = menuRequestDto.getPrice();
-        this.description = menuRequestDto.getDescription();
+    public void update(MenuChangeStauts menuChangeStauts) {
+        this.name = menuChangeStauts.getName();
+        this.price = menuChangeStauts.getPrice();
+        this.description = menuChangeStauts.getDescription();
+        this.menuStatus = menuChangeStauts.getMenuStatus();
     }
 
     public Menu(String name, Long price, String description, Store store) {

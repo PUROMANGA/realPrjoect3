@@ -5,6 +5,7 @@ import com.example.minzok.global.error.CustomRuntimeException;
 import com.example.minzok.global.error.ExceptionCode;
 import com.example.minzok.member.entity.Member;
 import com.example.minzok.member.repository.MemberRepository;
+import com.example.minzok.menu.Dto.Request.MenuChangeStauts;
 import com.example.minzok.menu.Dto.Request.MenuRequestDto;
 import com.example.minzok.menu.Dto.Response.MenuResponseDto;
 import com.example.minzok.menu.Entity.Menu;
@@ -39,7 +40,7 @@ public class MenuService {
         menuHandler.findMemberAndException(email);
         Store store = storeRepository.findById(storeId).orElseThrow(() -> new RuntimeException("가게가 없습니다"));
         Menu menu = new Menu(menuRequestDto, store);
-        menu.setMenuStatus(MenuStatus.NORMAL);
+        menuHandler.createMenu(menu);
         return new MenuResponseDto(menuRepository.save(menu));
     }
 
@@ -52,11 +53,11 @@ public class MenuService {
      */
 
     @Transactional
-    public MenuResponseDto findModifyMenuService(MenuRequestDto menuRequestDto, Long storeId, Long menuId, String email) {
+    public MenuResponseDto findModifyMenuService(MenuChangeStauts menuChangeStauts, Long storeId, Long menuId, String email) {
         menuHandler.findMemberAndException(email);
         storeRepository.findById(storeId).orElseThrow(() -> new RuntimeException("가게가 없습니다"));
         Menu menu = menuRepository.findById(menuId).orElseThrow(() -> new RuntimeException("메뉴가 없습니다"));
-        menu.update(menuRequestDto);
+        menu.update(menuChangeStauts);
         return new MenuResponseDto(menuRepository.save(menu));
     }
 
@@ -70,7 +71,7 @@ public class MenuService {
         menuHandler.findMemberAndException(email);
         storeRepository.findById(storeId).orElseThrow(() -> new RuntimeException("가게가 없습니다"));
         Menu menu = menuRepository.findById(menuid).orElseThrow(() -> new RuntimeException("메뉴가 없습니다"));
-        menu.setMenuStatus(MenuStatus.DELETE);
+        menuHandler.deleteMenu(menu);
         menuRepository.save(menu);
     }
 
