@@ -6,6 +6,8 @@ import com.example.minzok.global.error.ExceptionCode;
 import com.example.minzok.member.entity.Member;
 import com.example.minzok.member.enums.UserRole;
 import com.example.minzok.member.repository.MemberRepository;
+import com.example.minzok.store.dto.StoreMemberDto;
+import com.example.minzok.store.dto.StoreModifyDto;
 import com.example.minzok.store.dto.StoreRequestDto;
 import com.example.minzok.store.dto.StoreResponseDto;
 import com.example.minzok.store.entity.Store;
@@ -66,6 +68,15 @@ public class StoreServiceTest {
             15000
     );
 
+    StoreModifyDto storeModifyDto = new StoreModifyDto(
+            "둘이먹다 하나가 죽은 호식이치킨",
+            "정말 죽어서 경찰서 갔다왔습니다.",
+            LocalTime.parse("09:00"),
+            LocalTime.parse("23:00"),
+            15000,
+            StoreStatus.OPEN
+    );
+
     Member userMember = Member.of(
             "example1@email.com",
             "pw1234",
@@ -108,9 +119,6 @@ public class StoreServiceTest {
     public void cantFindMemberDuringPostingStore(){
 
         //given
-
-        String email = "example@email.com";
-
         given(memberRepository.findMemberByEmail(anyString())).willReturn(Optional.empty());
 
         //when
@@ -144,27 +152,6 @@ public class StoreServiceTest {
     }
 
     /**
-     * createStoreService : 실패 테스트3
-     */
-
-    @Test
-    @DisplayName("등록하려는 유저가 권한이 USER일 경우")
-    public void userCantHaveAuth(){
-
-        //given
-        given(memberRepository.findMemberByEmail(anyString())).willReturn(Optional.of(userMember));
-        given(storeRepository.countByMemberEmail(anyString())).willReturn(3);
-
-        //when
-        CustomRuntimeException exception = assertThrows(CustomRuntimeException.class, () -> {
-            storeService.createStoreService(storeRequestDto, userMember.getEmail());
-        });
-
-        //then
-        assertEquals(ExceptionCode.NO_HAVE_PERMISSION.getMessage(), exception.getMessage());
-    }
-
-    /**
      * createStoreService : 성공 테스트
      */
 
@@ -174,11 +161,11 @@ public class StoreServiceTest {
 
         //given
         given(memberRepository.findMemberByEmail(anyString())).willReturn(Optional.of(managerMember));
-        given(storeRepository.countByMemberEmail(anyString())).willReturn(3);
-        given(storeRepository.save(any(Store.class))).willReturn(store);
+        given(storeRepository.countByMemberEmail(anyString())).willReturn(0);
+        given(storeServiceHandler.changeStoreStatus(any(Store.class))).willReturn(store);
 
         //when
-        StoreResponseDto result = storeService.createStoreService(storeRequestDto, managerMember.getEmail());
+        StoreMemberDto result = storeService.createStoreService(storeRequestDto, managerMember.getEmail());
 
         //then
 
@@ -198,7 +185,7 @@ public class StoreServiceTest {
         given(storeRepository.save(any(Store.class))).willReturn(store);
 
         //when
-        StoreResponseDto result = storeService.patchStore(storeRequestDto, storeId, managerMember.getEmail());
+        StoreResponseDto result = storeService.patchStore(storeModifyDto, storeId, managerMember.getEmail());
 
         //then
         assertNotNull(result);

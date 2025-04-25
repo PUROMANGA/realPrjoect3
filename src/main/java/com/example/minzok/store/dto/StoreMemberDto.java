@@ -1,16 +1,25 @@
 package com.example.minzok.store.dto;
 
+import com.example.minzok.member.entity.Member;
 import com.example.minzok.store.entity.Store;
 import com.example.minzok.store.entity.StoreStatus;
-import com.querydsl.core.annotations.QueryProjection;
-import lombok.Data;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
 
 import java.time.LocalDateTime;
 import java.time.LocalTime;
 
-@Data
+@Getter
+@AllArgsConstructor
+@NoArgsConstructor
 
-public class StoreResponseDto {
+public class StoreMemberDto {
+
+    /**
+     * Store와 Member의 요소를 표현하기 위해 만들어준 Dto입니다
+     */
+
     private Long id;
     private String storeName;
     private String storeContent;
@@ -23,33 +32,16 @@ public class StoreResponseDto {
     private String menuName;
     private int countStore;
 
-    public StoreResponseDto(Store store) {
+    public StoreMemberDto(Store store, Member member) {
         this.id = store.getId();
         this.storeName = store.getStoreName();
         this.storeContent = store.getStoreContent();
+        this.storeStatus = store.getStoreStatus();
         this.openTime = store.getOpenTime();
         this.closeTime = store.getCloseTime();
         this.minimumOrderAmount = store.getMinimumOrderAmount();
-        this.storeStatus = store.getStoreStatus();
         this.creatTime = store.getCreatTime();
         this.modifiedTime = store.getModifiedTime();
+        this.countStore = member.getStoreCount();
     }
-
-    @QueryProjection
-    public StoreResponseDto(Long id, String storeName, String storeContent,
-                            LocalTime openTime, LocalTime closeTime, int minimumOrderAmount,
-                            LocalDateTime creatTime, LocalDateTime modifiedTime,
-                            StoreStatus storeStatus, String menuName) {
-        this.id = id;
-        this.storeName = storeName;
-        this.storeContent = storeContent;
-        this.openTime = openTime;
-        this.closeTime = closeTime;
-        this.minimumOrderAmount = minimumOrderAmount;
-        this.creatTime = creatTime;
-        this.modifiedTime = modifiedTime;
-        this.storeStatus = storeStatus;
-        this.menuName = menuName;
-    }
-
 }

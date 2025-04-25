@@ -4,6 +4,7 @@ import com.example.minzok.global.error.CustomNullPointerException;
 import com.example.minzok.global.error.CustomRuntimeException;
 import com.example.minzok.global.error.ExceptionCode;
 import com.example.minzok.store.entity.Store;
+import com.example.minzok.store.entity.StoreStatus;
 import com.example.minzok.store.repository.StoreRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
@@ -24,4 +25,16 @@ public class StoreServiceHandler {
 
         return foundStore;
     }
+
+    public Store changeStoreStatus(Store store) {
+        store.setStoreStatus(StoreStatus.PREPARING);
+        return storeRepository.save(store);
+    }
+
+    public Store deleteStoreStatus(Store store) {
+        store.setStoreStatus(StoreStatus.CRUSH);
+        return storeRepository.save(store);
+    }
+
+
 }

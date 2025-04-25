@@ -48,8 +48,8 @@ public class SecurityConfig {
 
     private void configureAuthorization(AuthorizeHttpRequestsConfigurer<HttpSecurity>.AuthorizationManagerRequestMatcherRegistry auth) {
         auth
-                .requestMatchers("/login", "/signup","logout").permitAll()
-                .requestMatchers("/profile","/stores").hasRole("MANAGER")
+                .requestMatchers("/login", "/signup","logout", "/error").permitAll()
+                .requestMatchers("/profile","/stores/**").hasRole("MANAGER")
                 .anyRequest().authenticated();
     }
 
