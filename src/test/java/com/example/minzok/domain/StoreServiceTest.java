@@ -36,6 +36,7 @@ import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.*;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.BDDMockito.willReturn;
+import static org.mockito.Mockito.doCallRealMethod;
 import static org.mockito.Mockito.verify;
 
 
@@ -93,8 +94,6 @@ public class StoreServiceTest {
             LocalDate.of(1995, 4, 24),
             1
     );
-
-
 
     Store store = new Store(
             1L,
@@ -238,11 +237,10 @@ public class StoreServiceTest {
         //given
         given(memberRepository.findMemberByEmail(anyString())).willReturn(Optional.of(managerMember));
         given(storeServiceHandler.foundStoreAndException(anyLong(), anyString())).willReturn((store));
-        given(storeServiceHandler.deleteStoreStatus(any(Store.class))).willReturn(store);
+        doCallRealMethod().when(storeServiceHandler).deleteStoreStatus(any(Store.class));
 
         //when
         storeService.deleteStoreService(storeId, managerMember.getEmail());
-
         verify(storeRepository).save(storeCaptor.capture());
         Store savedStore = storeCaptor.getValue();
 

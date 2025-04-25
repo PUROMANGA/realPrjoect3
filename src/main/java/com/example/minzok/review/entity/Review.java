@@ -43,7 +43,6 @@ public class Review extends BaseEntity {
     }
 
     public Review() {
-
     }
 
     public void updateReview(Long id, String contents, int rating) {

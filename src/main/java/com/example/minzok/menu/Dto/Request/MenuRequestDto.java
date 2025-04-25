@@ -18,4 +18,10 @@ public class MenuRequestDto {
 
     @NotBlank(message = "내용을 기입해주세요")
     private String description;
+
+    public MenuRequestDto(String name, Long price, String description) {
+        this.name = name;
+        this.price = price;
+        this.description = description;
+    }
 }

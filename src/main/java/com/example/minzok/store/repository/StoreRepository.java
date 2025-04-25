@@ -31,5 +31,4 @@ public interface StoreRepository extends JpaRepository<Store, Long>, CustomStore
 
     @Query("SELECT s FROM Store s WHERE s.member.email = :email AND s.storeStatus <> :status")
     List<Store> findStoreByMemberEmailAndStoreStatus(@Param("email") String email, @Param("status") StoreStatus status);
-
 }

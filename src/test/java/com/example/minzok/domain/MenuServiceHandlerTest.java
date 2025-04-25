@@ -23,7 +23,6 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.BDDMockito.given;
-import static org.mockito.Mockito.verify;
 
 @ExtendWith(MockitoExtension.class)
 
@@ -82,16 +81,5 @@ public class MenuServiceHandlerTest {
 
         //then
         assertEquals(ExceptionCode.NO_EDIT_PERMISSION.getMessage(), exception.getMessage());
-    }
-
-    @Test
-    @DisplayName("정상적인 테스트")
-    public void findMemberAndSuccess() {
-
-        //given
-
-        //when
-
-        //then
     }
 }

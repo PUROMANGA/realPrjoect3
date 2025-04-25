@@ -33,7 +33,6 @@ public class Common {
                 store.setStoreStatus(StoreStatus.OPEN);
             }
         }
-
         storeRepository.saveAll(stores);
     }
 }

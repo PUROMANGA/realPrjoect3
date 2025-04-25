@@ -31,9 +31,8 @@ public class StoreServiceHandler {
         return storeRepository.save(store);
     }
 
-    public Store deleteStoreStatus(Store store) {
+    public void deleteStoreStatus(Store store) {
         store.setStoreStatus(StoreStatus.CRUSH);
-        return storeRepository.save(store);
     }
 
 
