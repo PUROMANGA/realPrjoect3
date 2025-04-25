@@ -86,7 +86,7 @@ public class OrderService {
         return OrderResponseDto.builder()
                 .orderId(order.getId())
                 .storeId(store.getId())
-                .totalPrice(Long.valueOf(Math.toIntExact(order.getTotalPrice())))
+                .totalPrice(Long.valueOf((order.getTotalPrice())))
                 .orderStatus(order.getOrderStatus().name())
                 .orderTime(order.getOrderTime())
                 .menus(List.of(menuDto))

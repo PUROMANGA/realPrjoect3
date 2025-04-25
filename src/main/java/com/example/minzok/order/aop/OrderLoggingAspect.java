@@ -23,17 +23,19 @@ import java.time.LocalDateTime;
 @RequiredArgsConstructor
 public class OrderLoggingAspect {
     private final ObjectMapper objectMapper;
-    private JwtUtil jwtUtil;
+    private final JwtUtil jwtUtil;
 
     @Around("@annotation(com.example.minzok.order.aop.OrderLogging)")
     public Object logOrder(ProceedingJoinPoint joinPoint) throws Throwable {
         HttpServletRequest request = ((ServletRequestAttributes) RequestContextHolder.currentRequestAttributes()).getRequest();
         String token = request.getHeader("Authorization");
 
+        String subToken = jwtUtil.substringToken(token);
+
         // JWT에서 사용자 정보 추출
         String userId = "anonymous";
-        if (token != null && jwtUtil.validateToken(token)) {
-            Claims claims = jwtUtil.extractClaims(token);
+        if (token != null && jwtUtil.validateToken(subToken)) {
+            Claims claims = jwtUtil.extractClaims(subToken);
             userId = claims.getSubject(); // 사용자 이메일 또는 ID
         }
 
