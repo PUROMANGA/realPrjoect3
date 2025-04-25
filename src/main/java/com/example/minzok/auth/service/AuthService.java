@@ -80,9 +80,7 @@ public class AuthService {
         Member member = memberRepository.findMemberByEmail(dto.getEmail())
                 .orElseThrow(()-> new CustomRuntimeException(ExceptionCode.LOGIN_FAILED));
 
-        if(!passwordEncoder.matches(dto.getPassword(), member.getPassword())){
-            throw new CustomRuntimeException(ExceptionCode.LOGIN_FAILED);
-        }
+        member.validatePassword(dto.getPassword(), passwordEncoder);
 
         String bearerToken = jwtUtil.createToken(member.getEmail());
 
