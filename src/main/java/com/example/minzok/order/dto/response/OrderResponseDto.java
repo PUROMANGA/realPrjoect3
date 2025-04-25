@@ -11,7 +11,7 @@ import java.util.List;
 public class OrderResponseDto {
     private Long orderId;
     private Long storeId;
-    private int totalPrice;
+    private Long totalPrice;
     private String orderStatus;
     private LocalDateTime orderTime;
     private List<OrderMResponseDto> menus;

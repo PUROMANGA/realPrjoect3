@@ -70,10 +70,9 @@ public class OrderService {
                 .menu(menu)
                 .quantity(orderRequestDto.getQuantity())
                 .build();
-        List<OrderMenu> orderMenus = new ArrayList<>();
-        orderMenus.add(orderMenu);
 
-        Order order = new Order(member, store, orderMenus);
+        Order order = new Order(member, store);
+        order.addOrderMenu(orderMenu); // test 코드 작성 중 중복이 되어, 한 번만 추가.
         orderRepository.save(order);
 
         // 응답 DTO 생성
@@ -87,7 +86,7 @@ public class OrderService {
         return OrderResponseDto.builder()
                 .orderId(order.getId())
                 .storeId(store.getId())
-                .totalPrice(order.getTotalPrice())
+                .totalPrice(Long.valueOf(Math.toIntExact(order.getTotalPrice())))
                 .orderStatus(order.getOrderStatus().name())
                 .orderTime(order.getOrderTime())
                 .menus(List.of(menuDto))
