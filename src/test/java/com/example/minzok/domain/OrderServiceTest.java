@@ -79,12 +79,12 @@ public class OrderServiceTest {
         );
 
         // Menu 생성
-        menu = new Menu(
-                "후라이드 치킨",
-                15000L,
-                "바삭한 치킨",
-                store
-        );
+        menu = new Menu();
+        ReflectionTestUtils.setField(menu, "name", "후라이드 치킨");
+        ReflectionTestUtils.setField(menu, "price", 15000L);
+        ReflectionTestUtils.setField(menu, "description", "바삭한 치킨");
+        ReflectionTestUtils.setField(menu, "store", store);
+
 
         // OrderRequestDto 생성
         orderRequestDto = new OrderRequestDto(1L, 1L, 2);
