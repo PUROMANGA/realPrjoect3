@@ -6,10 +6,7 @@ import com.example.minzok.global.error.ExceptionCode;
 import com.example.minzok.member.entity.Member;
 import com.example.minzok.member.enums.UserRole;
 import com.example.minzok.member.repository.MemberRepository;
-import com.example.minzok.store.dto.StoreMemberDto;
-import com.example.minzok.store.dto.StoreModifyDto;
-import com.example.minzok.store.dto.StoreRequestDto;
-import com.example.minzok.store.dto.StoreResponseDto;
+import com.example.minzok.store.dto.*;
 import com.example.minzok.store.entity.Store;
 import com.example.minzok.store.entity.StoreStatus;
 import com.example.minzok.store.handler.StoreServiceHandler;
@@ -257,7 +254,7 @@ public class StoreServiceTest {
 
         //when
 
-        Slice<StoreResponseDto> result = storeService.findStorePage(keyword, pageable);
+        Slice<OnlyStoreResponseDto> result = storeService.findStorePage(keyword, pageable);
 
         //then
         assertNotNull(result);

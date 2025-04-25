@@ -2,10 +2,7 @@ package com.example.minzok.store.controller;
 
 
 import com.example.minzok.member.repository.MemberRepository;
-import com.example.minzok.store.dto.StoreMemberDto;
-import com.example.minzok.store.dto.StoreModifyDto;
-import com.example.minzok.store.dto.StoreRequestDto;
-import com.example.minzok.store.dto.StoreResponseDto;
+import com.example.minzok.store.dto.*;
 import com.example.minzok.store.service.StoreServiceImpl;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -68,10 +65,10 @@ public class StoreController {
      */
 
     @DeleteMapping("/{storeId}")
-    public ResponseEntity<Void> deleteStore(@PathVariable Long storeId,
+    public ResponseEntity<String> deleteStore(@PathVariable Long storeId,
                                                         @AuthenticationPrincipal MyUserDetail myUserDetail) {
         storeService.deleteStoreService(storeId, myUserDetail.getUsername());
-        return ResponseEntity.ok().build();
+        return ResponseEntity.ok("가게 삭제가 완료되었습니다.");
     }
 
     /**
@@ -82,7 +79,7 @@ public class StoreController {
      */
 
     @GetMapping
-    public ResponseEntity<Slice<StoreResponseDto>> findStorePage
+    public ResponseEntity<Slice<OnlyStoreResponseDto>> findStorePage
             (@RequestParam String keyword,
              @PageableDefault(size = 10, sort = "creatTime", direction = DESC) Pageable pageable) {
         return ResponseEntity.ok(storeService.findStorePage(keyword, pageable));
