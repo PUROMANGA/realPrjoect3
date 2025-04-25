@@ -30,7 +30,6 @@ public class MenuController {
     public ResponseEntity<MenuResponseDto> createdMenu(@Valid @RequestBody MenuRequestDto menuRequestDto,
                                                        @PathVariable Long storeId,
                                                        @AuthenticationPrincipal MyUserDetail myUserDetail) {
-        System.out.println("13823897r928472093470923749023470");
         return ResponseEntity.ok(menuService.createdMenuService(menuRequestDto, storeId, myUserDetail.getUsername()));
     }
 
