@@ -33,6 +33,7 @@ public class SecurityConfig {
                 .csrf(csrf -> csrf.disable())
                 .sessionManagement(this::configureSession)
                 .authorizeHttpRequests(this::configureAuthorization)
+                .logout(logout->logout.disable())
                 .addFilterBefore(new SecurityFilter(
                         jwtUtil,
                         myUserDetailService,
@@ -47,7 +48,7 @@ public class SecurityConfig {
 
     private void configureAuthorization(AuthorizeHttpRequestsConfigurer<HttpSecurity>.AuthorizationManagerRequestMatcherRegistry auth) {
         auth
-                .requestMatchers("/login", "/signup").permitAll()
+                .requestMatchers("/login", "/signup","logout").permitAll()
                 .requestMatchers("/profile","/stores").hasAnyRole("MANAGER", "ADMIN")
                 .requestMatchers("/").hasAnyRole("USER", "ADMIN")
                 .requestMatchers("/admin/**").hasRole("ADMIN")

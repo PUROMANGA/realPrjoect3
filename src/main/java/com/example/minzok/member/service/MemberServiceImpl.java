@@ -5,7 +5,7 @@ import com.example.minzok.addresss.enums.AddressType;
 import com.example.minzok.addresss.repository.AddressRepository;
 import com.example.minzok.global.error.CustomRuntimeException;
 import com.example.minzok.global.error.ExceptionCode;
-import com.example.minzok.global.jwt.MyUserDetail;
+import com.example.minzok.auth.entity.MyUserDetail;
 import com.example.minzok.member.dto.request.MemberDeleteRequestDto;
 import com.example.minzok.member.dto.request.MemberUpdateRequestDto;
 import com.example.minzok.member.dto.response.MemberStoreOrderCountDto;

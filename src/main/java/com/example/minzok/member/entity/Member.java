@@ -47,14 +47,14 @@ public class Member extends BaseEntity {
     @Column(nullable = false)
     private LocalDate birth;
 
-    @OneToMany(mappedBy = "member", cascade = CascadeType.ALL, orphanRemoval = true)
+    @OneToMany(mappedBy = "member", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
     private List<Address> addresses = new ArrayList<>();
 
     /**
      * 사장님이 가게 몇 개씩 들고 있는지 체크하는 변수
      */
     @Column(nullable = false)
-    private int storeCount;
+    private int storeCount = 0;
 
     protected Member(){
     }
@@ -114,6 +114,17 @@ public class Member extends BaseEntity {
 
     public Member(String email) {
         this.email = email;
+    }
+
+    public void increaseStoreCount() {
+         storeCount++;
+    }
+
+    public void decreaseStoreCount() {
+        if(storeCount == 0){
+            throw new RuntimeException();
+        }
+         storeCount--;
     }
 
 

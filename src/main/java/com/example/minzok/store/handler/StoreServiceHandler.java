@@ -21,11 +21,11 @@ public class StoreServiceHandler {
     public Store foundStoreAndException(Long storeId, String email){
         Member member = memberRepository.findMemberByEmail(email).orElseThrow(() -> new CustomNullPointerException(ExceptionCode.CANT_FIND_MEMBER));
 
-        if(!member.getEmail().equals(email)) {
+        Store foundStore = storeRepository.findById(storeId).orElseThrow(() -> new CustomNullPointerException(ExceptionCode.CANT_FIND_STORE));
+
+        if(!foundStore.getMember().getEmail().equals(email)) {
             throw new CustomRuntimeException(ExceptionCode.NO_EDIT_PERMISSION);
         }
-
-        Store foundStore = storeRepository.findById(storeId).orElseThrow(() -> new CustomNullPointerException(ExceptionCode.CANT_FIND_STORE));
 
         return foundStore;
     }

@@ -1,7 +1,7 @@
 package com.example.minzok.menu.Controller;
 
 
-import com.example.minzok.global.jwt.MyUserDetail;
+import com.example.minzok.auth.entity.MyUserDetail;
 import com.example.minzok.menu.Dto.Request.MenuRequestDto;
 import com.example.minzok.menu.Dto.Response.MenuResponseDto;
 import com.example.minzok.menu.Service.MenuService;

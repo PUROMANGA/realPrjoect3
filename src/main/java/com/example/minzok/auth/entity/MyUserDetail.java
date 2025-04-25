@@ -1,4 +1,4 @@
-package com.example.minzok.global.jwt;
+package com.example.minzok.auth.entity;
 
 import com.example.minzok.addresss.entity.Address;
 import com.example.minzok.addresss.enums.AddressType;
