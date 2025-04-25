@@ -52,7 +52,7 @@ public class AuthService {
         Member member = Member.of(
                 dto.getEmail(),
                 encodedPassword,
-                UserRole.USER,
+                UserRole.valueOf(dto.getUserRole()),
                 dto.getName(),
                 dto.getNickname(),
                 dto.getBirth()

@@ -108,6 +108,16 @@ public class Member extends BaseEntity {
         }
     }
 
+    public void increaseStoreCount() {
+        storeCount++;
+    }
+
+    public void decreaseStoreCount() {
+        if(storeCount == 0){
+            throw new RuntimeException();
+        }
+        storeCount--;
+    }
     /**
      * 테스트용 멤버 이메일
      */
@@ -116,16 +126,7 @@ public class Member extends BaseEntity {
         this.email = email;
     }
 
-    public void increaseStoreCount() {
-         storeCount++;
-    }
 
-    public void decreaseStoreCount() {
-        if(storeCount == 0){
-            throw new RuntimeException();
-        }
-         storeCount--;
-    }
 
 
 

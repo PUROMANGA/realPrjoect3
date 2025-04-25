@@ -32,6 +32,10 @@ public class OrderMenu {
     // 연관관계 편의 메서드
     public void setOrder(Order order) {
         this.order = order;
-        order.getOrderMenus().add(this);
+        // 중복 추가 방지 조건문
+        if (order != null && !order.getOrderMenus().contains(this)) {
+            order.getOrderMenus().add(this);
+        }
     }
+
 }
