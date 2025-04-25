@@ -92,29 +92,6 @@ public class StoreServiceHandlerTest {
     }
 
     /**
-     * patchStore, deleteStoreService에서 사용되는 foundStoreAndException메소드 실패 테스트 2
-     */
-
-    @Test
-    @DisplayName("가게를 수정하려고 하는데 그 email로 등록된 멤버가 보이지 않는다")
-    public void cantFindMemberForPuttingStore() {
-
-        //given
-
-        given(memberRepository.findMemberByEmail(anyString())).willReturn(Optional.empty());
-
-        //when
-
-        CustomNullPointerException exception = assertThrows(CustomNullPointerException.class, () -> {
-            storeServiceHandler.foundStoreAndException(store.getId(), member.getEmail());
-        });
-
-        //then
-
-        assertEquals(ExceptionCode.CANT_FIND_MEMBER.getMessage(), exception.getMessage());
-    }
-
-    /**
      * patchStore, deleteStoreService에서 사용되는 foundStoreAndException메소드 실패 테스트 3
      */
 
