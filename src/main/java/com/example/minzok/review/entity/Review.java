@@ -2,6 +2,7 @@ package com.example.minzok.review.entity;
 
 import com.example.minzok.global.base_entity.BaseEntity;
 import com.example.minzok.member.entity.Member;
+import com.example.minzok.order.entity.Order;
 import com.example.minzok.store.entity.Store;
 import jakarta.persistence.*;
 import lombok.Getter;
@@ -29,7 +30,14 @@ public class Review extends BaseEntity {
     @JoinColumn(name = "store_id")
     private Store store;
 
-    public Review(String contents, int rating) {
+    @ManyToOne
+    @JoinColumn(name = "order_id")
+    private Order order;
+
+    public Review(Member member, Store store, Order order, String contents, int rating) {
+        this.member = member;
+        this.store = store;
+        this.order = order;
         this.contents = contents;
         this.rating = rating;
     }
