@@ -2,6 +2,8 @@ package com.example.minzok.store.controller;
 
 
 import com.example.minzok.member.repository.MemberRepository;
+import com.example.minzok.store.dto.StoreMemberDto;
+import com.example.minzok.store.dto.StoreModifyDto;
 import com.example.minzok.store.dto.StoreRequestDto;
 import com.example.minzok.store.dto.StoreResponseDto;
 import com.example.minzok.store.service.StoreServiceImpl;
@@ -37,9 +39,9 @@ public class StoreController {
      */
 
     @PostMapping
-    public ResponseEntity<StoreResponseDto> createStore(@RequestBody @Validated StoreRequestDto storeRequestDto,
-                                                        @AuthenticationPrincipal MyUserDetail myUserDetail) {
-        StoreResponseDto createStore = storeService.createStoreService(storeRequestDto, myUserDetail.getUsername());
+    public ResponseEntity<StoreMemberDto> createStore(@RequestBody @Validated StoreRequestDto storeRequestDto,
+                                                      @AuthenticationPrincipal MyUserDetail myUserDetail) {
+        StoreMemberDto createStore = storeService.createStoreService(storeRequestDto, myUserDetail.getUsername());
         return ResponseEntity.ok(createStore);
     }
 
@@ -52,10 +54,10 @@ public class StoreController {
      */
 
     @PatchMapping ("/{storeId}")
-    public ResponseEntity<StoreResponseDto> patchStore(@RequestBody @Validated StoreRequestDto storeRequestDto,
+    public ResponseEntity<StoreResponseDto> patchStore(@RequestBody @Validated StoreModifyDto storeModifyDto,
                                                        @PathVariable Long storeId,
                                                        @AuthenticationPrincipal MyUserDetail myUserDetail) {
-        return ResponseEntity.ok(storeService.patchStore(storeRequestDto,storeId, myUserDetail.getUsername()));
+        return ResponseEntity.ok(storeService.patchStore(storeModifyDto, storeId, myUserDetail.getUsername()));
     }
 
     /**

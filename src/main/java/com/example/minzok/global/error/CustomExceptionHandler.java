@@ -36,4 +36,23 @@ public class CustomExceptionHandler {
 
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(response);
     }
+
+    @ExceptionHandler(CustomRuntimeException.class)
+    public ResponseEntity<CustomErrorResponse> handleArgumentNotValidException(CustomRuntimeException e) {
+
+        log.error("[RuntimeException 발생] cause:{}, message: {}",
+                NestedExceptionUtils.getMostSpecificCause(e),
+                e.getMessage());
+
+        ErrorCode errorCode = ExceptionCode.TOO_MANY_STORES;
+
+        CustomErrorResponse response = CustomErrorResponse.builder()
+                .message(errorCode.getMessage())
+                .timeStamp(LocalDateTime.now())
+                .build();
+
+        return ResponseEntity
+                .status(errorCode.gethttpStatus())
+                .body(response);
+    }
 }

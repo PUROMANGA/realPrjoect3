@@ -13,7 +13,7 @@ public class MenuResponseDto {
     private String name;
     private Long price;
     private String description;
-    private Store store;
+    private String storeName;
     private MenuStatus menuStatus;
 
 
@@ -22,7 +22,7 @@ public class MenuResponseDto {
         this.name = menu.getName();
         this.price = menu.getPrice();
         this.description = menu.getDescription();
-        this.store = menu.getStore();
+        this.storeName = menu.getStore().getStoreName();
         this.menuStatus = menu.getMenuStatus();
     }
 }
