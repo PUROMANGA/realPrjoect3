@@ -4,9 +4,11 @@ import com.example.minzok.global.error.CustomRuntimeException;
 import com.example.minzok.global.error.ExceptionCode;
 import com.example.minzok.member.entity.Member;
 import com.example.minzok.member.repository.MemberRepository;
+import com.example.minzok.order.entity.Order;
 import com.example.minzok.review.dto.response.ReviewResponseDto;
 import com.example.minzok.review.entity.Review;
 import com.example.minzok.review.repository.ReviewRepository;
+import com.example.minzok.store.entity.Store;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -21,9 +23,9 @@ public class ReviewService {
     private final ReviewRepository reviewRepository;
     private final MemberRepository memberRepository;
 
-    public ReviewResponseDto saveReview(String contents, int rating) {
+    public ReviewResponseDto saveReview(Member member, Store store, Order order, String contents, int rating) {
 
-        Review review = new Review(contents, rating);
+        Review review = new Review(member, store, order, contents, rating);
 
         Review saveReview = reviewRepository.save(review);
 
