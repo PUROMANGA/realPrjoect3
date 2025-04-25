@@ -29,7 +29,7 @@ public enum ExceptionCode implements ErrorCode{
     ADDRESS_MAX_EXCEEDED(HttpStatus.BAD_REQUEST, "주소는 5개를 초과하여 저장할 수 없습니다."),
     ADDRESS_MIN_EXCEEDED(HttpStatus.BAD_REQUEST, "주소는 1개 이상이여야 합니다."),
     ADDRESS_DEFAULT_NOT_DELETED(HttpStatus.BAD_REQUEST, "대표 주소는 삭제할 수 없습니다."),
-    MEMBER_NO_ACCESS(HttpStatus.BAD_REQUEST, "해당 경로로 자신의 정보는 볼 수 없습니다."),
+    MEMBER_NO_ACCESS(HttpStatus.FORBIDDEN, "해당 경로로 자신의 정보는 볼 수 없습니다."),
     REVIEW_NOT_FOUND(HttpStatus.NOT_FOUND, "해당 리뷰가 존재하지 않습니다."),
     REVIEW_MEMBER_NOT_FOUND(HttpStatus.NOT_FOUND, "해당 회원이 존재하지 않습니다."),
     REVIEW_STORE_NOT_FOUND(HttpStatus.NOT_FOUND, "해당 상점이 존재하지 않습니다."),
