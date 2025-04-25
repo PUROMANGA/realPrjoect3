@@ -5,10 +5,7 @@ import com.example.minzok.global.error.CustomRuntimeException;
 import com.example.minzok.global.error.ExceptionCode;
 import com.example.minzok.member.entity.Member;
 import com.example.minzok.member.repository.MemberRepository;
-import com.example.minzok.store.dto.StoreMemberDto;
-import com.example.minzok.store.dto.StoreModifyDto;
-import com.example.minzok.store.dto.StoreRequestDto;
-import com.example.minzok.store.dto.StoreResponseDto;
+import com.example.minzok.store.dto.*;
 import com.example.minzok.store.entity.Store;
 import com.example.minzok.store.entity.StoreFactory;
 import com.example.minzok.store.entity.StoreStatus;
@@ -87,14 +84,10 @@ public class StoreServiceImpl implements StoreService {
     @Transactional
     @Override
     public void deleteStoreService(Long storeId, String email) {
+        Member member = memberRepository.findMemberByEmail(email).orElseThrow(() -> new CustomNullPointerException(ExceptionCode.CANT_FIND_MEMBER));
         Store foundStore = storeServiceHandler.foundStoreAndException(storeId, email);
-        Member member = memberRepository.findMemberByEmail(email).orElseThrow(() -> new CustomRuntimeException(ExceptionCode.CANT_FIND_MEMBER));
-        storeServiceHandler.deleteStoreStatus(foundStore);
-
-
-        foundStore.setStoreStatus(StoreStatus.CRUSH);
         member.decreaseStoreCount();
-        storeRepository.save(foundStore);
+        storeServiceHandler.deleteStoreStatus(foundStore);
     }
 
     /**
@@ -106,13 +99,13 @@ public class StoreServiceImpl implements StoreService {
 
     @Transactional(readOnly = true)
     @Override
-    public Slice<StoreResponseDto> findStorePage(String keyword, Pageable pageable) {
+    public Slice<OnlyStoreResponseDto> findStorePage(String keyword, Pageable pageable) {
         Slice<Store> store = storeRepository.storeNameFindByKeyword(keyword, pageable);
 
         if(store.isEmpty()) {
             throw new CustomRuntimeException(ExceptionCode.NOT_FIND_KEYWORD);
         }
-        return store.map(StoreResponseDto::new);
+        return store.map(OnlyStoreResponseDto::new);
     }
 
     /**

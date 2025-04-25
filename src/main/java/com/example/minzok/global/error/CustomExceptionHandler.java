@@ -44,7 +44,7 @@ public class CustomExceptionHandler {
                 NestedExceptionUtils.getMostSpecificCause(e),
                 e.getMessage());
 
-        ErrorCode errorCode = ExceptionCode.TOO_MANY_STORES;
+        ErrorCode errorCode = ExceptionCode.RUNTIME_EXCEPTION;
 
         CustomErrorResponse response = CustomErrorResponse.builder()
                 .message(errorCode.getMessage())

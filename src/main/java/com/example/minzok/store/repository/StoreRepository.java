@@ -18,8 +18,7 @@ public interface StoreRepository extends JpaRepository<Store, Long>, CustomStore
 
     @Query("select s " +
             "from Store s " +
-            "Join s.menus m " +
-            "Where m.name LIKE CONCAT('%', :keyword, '%')" +
+            "Where s.storeName LIKE CONCAT('%', :keyword, '%')" +
             "AND s.storeStatus = 'OPEN'")
     Slice<Store> storeNameFindByKeyword(String keyword, Pageable pageable);
 
