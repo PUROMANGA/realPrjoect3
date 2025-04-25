@@ -39,6 +39,7 @@ public class MenuService {
         menuHandler.findMemberAndException(email);
         Store store = storeRepository.findById(storeId).orElseThrow(() -> new RuntimeException("가게가 없습니다"));
         Menu menu = new Menu(menuRequestDto, store);
+        menu.setMenuStatus(MenuStatus.NORMAL);
         return new MenuResponseDto(menuRepository.save(menu));
     }
 

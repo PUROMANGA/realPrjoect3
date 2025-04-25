@@ -2,7 +2,6 @@ package com.example.minzok.review.controller;
 
 import com.example.minzok.global.error.CustomRuntimeException;
 import com.example.minzok.global.error.ExceptionCode;
-import com.example.minzok.global.jwt.MyUserDetail;
 import com.example.minzok.auth.entity.MyUserDetail;
 import com.example.minzok.member.entity.Member;
 import com.example.minzok.member.repository.MemberRepository;

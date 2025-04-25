@@ -98,5 +98,4 @@ public class StoreController {
      @PageableDefault(size = 10, sort = "creatTime", direction = DESC)Pageable pageable) {
         return ResponseEntity.ok(storeService.findOneStore(storeId, pageable));
     }
-
 }
