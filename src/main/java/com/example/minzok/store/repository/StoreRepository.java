@@ -22,7 +22,10 @@ public interface StoreRepository extends JpaRepository<Store, Long>, CustomStore
             "AND s.storeStatus = 'OPEN'")
     Slice<Store> storeNameFindByKeyword(String keyword, Pageable pageable);
 
-    List<Store> findByStoreStatusNot(StoreStatus storeStatus);
+    @Query("select s " +
+            "from Store s " +
+            "Where s.storeStatus IN :status")
+    List<Store> findStatusIn(List<StoreStatus> status);
 
     int countByMemberEmail(String email);
 

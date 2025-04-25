@@ -16,6 +16,7 @@ import com.example.minzok.store.entity.Store;
 import com.example.minzok.store.repository.StoreRepository;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.access.annotation.Secured;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -35,6 +36,7 @@ public class MenuService {
      * @return
      */
 
+    @Secured({"ROLE_MANAGER"})
     @Transactional
     public MenuResponseDto createdMenuService(MenuRequestDto menuRequestDto, Long storeId, String email) {
         menuHandler.findMemberAndException(email);
@@ -52,6 +54,7 @@ public class MenuService {
      * @return
      */
 
+    @Secured({"ROLE_MANAGER"})
     @Transactional
     public MenuResponseDto findModifyMenuService(MenuChangeStauts menuChangeStauts, Long storeId, Long menuId, String email) {
         menuHandler.findMemberAndException(email);
@@ -67,6 +70,7 @@ public class MenuService {
      * @param storeId
      */
 
+    @Secured({"ROLE_MANAGER"})
     public void deleteMenuService(Long menuid, Long storeId, String email) {
         menuHandler.findMemberAndException(email);
         storeRepository.findById(storeId).orElseThrow(() -> new RuntimeException("가게가 없습니다"));
