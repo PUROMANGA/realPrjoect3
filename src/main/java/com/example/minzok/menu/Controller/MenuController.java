@@ -2,9 +2,11 @@ package com.example.minzok.menu.Controller;
 
 
 import com.example.minzok.auth.entity.MyUserDetail;
+import com.example.minzok.menu.Dto.Request.MenuChangeStauts;
 import com.example.minzok.menu.Dto.Request.MenuRequestDto;
 import com.example.minzok.menu.Dto.Response.MenuResponseDto;
 import com.example.minzok.menu.Service.MenuService;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
@@ -13,6 +15,7 @@ import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequiredArgsConstructor
+@RequestMapping("/stores")
 
 public class MenuController {
 
@@ -26,7 +29,7 @@ public class MenuController {
      */
 
     @PostMapping("/{storeId}/menus")
-    public ResponseEntity<MenuResponseDto> createdMenu(@RequestBody @Validated MenuRequestDto menuRequestDto,
+    public ResponseEntity<MenuResponseDto> createdMenu(@Valid @RequestBody MenuRequestDto menuRequestDto,
                                                        @PathVariable Long storeId,
                                                        @AuthenticationPrincipal MyUserDetail myUserDetail) {
         return ResponseEntity.ok(menuService.createdMenuService(menuRequestDto, storeId, myUserDetail.getUsername()));
@@ -39,11 +42,11 @@ public class MenuController {
      * @return
      */
 
-    @PatchMapping("/{storeId}/{menuId}")
-    public ResponseEntity<MenuResponseDto> findModifyMenu(@RequestBody @Validated MenuRequestDto menuRequestDto,
+    @PatchMapping("/{storeId}/menus/{menuId}")
+    public ResponseEntity<MenuResponseDto> findModifyMenu(@RequestBody @Validated MenuChangeStauts menuChangeStauts,
                                                       @PathVariable Long storeId, @PathVariable Long menuId,
                                                           @AuthenticationPrincipal MyUserDetail myUserDetail) {
-        return ResponseEntity.ok(menuService.findModifyMenuService(menuRequestDto, storeId, menuId, myUserDetail.getUsername()));
+        return ResponseEntity.ok(menuService.findModifyMenuService(menuChangeStauts, storeId, menuId, myUserDetail.getUsername()));
     }
 
     /**
@@ -53,10 +56,10 @@ public class MenuController {
      * @return
      */
 
-    @DeleteMapping("/{storeId}/{menuId}")
-    public ResponseEntity<Void> deleteMenu(@PathVariable Long menuid, @PathVariable Long storeId,
+    @DeleteMapping("/{storeId}/menus/{menuId}")
+    public ResponseEntity<String> deleteMenu(@PathVariable Long menuId, @PathVariable Long storeId,
                                            @AuthenticationPrincipal MyUserDetail myUserDetail) {
-        menuService.deleteMenuService(menuid, storeId, myUserDetail.getUsername());
-        return ResponseEntity.ok().build();
+        menuService.deleteMenuService(menuId, storeId, myUserDetail.getUsername());
+        return ResponseEntity.ok("메뉴가 삭제 완료되었습니다!");
     }
 }

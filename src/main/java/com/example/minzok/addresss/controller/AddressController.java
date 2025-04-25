@@ -67,7 +67,7 @@ public class AddressController {
      * @param myUserDetail
      * @return
      */
-    @PreAuthorize("hasRole('ADMIN') or @addressServiceImpl.matchMember(#addressId, principal.username)")
+    @PreAuthorize("@addressServiceImpl.matchMember(#addressId, principal.username)")
     @DeleteMapping("/{addressId}")
     public ResponseEntity<Map<String, String>> deleteAddress(@PathVariable Long addressId, @AuthenticationPrincipal MyUserDetail myUserDetail){
         addressService.deleteAddress(addressId, myUserDetail);

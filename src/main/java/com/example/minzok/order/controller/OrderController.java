@@ -26,7 +26,9 @@ public class OrderController {
             @RequestBody OrderRequestDto dto,
             @AuthenticationPrincipal MyUserDetail myUserDetail
             ){
+      
         OrderResponseDto response = orderService.createOrder(myUserDetail.getMemberId(),dto);
+
         return ResponseEntity.status(HttpStatus.CREATED).body(response);
     }
 
