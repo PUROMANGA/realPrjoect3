@@ -6,7 +6,6 @@ import com.example.minzok.member.entity.Member;
 import com.example.minzok.member.repository.MemberRepository;
 import com.example.minzok.menu.Entity.Menu;
 import com.example.minzok.menu.Entity.MenuStatus;
-import com.example.minzok.menu.Repository.MenuRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 
@@ -16,7 +15,6 @@ import org.springframework.stereotype.Component;
 public class MenuHandler {
 
     private final MemberRepository memberRepository;
-    private final MenuRepository menuRepository;
 
     public void findMemberAndException(String email) {
 

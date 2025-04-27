@@ -35,12 +35,16 @@ public class MenuController {
         return ResponseEntity.ok(menuService.createdMenuService(menuRequestDto, storeId, myUserDetail.getUsername()));
     }
 
+
     /**
-     * 메뉴수정
-     * @param menuRequestDto
+     * 메뉴를 수정하는 역할.
+     * @param menuChangeStauts
+     * @param storeId
+     * @param menuId
      * @param myUserDetail
      * @return
      */
+
 
     @PatchMapping("/{storeId}/menus/{menuId}")
     public ResponseEntity<MenuResponseDto> findModifyMenu(@RequestBody @Validated MenuChangeStauts menuChangeStauts,
@@ -50,8 +54,9 @@ public class MenuController {
     }
 
     /**
-     * 메뉴 삭제
-     * @param menuid
+     * 메뉴를 삭제하는 역할.
+     * @param menuId
+     * @param storeId
      * @param myUserDetail
      * @return
      */

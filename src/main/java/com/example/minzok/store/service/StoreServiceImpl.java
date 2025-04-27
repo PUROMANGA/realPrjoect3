@@ -88,6 +88,7 @@ public class StoreServiceImpl implements StoreService {
         Store foundStore = storeServiceHandler.foundStoreAndException(storeId, email);
         member.decreaseStoreCount();
         storeServiceHandler.deleteStoreStatus(foundStore);
+        storeRepository.save(foundStore);
     }
 
     /**

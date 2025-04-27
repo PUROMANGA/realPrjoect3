@@ -35,6 +35,8 @@ import java.util.Optional;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.*;
 import static org.mockito.BDDMockito.given;
+import static org.mockito.BDDMockito.willReturn;
+import static org.mockito.Mockito.doCallRealMethod;
 import static org.mockito.Mockito.verify;
 
 
@@ -83,16 +85,15 @@ public class StoreServiceTest {
             LocalDate.of(1995, 4, 24)
     );
 
-    Member managerMember = Member.of(
+    Member managerMember = new Member(
             "example2@email.com",
             "pw1234",
             UserRole.MANAGER,
             "SAM",
             "nickname",
-            LocalDate.of(1995, 4, 24)
+            LocalDate.of(1995, 4, 24),
+            1
     );
-
-
 
     Store store = new Store(
             1L,
@@ -149,6 +150,25 @@ public class StoreServiceTest {
     }
 
     /**
+     * createStoreService : 실패 테스트3
+     */
+
+    @Test
+    @DisplayName("member의 countStore가 1 안올라감")
+    public void dontUpCountStoreInMember(){
+
+        //given
+
+        int before = managerMember.getStoreCount();
+
+        //when
+        managerMember.increaseStoreCount();
+
+        //then
+        assertNotEquals(managerMember.getStoreCount(), before);
+    }
+
+    /**
      * createStoreService : 성공 테스트
      */
 
@@ -189,6 +209,24 @@ public class StoreServiceTest {
     }
 
     /**
+     * deleteStoreService : 실패 테스트
+     */
+
+    @Test
+    @DisplayName("member의 countStore가 1 안 내려감")
+    public void decreaseStoreCount() {
+
+        //given
+
+        int count = managerMember.getStoreCount();
+        //when
+        managerMember.decreaseStoreCount();
+
+        //then
+        assertNotEquals(count, managerMember);
+    }
+
+    /**
      * deleteStoreService : 전체 흐름 테스트
      */
 
@@ -199,11 +237,10 @@ public class StoreServiceTest {
         //given
         given(memberRepository.findMemberByEmail(anyString())).willReturn(Optional.of(managerMember));
         given(storeServiceHandler.foundStoreAndException(anyLong(), anyString())).willReturn((store));
-        given(storeRepository.save(any(Store.class))).willReturn(store);
+        doCallRealMethod().when(storeServiceHandler).deleteStoreStatus(any(Store.class));
 
         //when
         storeService.deleteStoreService(storeId, managerMember.getEmail());
-
         verify(storeRepository).save(storeCaptor.capture());
         Store savedStore = storeCaptor.getValue();
 

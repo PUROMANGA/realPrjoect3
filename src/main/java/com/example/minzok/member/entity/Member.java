@@ -118,12 +118,35 @@ public class Member extends BaseEntity {
         }
         storeCount--;
     }
+
     /**
      * 테스트용 멤버 이메일
+     * @param email
      */
 
     public Member(String email) {
         this.email = email;
+    }
+
+    /**
+     * 테스트용 멤버 생성자
+     * @param email
+     * @param password
+     * @param userRole
+     * @param name
+     * @param nickname
+     * @param birth
+     * @param storeCount
+     */
+
+    public Member(String email, String password, UserRole userRole, String name, String nickname, LocalDate birth, int storeCount) {
+        this.email = email;
+        this.password = password;
+        this.userRole = userRole;
+        this.name = name;
+        this.nickname = nickname;
+        this.birth = birth;
+        this.storeCount = storeCount;
     }
 
 

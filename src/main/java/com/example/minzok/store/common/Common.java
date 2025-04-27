@@ -21,7 +21,9 @@ public class Common {
     @Scheduled(cron = "0 */10 * * * *")
     public void updateWithDrawStatus() {
 
-        List<Store> stores = storeRepository.findByStoreStatusNot(StoreStatus.CLOSED);
+        List<StoreStatus> statusList = List.of(StoreStatus.OPEN, StoreStatus.CLOSED);
+
+        List<Store> stores = storeRepository.findStatusIn(statusList);
         LocalTime now = LocalTime.now();
 
         for(Store store : stores) {
@@ -31,7 +33,6 @@ public class Common {
                 store.setStoreStatus(StoreStatus.OPEN);
             }
         }
-
         storeRepository.saveAll(stores);
     }
 }
