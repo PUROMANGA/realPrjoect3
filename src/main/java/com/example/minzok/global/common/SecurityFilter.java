@@ -77,10 +77,10 @@ public class SecurityFilter extends OncePerRequestFilter {
             filterChain.doFilter(request, response);
         } catch (ExpiredJwtException e) {
             throw new CustomRuntimeException(ExceptionCode.TOKEN_EXPIRED);
-        } catch (JwtException | IllegalArgumentException e) {
-            response.sendError(HttpServletResponse.SC_UNAUTHORIZED, "JWT 오류: " + e.getMessage());
+        } catch (CustomRuntimeException e) {
+            throw e;
         } catch (Exception e) {
-            response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, "인증 처리 중 서버 오류 발생");
+            throw new CustomRuntimeException(ExceptionCode.INTERNAL_SERVER_ERROR);
         }
     }
 }

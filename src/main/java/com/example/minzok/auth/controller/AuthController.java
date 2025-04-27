@@ -4,6 +4,10 @@ import com.example.minzok.auth.dto.request.LoginRequestDto;
 import com.example.minzok.auth.dto.request.SignUpRequestDto;
 import com.example.minzok.auth.dto.response.TokenResponseDto;
 import com.example.minzok.auth.service.AuthService;
+import com.example.minzok.auth.service.RefreshTokenService;
+import com.example.minzok.global.error.CustomRuntimeException;
+import com.example.minzok.global.error.ExceptionCode;
+import com.example.minzok.global.jwt.JwtUtil;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -20,6 +24,7 @@ import org.springframework.web.bind.annotation.RestController;
 public class AuthController {
 
     private final AuthService authService;
+    private final RefreshTokenService refreshTokenService;
 
     /**
      * 입력한 정보로 회원가입 한다.
@@ -54,4 +59,10 @@ public class AuthController {
 
         return new ResponseEntity<>( null , HttpStatus.OK);
     }
+
+    @PostMapping("/refresh")
+    public ResponseEntity<TokenResponseDto> reissue(@RequestHeader("Authorization") String refreshToken) {
+        return new ResponseEntity<>(refreshTokenService.refresh(refreshToken), HttpStatus.OK);
+    }
+
 }
