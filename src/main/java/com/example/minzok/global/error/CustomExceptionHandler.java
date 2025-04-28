@@ -87,7 +87,7 @@ public class CustomExceptionHandler {
                 .build();
 
         return ResponseEntity
-                .status(errorCode.gethttpStatus())
+                .status(errorCode.getHttpStatus())
                 .body(response);
     }
 }
