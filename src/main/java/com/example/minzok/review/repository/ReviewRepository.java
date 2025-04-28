@@ -12,10 +12,10 @@ import java.util.List;
 @Repository
 public interface ReviewRepository extends JpaRepository<Review, Long> {
 
-    @Query(value = "select id, contents, rating, store_id, creat_time, modified_time from Minzok.reviews where rating between ? and ? order by creat_time desc", nativeQuery = true)
+    @Query(value = "select id, contents, rating, store_id, creat_time, modified_time from reviews where rating between ? and ? order by creat_time desc", nativeQuery = true)
     List<Review> searchFindByRating(int min, int max);
 
-    @Query(value = "select id, contents, rating, store_id, creat_time, modified_time from Minzok.reviews where store_id = ? order by creat_time desc", nativeQuery = true)
+    @Query(value = "select id, contents, rating, store_id, creat_time, modified_time from reviews where store_id = ? order by creat_time desc", nativeQuery = true)
     List<Review> findAllByStoreId(Long storeId);
 
     default Review findByIdOrElseThrow(Long id) {
