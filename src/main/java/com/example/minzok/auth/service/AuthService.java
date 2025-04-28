@@ -6,6 +6,7 @@ import com.example.minzok.addresss.repository.AddressRepository;
 import com.example.minzok.auth.dto.request.LoginRequestDto;
 import com.example.minzok.auth.dto.request.SignUpRequestDto;
 import com.example.minzok.auth.dto.response.TokenResponseDto;
+import com.example.minzok.auth.entity.RefreshToken;
 import com.example.minzok.global.error.CustomRuntimeException;
 import com.example.minzok.global.error.ErrorCode;
 import com.example.minzok.global.error.ExceptionCode;
@@ -13,6 +14,7 @@ import com.example.minzok.global.jwt.JwtUtil;
 import com.example.minzok.member.entity.Member;
 import com.example.minzok.member.enums.UserRole;
 import com.example.minzok.member.repository.MemberRepository;
+import io.jsonwebtoken.Claims;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -26,6 +28,7 @@ public class AuthService {
     private final MemberRepository memberRepository;
     private final PasswordEncoder passwordEncoder;
     private final BlackListTokenService blackListTokenService;
+    private final RefreshTokenService refreshTokenService;
     private final JwtUtil jwtUtil;
     private final AddressRepository addressRepository;
 
@@ -64,6 +67,7 @@ public class AuthService {
         addressRepository.save(address);
 
         String bearerToken = jwtUtil.createToken(member.getEmail());
+        refreshTokenService.createRefreshToken(member.getEmail());
 
         return new TokenResponseDto(bearerToken);
     }
@@ -83,6 +87,7 @@ public class AuthService {
         member.validatePassword(dto.getPassword(), passwordEncoder);
 
         String bearerToken = jwtUtil.createToken(member.getEmail());
+        refreshTokenService.createRefreshToken(member.getEmail());
 
         return new TokenResponseDto(bearerToken);
     }
@@ -95,8 +100,9 @@ public class AuthService {
     public void logout(String token) {
         if (token != null && token.startsWith("Bearer ")) {
             token = jwtUtil.substringToken(token);
-            blackListTokenService.addToBlacklist(token);
         }
+        blackListTokenService.addToBlacklist(token);
+        refreshTokenService.deleteRefreshToken(token);
     }
 
 }

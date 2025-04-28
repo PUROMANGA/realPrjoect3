@@ -1,6 +1,6 @@
 package com.example.minzok.global.error;
 
-import jakarta.servlet.http.HttpServletRequest;
+import com.example.minzok.global.error.authEntryPoint.CustomAuthenticationException;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.core.NestedExceptionUtils;
 import org.springframework.dao.DataIntegrityViolationException;
@@ -53,7 +53,22 @@ public class CustomExceptionHandler {
                 .build();
 
         return ResponseEntity
-                .status(errorCode.gethttpStatus())
+                .status(errorCode.getHttpStatus())
+                .body(response);
+    }
+
+    @ExceptionHandler(CustomAuthenticationException.class)
+    public ResponseEntity<CustomErrorResponse> handleException(CustomAuthenticationException e) {
+
+        ErrorCode errorCode = e.getExceptionCode();
+
+        CustomErrorResponse response = CustomErrorResponse.builder()
+                .message(errorCode.getMessage())
+                .timeStamp(LocalDateTime.now())
+                .build();
+
+        return ResponseEntity
+                .status(errorCode.getHttpStatus())
                 .body(response);
     }
 

@@ -38,13 +38,16 @@ public enum ExceptionCode implements ErrorCode{
     NOT_FIND_KEYWORD(HttpStatus.NOT_FOUND,"키워드를 찾을 수 없습니다."),
     REVIEW_UPDATE_UNAUTHORIZED(HttpStatus.UNAUTHORIZED, "해당 리뷰의 작성자만 수정할 수 있습니다."),
     REVIEW_DELETE_UNAUTHORIZED(HttpStatus.UNAUTHORIZED, "해당 리뷰의 작성자만 삭제할 수 있습니다."),
-    TOO_MANY_STORES(HttpStatus.BAD_REQUEST, "3개 이상의 가게를 만들 수 없습니다.");
+    TOO_MANY_STORES(HttpStatus.BAD_REQUEST, "3개 이상의 가게를 만들 수 없습니다."),
+    INTERNAL_SERVER_ERROR(HttpStatus.INTERNAL_SERVER_ERROR, "인증 처리 중 서버 오류 발생"),
+    ACCESS_DENIED(HttpStatus.FORBIDDEN, "접근 권한이 없습니다."),
+    INVALID_REFRESH_TOKEN(HttpStatus.UNAUTHORIZED, "리프레시토큰이 유효하지 않습니다.");
 
     private final HttpStatus httpStatus;
     private final String message;
 
     @Override
-    public HttpStatus gethttpStatus() {
+    public HttpStatus getHttpStatus() {
         return httpStatus;
     }
 }
