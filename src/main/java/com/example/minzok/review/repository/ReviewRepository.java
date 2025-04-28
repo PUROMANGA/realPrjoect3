@@ -12,6 +12,7 @@ import java.util.List;
 @Repository
 public interface ReviewRepository extends JpaRepository<Review, Long> {
 
+
     @Query("select r from Review r where r.rating between ?1 and ?2 order by r.creatTime desc")
     List<Review> searchFindByRating(int min, int max);
 
