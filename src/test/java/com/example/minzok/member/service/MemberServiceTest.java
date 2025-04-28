@@ -6,8 +6,6 @@ import com.example.minzok.addresss.enums.AddressType;
 import com.example.minzok.addresss.repository.AddressRepository;
 import com.example.minzok.auth.entity.MyUserDetail;
 import com.example.minzok.auth.service.MyUserDetailService;
-import com.example.minzok.global.error.CustomNullPointerException;
-import com.example.minzok.global.error.ExceptionCode;
 import com.example.minzok.member.dto.response.MyMemberResponseDto;
 import com.example.minzok.member.dto.response.OtherMemberResponseDto;
 import com.example.minzok.member.entity.Member;

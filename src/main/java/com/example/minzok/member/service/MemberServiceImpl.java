@@ -44,8 +44,8 @@ public class MemberServiceImpl implements MemberService {
 
         return new MyMemberResponseDto(
                 member.getId(),
-                member.getUserRole().toString(),
                 member.getEmail(),
+                member.getUserRole().toString(),
                 member.getName(),
                 member.getNickname(),
                 member.getBirth(),
