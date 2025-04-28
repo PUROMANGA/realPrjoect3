@@ -46,7 +46,7 @@ public enum ExceptionCode implements ErrorCode{
     private final String message;
 
     @Override
-    public HttpStatus gethttpStatus() {
+    public HttpStatus getHttpStatus() {
         return httpStatus;
     }
 }

@@ -5,6 +5,9 @@ import com.example.minzok.global.error.CustomRuntimeException;
 import com.example.minzok.global.error.ErrorCode;
 import com.example.minzok.global.error.ExceptionCode;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.SerializationFeature;
+import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
+import com.fasterxml.jackson.datatype.jsr310.ser.LocalDateTimeSerializer;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
@@ -16,12 +19,24 @@ import org.springframework.stereotype.Component;
 
 import java.io.IOException;
 import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 
 @Slf4j
 @Component
 public class CustomAuthenticationEntryPoint implements AuthenticationEntryPoint {
 
-    private final ObjectMapper objectMapper = new ObjectMapper();
+    private final ObjectMapper objectMapper;
+
+    public CustomAuthenticationEntryPoint() {
+        this.objectMapper = new ObjectMapper();
+
+        JavaTimeModule javaTimeModule = new JavaTimeModule();
+        javaTimeModule.addSerializer(LocalDateTime.class,
+                new LocalDateTimeSerializer(DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss")));
+
+        this.objectMapper.registerModule(javaTimeModule);
+        this.objectMapper.disable(SerializationFeature.WRITE_DATES_AS_TIMESTAMPS);
+    }
 
     @Override
     public void commence(
@@ -33,10 +48,13 @@ public class CustomAuthenticationEntryPoint implements AuthenticationEntryPoint 
 
         ErrorCode errorCode;
 
-        if (authException.getCause() instanceof CustomRuntimeException) {
-            CustomRuntimeException customException = (CustomRuntimeException) authException.getCause();
-            errorCode = customException.getExceptionCode();
+        System.out.println(authException.getMessage());
+
+        if (authException instanceof CustomAuthenticationException) {
+            CustomAuthenticationException e = (CustomAuthenticationException) authException;
+            errorCode = e.getExceptionCode();
         } else {
+            System.out.println("1");
             errorCode = ExceptionCode.INTERNAL_SERVER_ERROR;
         }
 
@@ -44,8 +62,7 @@ public class CustomAuthenticationEntryPoint implements AuthenticationEntryPoint 
                 NestedExceptionUtils.getMostSpecificCause(authException),
                 errorCode.getMessage());
 
-
-        response.setStatus(errorCode.gethttpStatus().value());
+        response.setStatus(errorCode.getHttpStatus().value());
 
         CustomErrorResponse errorResponse = CustomErrorResponse.builder()
                 .message(errorCode.getMessage())

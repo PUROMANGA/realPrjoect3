@@ -4,6 +4,7 @@ import com.example.minzok.auth.service.BlackListTokenService;
 import com.example.minzok.auth.service.MyUserDetailService;
 import com.example.minzok.global.error.CustomRuntimeException;
 import com.example.minzok.global.error.ExceptionCode;
+import com.example.minzok.global.error.authEntryPoint.CustomAuthenticationException;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.ExpiredJwtException;
 import io.jsonwebtoken.JwtException;
@@ -12,7 +13,9 @@ import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.security.access.AccessDeniedException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.filter.OncePerRequestFilter;
 import com.example.minzok.global.jwt.JwtUtil;
@@ -57,11 +60,11 @@ public class SecurityFilter extends OncePerRequestFilter {
             String token = jwtUtil.substringToken(authToken);
 
             if (!jwtUtil.validateToken(token)) {
-                throw new CustomRuntimeException(ExceptionCode.TOKEN_INVALID);
+                throw new CustomAuthenticationException(ExceptionCode.TOKEN_INVALID);
             }
 
             if (blackListTokenService.isTokenBlacklisted(authToken)) {
-                throw new CustomRuntimeException(ExceptionCode.TOKEN_BLACKLISTED);
+                throw new CustomAuthenticationException(ExceptionCode.TOKEN_BLACKLISTED);
             }
 
             Claims claims = jwtUtil.extractClaims(token);
@@ -76,11 +79,13 @@ public class SecurityFilter extends OncePerRequestFilter {
 
             filterChain.doFilter(request, response);
         } catch (ExpiredJwtException e) {
-            throw new CustomRuntimeException(ExceptionCode.TOKEN_EXPIRED);
-        } catch (CustomRuntimeException e) {
+            throw new CustomAuthenticationException(ExceptionCode.TOKEN_EXPIRED);
+        } catch (CustomAuthenticationException e) {
+            throw e;
+        } catch (AuthenticationException | AccessDeniedException e) {
             throw e;
         } catch (Exception e) {
-            throw new CustomRuntimeException(ExceptionCode.INTERNAL_SERVER_ERROR);
+            throw new CustomAuthenticationException(ExceptionCode.INTERNAL_SERVER_ERROR);
         }
     }
 }

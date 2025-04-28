@@ -2,6 +2,7 @@ package com.example.minzok.global.jwt;
 
 import com.example.minzok.global.error.CustomRuntimeException;
 import com.example.minzok.global.error.ExceptionCode;
+import com.example.minzok.global.error.authEntryPoint.CustomAuthenticationException;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.JwtException;
 import io.jsonwebtoken.Jwts;
@@ -55,7 +56,7 @@ public class JwtUtil {
         if (StringUtils.hasText(tokenValue) && tokenValue.startsWith(BEARER_PREFIX)) {
             return tokenValue.substring(7);
         }
-        throw new CustomRuntimeException(ExceptionCode.CANT_FIND_TOKEN);
+        throw new CustomAuthenticationException(ExceptionCode.CANT_FIND_TOKEN);
     }
 
     public Claims extractClaims(String token) {
