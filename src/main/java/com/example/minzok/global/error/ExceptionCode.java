@@ -11,6 +11,7 @@ public enum ExceptionCode implements ErrorCode{
 
     VALID_EXCEPTION(HttpStatus.BAD_REQUEST, "VALID_EXCEPTION가 발생했습니다, 인텔리제이 로그를 확인해주세요"),
     RUNTIME_EXCEPTION(HttpStatus.UNAUTHORIZED, "RUNTIME_EXCEPTION가 발생했습니다, 인텔리제이 로그를 확인해주세요"),
+    DUPLICATE_SAME_NAME(HttpStatus.FORBIDDEN, "같은 이름의 값의 입력이 의심됩니다, 인텔리제이 로그를 확인해주세요."),
     CANT_FIND_MEMBER(HttpStatus.NOT_FOUND, "해당 유저를 찾을 수 없습니다."),
     CANT_FIND_STORE(HttpStatus.NOT_FOUND, "해당 가게를 찾을 수 없습니다."),
     CANT_FIND_ADDRESS(HttpStatus.NOT_FOUND, "해당 주소를 찾을 수 없습니다."),
