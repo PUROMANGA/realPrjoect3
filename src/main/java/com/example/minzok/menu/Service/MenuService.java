@@ -71,6 +71,7 @@ public class MenuService {
      */
 
     @Secured({"ROLE_MANAGER"})
+    @Transactional
     public void deleteMenuService(Long menuid, Long storeId, String email) {
         menuHandler.findMemberAndException(email);
         storeRepository.findById(storeId).orElseThrow(() -> new RuntimeException("가게가 없습니다"));
