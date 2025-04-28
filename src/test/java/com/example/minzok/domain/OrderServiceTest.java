@@ -28,6 +28,7 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.test.util.ReflectionTestUtils;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.util.List;
 import java.util.Optional;
@@ -133,9 +134,10 @@ public class OrderServiceTest {
     // 영업 시간이 아닐 때 주문 테스트
     @Test
     void createOrder_영업시간이아님() {
+
         // Given
         store.setOpenTime(LocalTime.of(10, 0)); // 오전 10시
-        store.setCloseTime(LocalTime.of(18, 0)); // 오후 6시
+        store.setCloseTime(LocalTime.of(10, 0)); // 오후 6시
         when(memberRepository.findById(1L)).thenReturn(Optional.of(member));
         when(storeRepository.findById(1L)).thenReturn(Optional.of(store));
         when(menuRepository.findById(1L)).thenReturn(Optional.of(menu));

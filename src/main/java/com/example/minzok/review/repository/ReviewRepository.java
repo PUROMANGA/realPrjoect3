@@ -12,10 +12,11 @@ import java.util.List;
 @Repository
 public interface ReviewRepository extends JpaRepository<Review, Long> {
 
-    @Query(value = "select id, contents, rating, store_id, creat_time, modified_time from reviews where rating between ? and ? order by creat_time desc", nativeQuery = true)
+
+    @Query("select r from Review r where r.rating between ?1 and ?2 order by r.creatTime desc")
     List<Review> searchFindByRating(int min, int max);
 
-    @Query(value = "select id, contents, rating, store_id, creat_time, modified_time from reviews where store_id = ? order by creat_time desc", nativeQuery = true)
+    @Query("SELECT r FROM Review r WHERE r.store.id = :storeId ORDER BY r.creatTime DESC")
     List<Review> findAllByStoreId(Long storeId);
 
     default Review findByIdOrElseThrow(Long id) {
