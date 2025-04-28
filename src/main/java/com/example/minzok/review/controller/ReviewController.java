@@ -33,17 +33,29 @@ public class ReviewController {
     private final StoreRepository storeRepository;
     private final OrderRepository orderRepository;
 
+    /**
+     * 리뷰 생성
+     * @param request
+     * @param storeId
+     * @param orderId
+     * @param myUserDetail
+     * @return
+     */
     @PostMapping("/{storeId}/{orderId}")
     public ResponseEntity<ReviewResponseDto> saveReview(@RequestBody ReviewSaveRequestDto request, @PathVariable Long storeId, @PathVariable Long orderId, @AuthenticationPrincipal MyUserDetail myUserDetail) {
 
-        Member findMember = memberRepository.findMemberByEmail(myUserDetail.getUsername()).orElseThrow(() -> new CustomRuntimeException(ExceptionCode.REVIEW_MEMBER_NOT_FOUND));;
-        Store findStore = storeRepository.findById(storeId).orElseThrow(() -> new CustomRuntimeException(ExceptionCode.REVIEW_STORE_NOT_FOUND));;
-        Order findOrder = orderRepository.findById(orderId).orElseThrow(() -> new CustomRuntimeException(ExceptionCode.REVIEW_ORDER_NOT_FOUND));;
+        Member findMember = memberRepository.findMemberByEmail(myUserDetail.getUsername()).orElseThrow(() -> new CustomRuntimeException(ExceptionCode.CANT_FIND_MEMBER));;
+        Store findStore = storeRepository.findById(storeId).orElseThrow(() -> new CustomRuntimeException(ExceptionCode.CANT_FIND_STORE));;
+        Order findOrder = orderRepository.findById(orderId).orElseThrow(() -> new CustomRuntimeException(ExceptionCode.CANT_FIND_ORDER));;
         ReviewResponseDto reviewResponseDto = reviewService.saveReview(findMember, findStore, findOrder, request.getContents(), request.getRating());
 
         return new ResponseEntity<>(reviewResponseDto, HttpStatus.CREATED);
     }
 
+    /**
+     * 리뷰 전체 조회
+     * @return
+     */
     @GetMapping
     public ResponseEntity<List<ReviewResponseDto>> findAll() {
 
@@ -52,6 +64,11 @@ public class ReviewController {
         return new ResponseEntity<>(reviewResponseDto, HttpStatus.OK);
     }
 
+    /**
+     * 상점별 리뷰 조회
+     * @param storeId
+     * @return
+     */
     @GetMapping("/{storeId}")
     public ResponseEntity<List<ReviewResponseDto>> findAllByStoreId(@PathVariable Long storeId) {
 
@@ -61,6 +78,12 @@ public class ReviewController {
 
     }
 
+    /**
+     * 리뷰 평점 검색 조회
+     * @param min
+     * @param max
+     * @return
+     */
     @GetMapping("/search")
     public ResponseEntity<List<ReviewResponseDto>> searchFindByRating(
             @RequestParam(defaultValue = "1") int min,
@@ -71,6 +94,13 @@ public class ReviewController {
         return new ResponseEntity<>(reviewResponseDto, HttpStatus.OK);
     }
 
+    /**
+     * 리뷰 수정
+     * @param id
+     * @param request
+     * @param myUserDetail
+     * @return
+     */
     @PatchMapping("/{id}")
     public ResponseEntity<ReviewResponseDto> updateReview(@PathVariable Long id, @RequestBody ReviewUpdateRequestDto request, @AuthenticationPrincipal MyUserDetail myUserDetail) {
 
@@ -82,6 +112,12 @@ public class ReviewController {
         return new ResponseEntity<>(reviewResponseDto, HttpStatus.OK);
     }
 
+    /**
+     * 리뷰 삭제
+     * @param id
+     * @param myUserDetail
+     * @return
+     */
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> deleteReview(@PathVariable Long id, @AuthenticationPrincipal MyUserDetail myUserDetail) {
 
