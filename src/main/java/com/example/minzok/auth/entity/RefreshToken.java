@@ -1,6 +1,7 @@
 package com.example.minzok.auth.entity;
 
 import com.example.minzok.global.base_entity.BaseEntity;
+import com.example.minzok.member.entity.Member;
 import jakarta.persistence.*;
 import lombok.Getter;
 
@@ -8,8 +9,8 @@ import java.time.LocalDateTime;
 
 @Getter
 @Entity
-@Table(name = "blacklisttokens")
-public class BlackListToken extends BaseEntity {
+@Table(name = "refreshtokens")
+public class RefreshToken extends BaseEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -21,15 +22,21 @@ public class BlackListToken extends BaseEntity {
     @Column(nullable = false)
     private LocalDateTime expireDate;
 
-    protected BlackListToken() {
+    @Column(nullable = false)
+    private String email;
+
+    protected RefreshToken() {
     }
 
-    private BlackListToken(String token, LocalDateTime expireDate) {
+    private RefreshToken(String token, LocalDateTime expireDate, String email) {
         this.token = token;
         this.expireDate = expireDate;
+        this.email = email;
     }
 
-    public static BlackListToken of(String token, LocalDateTime expireDate){
-        return new BlackListToken(token, expireDate);
+    public static RefreshToken of(String token, LocalDateTime expireDate, String email){
+        return new RefreshToken(token, expireDate, email);
     }
+
+
 }
