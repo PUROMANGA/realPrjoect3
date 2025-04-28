@@ -21,8 +21,17 @@ import java.util.Optional;
 public class ReviewService {
 
     private final ReviewRepository reviewRepository;
-    private final MemberRepository memberRepository;
+//    private final MemberRepository memberRepository;
 
+    /**
+     * 리뷰 생성
+     * @param member
+     * @param store
+     * @param order
+     * @param contents
+     * @param rating
+     * @return
+     */
     public ReviewResponseDto saveReview(Member member, Store store, Order order, String contents, int rating) {
 
         Review review = new Review(member, store, order, contents, rating);
@@ -33,32 +42,55 @@ public class ReviewService {
 
     }
 
+    /**
+     * 리뷰 전체 조회
+     * @return
+     */
     public List<ReviewResponseDto> findAll() {
         return reviewRepository.findAll().stream().map(ReviewResponseDto::toDto).toList();
     }
 
+    /**
+     * 상점별 리뷰 조회
+     * @param storeId
+     * @return
+     */
     public List<ReviewResponseDto> findAllByStoreId(Long storeId) {
         return reviewRepository.findAllByStoreId(storeId).stream().map(ReviewResponseDto::toDto).toList();
     }
 
+    /**
+     * 리뷰 평점 검색 조회
+     * @param min
+     * @param max
+     * @return
+     */
     public List<ReviewResponseDto> searchFindByRating(int min, int max) {
         return reviewRepository.searchFindByRating(min, max).stream().map(ReviewResponseDto::toDto).toList();
     }
 
-    public ReviewResponseDto findById(Long id) {
+//    public ReviewResponseDto findById(Long id) {
+//
+//        Review findReview = reviewRepository.findByIdOrElseThrow(id);
+//
+//        return new ReviewResponseDto(findReview.getId(), findReview.getContents(), findReview.getRating(), findReview.getCreatTime(), findReview.getModifiedTime());
+//
+//    }
 
-        Review findReview = reviewRepository.findByIdOrElseThrow(id);
-
-        return new ReviewResponseDto(findReview.getId(), findReview.getContents(), findReview.getRating(), findReview.getCreatTime(), findReview.getModifiedTime());
-
-    }
-
+    /**
+     * 리뷰 수정
+     * @param id
+     * @param contents
+     * @param rating
+     * @param memberEmail
+     * @return
+     */
     @Transactional
     public ReviewResponseDto updateReview(Long id, String contents, int rating, String memberEmail) {
 
 
         Review findReview = reviewRepository.findByIdOrElseThrow(id);
-        Optional<Member> findMember = memberRepository.findMemberByEmail(memberEmail);
+//        Optional<Member> findMember = memberRepository.findMemberByEmail(memberEmail);
 
         if(!findReview.getMember().getEmail().equals(memberEmail)) {
             throw new CustomRuntimeException(ExceptionCode.REVIEW_UPDATE_UNAUTHORIZED);
@@ -69,9 +101,14 @@ public class ReviewService {
         return new ReviewResponseDto(id, contents, rating, findReview.getCreatTime(), findReview.getModifiedTime());
     }
 
+    /**
+     * 리뷰 삭제
+     * @param id
+     * @param memberEmail
+     */
     public void deleteReview(Long id, String memberEmail) {
         Review findReview = reviewRepository.findByIdOrElseThrow(id);
-        Optional<Member> findMember = memberRepository.findMemberByEmail(memberEmail);
+//        Optional<Member> findMember = memberRepository.findMemberByEmail(memberEmail);
 
         if(!findReview.getMember().getEmail().equals(memberEmail)) {
             throw new CustomRuntimeException(ExceptionCode.REVIEW_DELETE_UNAUTHORIZED);

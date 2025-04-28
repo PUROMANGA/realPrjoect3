@@ -114,7 +114,6 @@ public class OrderServiceTest {
         assertEquals(1L, response.getOrderId());
         assertEquals(30000L, response.getTotalPrice());
         assertEquals(OrderStatus.WAITING.name(), response.getOrderStatus());
-
     }
 
     // 최소 주문 금액 미달 테스트
