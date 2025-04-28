@@ -26,6 +26,7 @@ import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.anyLong;
 import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.BDDMockito.given;
+import static org.mockito.Mockito.lenient;
 
 @ExtendWith(MockitoExtension.class)
 
@@ -78,7 +79,6 @@ public class StoreServiceHandlerTest {
 
         //given
         given(storeRepository.findById(anyLong())).willReturn(Optional.empty());
-        given(memberRepository.findMemberByEmail(anyString())).willReturn(Optional.of(member));
 
         //when
 
@@ -112,7 +112,7 @@ public class StoreServiceHandlerTest {
                 LocalDate.of(1995, 4, 24)
         );
 
-        given(memberRepository.findMemberByEmail(anyString())).willReturn(Optional.of(anotherMember));
+        lenient().when(memberRepository.findMemberByEmail(anyString())).thenReturn(Optional.of(anotherMember));
 
         //when
 
@@ -134,17 +134,12 @@ public class StoreServiceHandlerTest {
     public void youCanUpdateStoreInterface() {
 
         //given
-
-
         given(storeRepository.findById(anyLong())).willReturn(Optional.of(store));
-        given(memberRepository.findMemberByEmail(anyString())).willReturn(Optional.of(member));
 
         //when
-
         Store result = storeServiceHandler.foundStoreAndException(store.getId(), member.getEmail());
 
         //then
-
         assertNotNull(result);
     }
 
