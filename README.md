@@ -41,7 +41,7 @@ Environoment
 
 Development
 
-<img src="https://img.shields.io/badge/java-007396?style=for-the-badge&logo=&logoColor=white"> <img src="https://img.shields.io/badge/OpenJdk17-000000?style=for-the-badge&logo=openjdk&logoColor=white"> 
+<img src="https://img.shields.io/badge/java-007396?style=for-the-badge&logo=java&logoColor=white"> <img src="https://img.shields.io/badge/OpenJdk17-000000?style=for-the-badge&logo=openjdk&logoColor=white"> 
 
 Frmaework
 
