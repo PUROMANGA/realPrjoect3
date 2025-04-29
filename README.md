@@ -1,10 +1,5 @@
 # ▶️[Spring 6기] 아웃소싱 프로젝트
 
-* 사용 버전 : JDK version 17
-
-* 기술 스택 : Github, Git, IntelliJ, Notion,  ERD Cloud, SpringBoot
-
-* 사용 언어 : Java, JavaScript, MySql
 
 ------
 
@@ -35,6 +30,30 @@
  4. 주문
 
  5. 리뷰
+
+------
+
+## Stacks
+
+Environoment
+
+ <img src="https://img.shields.io/badge/Intellij-000000?style=for-the-badge&logo=intellijidea&logoColor=white"> <img src="https://img.shields.io/badge/git-F05032?style=for-the-badge&logo=git&logoColor=white"> <img src="https://img.shields.io/badge/Postman-FF6C37?style=for-the-badge&logo=Postman&logoColor=white">
+
+Development
+
+<img src="https://img.shields.io/badge/java-007396?style=for-the-badge&logo=java&logoColor=white"> <img src="https://img.shields.io/badge/OpenJdk17-000000?style=for-the-badge&logo=openjdk&logoColor=white"> 
+
+Frmaework
+
+<img src="https://img.shields.io/badge/spring-6DB33F?style=for-the-badge&logo=spring&logoColor=white"> 
+
+DB
+
+<img src="https://img.shields.io/badge/mysql-4479A1?style=for-the-badge&logo=mysql&logoColor=white"> <img src="https://img.shields.io/badge/Redis-FF4438?style=for-the-badge&logo=redis&logoColor=white"> 
+
+Communication
+
+<img src="https://img.shields.io/badge/slack-4A154B?style=for-the-badge&logo=slack&logoColor=white"> <img src="https://img.shields.io/badge/notion-333333?style=for-the-badge&logo=notion&logoColor=white"> <img src="https://img.shields.io/badge/github-181717?style=for-the-badge&logo=github&logoColor=white"> 
 
 ------
 
