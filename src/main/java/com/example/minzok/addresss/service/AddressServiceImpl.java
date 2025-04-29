@@ -81,8 +81,6 @@ public class AddressServiceImpl implements AddressService {
             address.updateAddressType(AddressType.NORMAL);
         }
 
-        addressRepository.flush();
-
         selected.updateAddressType(AddressType.DEFAULT);
 
         return addressList.stream().map(AddressResponseDto::toDto).toList();
