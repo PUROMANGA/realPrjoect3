@@ -132,4 +132,18 @@ public class OrderService {
                         .collect(Collectors.toList()))
                 .build();
     }
+
+    // 주문 삭제
+    @Transactional
+    public void deleteOrder(Long orderId, Long memberId) {
+        Order order = orderRepository.findById(orderId)
+                .orElseThrow(() -> new CustomRuntimeException(ExceptionCode.CANT_FIND_ORDER));
+
+        // 주문자 본인만 삭제 가능하도록 체크 (옵션)
+        if (!order.getMember().getId().equals(memberId)) {
+            throw new CustomRuntimeException(ExceptionCode.NO_EDIT_PERMISSION);
+        }
+
+        orderRepository.delete(order);
+    }
 }

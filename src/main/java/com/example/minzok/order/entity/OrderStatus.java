@@ -6,7 +6,7 @@ public enum OrderStatus {
     /**
      WAITING: 대기 상태,
      CONFIRM: 수락,
-     COOKGIN: 조리 중,
+     COOKING: 조리 중,
      DELIVERING: 배달 중,
      COMPLETED: 완료.
      */

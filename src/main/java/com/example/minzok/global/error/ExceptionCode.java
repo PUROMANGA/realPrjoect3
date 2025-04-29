@@ -15,6 +15,7 @@ public enum ExceptionCode implements ErrorCode{
     CANT_FIND_MEMBER(HttpStatus.NOT_FOUND, "해당 유저를 찾을 수 없습니다."),
     CANT_FIND_STORE(HttpStatus.NOT_FOUND, "해당 가게를 찾을 수 없습니다."),
     CANT_FIND_ADDRESS(HttpStatus.NOT_FOUND, "해당 주소를 찾을 수 없습니다."),
+    CANT_FIND_ORDER(HttpStatus.NOT_FOUND, "해당 주문을 찾을 수 없습니다."),
     CANT_FIND_MENU(HttpStatus.NOT_FOUND, "해당 메뉴를 찾을 수 없습니다."),
     CANT_FIND_ORDER(HttpStatus.NOT_FOUND, "해당 주문을 찾을 수 없습니다."),
     NO_EDIT_PERMISSION(HttpStatus.FORBIDDEN, "수정 권한이 없습니다."),
