@@ -17,7 +17,6 @@ public enum ExceptionCode implements ErrorCode{
     CANT_FIND_ADDRESS(HttpStatus.NOT_FOUND, "해당 주소를 찾을 수 없습니다."),
     CANT_FIND_ORDER(HttpStatus.NOT_FOUND, "해당 주문을 찾을 수 없습니다."),
     CANT_FIND_MENU(HttpStatus.NOT_FOUND, "해당 메뉴를 찾을 수 없습니다."),
-    CANT_FIND_ORDER(HttpStatus.NOT_FOUND, "해당 주문을 찾을 수 없습니다."),
     NO_EDIT_PERMISSION(HttpStatus.FORBIDDEN, "수정 권한이 없습니다."),
     NO_HAVE_PERMISSION(HttpStatus.FORBIDDEN, "권한이 없습니다."),
     DUPLICATE_EMAIL(HttpStatus.CONFLICT, "이미 사용 중인 이메일입니다."),
