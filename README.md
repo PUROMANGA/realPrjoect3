@@ -1,5 +1,11 @@
 # ▶️[Spring 6기] 아웃소싱 프로젝트
 
+## 팀 구성
+| 역할 | 팀장 | 팀원 | 팀원 | 팀원 | 팀원 |
+|:-------------:|:-------------:|:-------------:|:-------------:|:-------------:|:-------------:|
+|이름|진형국|김윤범|이종현|류경선|김준영|
+|GitHub|PUROMANGA|Kimyoonbeom|Jong Hyeon Lee|RKS-t|idkimjunyng|
+|기술블로그|[형국velog](https://velog.io/@puromanga41/posts)|[윤범velog](https://velog.io/@kimybeom/posts)|[종현velog](https://velog.io/@ljh7367)|[경선tistory](https://rudtjs2.tistory.com)|[준영tistory](https://kimjunyng.tistory.com)|
 
 ------
 
