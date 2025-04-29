@@ -121,7 +121,8 @@
 ![image](https://github.com/user-attachments/assets/0631bf47-cf06-40b3-b721-8e1125fc3733)
 
 
-
+### 디렉토리
+<pre> 
 
 └─src
     ├─main
@@ -366,4 +367,6 @@
                         └─member
                             └─service
                                     MemberServiceTest.java
+  </pre>
+ ----
 
