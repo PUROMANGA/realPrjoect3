@@ -1,12 +1,19 @@
 package com.example.minzok.store.service;
 
-import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
-import org.springframework.stereotype.Service;
+import com.example.minzok.store.dto.*;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Slice;
 
-@Service
-@Slf4j
-@RequiredArgsConstructor
+public interface StoreService {
 
-public class StoreService {
+    StoreMemberDto createStoreService(StoreRequestDto storeRequestDto, String email);
+
+    StoreResponseDto patchStore(StoreModifyDto storeModifyDto, Long storeId, String email);
+
+    void deleteStoreService(Long storeId, String email);
+
+    Slice<OnlyStoreResponseDto> findStorePage(String keyword, Pageable pageable);
+
+    Slice<StoreResponseDto> findOneStore(Long storeId, Pageable pageable);
+
 }

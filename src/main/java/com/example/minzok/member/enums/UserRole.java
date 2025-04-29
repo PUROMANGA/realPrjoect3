@@ -1,7 +1,5 @@
 package com.example.minzok.member.enums;
 
 public enum UserRole {
-    USER, MANAGER, ADMIN
-
-
+    USER, MANAGER
 }

@@ -1,5 +1,8 @@
 package com.example.minzok.global.jwt;
 
+import com.example.minzok.global.error.CustomRuntimeException;
+import com.example.minzok.global.error.ExceptionCode;
+import com.example.minzok.global.error.authEntryPoint.CustomAuthenticationException;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.JwtException;
 import io.jsonwebtoken.Jwts;
@@ -12,6 +15,8 @@ import org.springframework.stereotype.Component;
 import org.springframework.util.StringUtils;
 
 import java.security.Key;
+import java.time.LocalDateTime;
+import java.time.ZoneId;
 import java.util.Base64;
 import java.util.Date;
 
@@ -51,7 +56,7 @@ public class JwtUtil {
         if (StringUtils.hasText(tokenValue) && tokenValue.startsWith(BEARER_PREFIX)) {
             return tokenValue.substring(7);
         }
-        throw new JwtException("Not Found Token");
+        throw new CustomAuthenticationException(ExceptionCode.CANT_FIND_TOKEN);
     }
 
     public Claims extractClaims(String token) {
@@ -62,6 +67,15 @@ public class JwtUtil {
                 .getBody();
     }
 
+    public boolean validateToken(String token) {
+        try {
+            Jwts.parserBuilder().setSigningKey(key).build().parseClaimsJws(token);
+            return true;
+        } catch (JwtException | IllegalArgumentException e) {
+            return false;
+        }
+    }
+
     public String createRefreshToken(String email) {
         Date date = new Date();
         return Jwts.builder()
@@ -70,6 +84,12 @@ public class JwtUtil {
                 .setIssuedAt(date)
                 .signWith(key, signatureAlgorithm)
                 .compact();
+    }
+
+    public LocalDateTime extractExpiration(String token) {
+        Claims claims = extractClaims(token);
+        Date expiration = claims.getExpiration();
+        return LocalDateTime.ofInstant(expiration.toInstant(), ZoneId.systemDefault());
     }
 
 }

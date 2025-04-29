@@ -19,7 +19,7 @@ public class MyUserDetail implements UserDetails {
 
     public MyUserDetail(Member member){
         this.member = member;
-        this.address = member.getAddress().stream()
+        this.address = member.getAddresses().stream()
                 .filter(addr -> addr.getAddressType() == AddressType.DEFAULT)
                 .findFirst()
                 .map(Address::getAddressInfo)
@@ -40,6 +40,10 @@ public class MyUserDetail implements UserDetails {
 
     public String getName(){
         return member.getName();
+    }
+
+    public Long getMemberId(){
+        return member.getId();
     }
 
 

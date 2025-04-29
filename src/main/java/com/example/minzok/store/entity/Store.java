@@ -1,19 +1,21 @@
 package com.example.minzok.store.entity;
 
 import com.example.minzok.global.base_entity.BaseEntity;
+import com.example.minzok.member.entity.Member;
+import com.example.minzok.menu.Entity.Menu;
+import com.example.minzok.store.dto.StoreModifyDto;
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
-import lombok.RequiredArgsConstructor;
+import lombok.*;
 
-import java.time.LocalDateTime;
+import java.time.LocalTime;
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
-@Data
+@Getter
+@Setter
 @RequiredArgsConstructor
 @AllArgsConstructor
-@Table(name = "Store")
 
 public class Store extends BaseEntity {
 
@@ -22,16 +24,65 @@ public class Store extends BaseEntity {
     private Long id;
 
     @Column(nullable = false, unique = true)
-    private String Store_name;
+    private String storeName;
 
     @Column(nullable = false)
-    private String Store_content;
+    private String storeContent;
 
     @Column(nullable = false)
-    private LocalDateTime openTime;
+    private LocalTime openTime;
 
     @Column(nullable = false)
-    private LocalDateTime closeTime;
+    private LocalTime closeTime;
 
-    private int Minimum_order_amount;
+    private int minimumOrderAmount;
+
+    @Enumerated(EnumType.STRING)
+    @Column(nullable = false)
+    private StoreStatus storeStatus;
+
+    @OneToMany(mappedBy = "store")
+    private List<Menu> menus = new ArrayList<>();
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "members_id")
+    private Member member;
+
+    public Store(Long id, String storeName, String storeContent, LocalTime openTime, LocalTime closeTime, int minimumOrderAmount, StoreStatus storeStatus, Member member) {
+        this.id = id;
+        this.storeName = storeName;
+        this.storeContent = storeContent;
+        this.openTime = openTime;
+        this.closeTime = closeTime;
+        this.minimumOrderAmount = minimumOrderAmount;
+        this.storeStatus = storeStatus;
+        this.member = member;
+    }
+
+    public Store(String storeName, String storeContent, LocalTime openTime, LocalTime closeTime, int minimumOrderAmount, Member member) {
+        this.storeName = storeName;
+        this.storeContent = storeContent;
+        this.openTime = openTime;
+        this.closeTime = closeTime;
+        this.minimumOrderAmount = minimumOrderAmount;
+        this.member = member;
+    }
+
+    public Store(String storeName, String storeContent, LocalTime openTime, LocalTime closeTime, int minimumOrderAmount, StoreStatus storeStatus) {
+        this.storeName = storeName;
+        this.storeContent = storeContent;
+        this.openTime = openTime;
+        this.closeTime = closeTime;
+        this.minimumOrderAmount = minimumOrderAmount;
+        this.storeStatus = storeStatus;
+    }
+
+    public void update(StoreModifyDto storeModifyDto) {
+        this.storeName = storeModifyDto.getStoreName();
+        this.storeContent = storeModifyDto.getStoreContent();
+        this.openTime = storeModifyDto.getOpenTime();
+        this.closeTime = storeModifyDto.getCloseTime();
+        this.minimumOrderAmount = storeModifyDto.getMinimumOrderAmount();
+        this.storeStatus = storeModifyDto.getStoreStatus();
+    }
 }

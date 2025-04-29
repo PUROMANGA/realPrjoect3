@@ -10,10 +10,7 @@ import java.time.LocalDate;
 
 @Getter
 @Entity
-@Table(name = "address", uniqueConstraints = @UniqueConstraint(
-        columnNames = {"member_id", "address_type"},
-        name = "uk_member_address_type")
-)
+@Table(name = "address")
 public class Address extends BaseEntity {
 
     @Id
@@ -36,23 +33,29 @@ public class Address extends BaseEntity {
 
     protected Address (){}
 
-    private Address(String lotNumberAddress, String detailAddress){
+    private Address(String lotNumberAddress, String detailAddress, AddressType addressType){
         this.lotNumberAddress = lotNumberAddress;
         this.detailAddress = detailAddress;
+        this.addressType = addressType;
     }
 
     private void initMember(Member member){
         this.member = member;
     }
 
-    public Address of(String lotNumberAddress, String detailAddress, Member member ){
-        Address address = new Address(lotNumberAddress, detailAddress);
+    public static Address of(String lotNumberAddress, String detailAddress, AddressType addressType, Member member ){
+        Address address = new Address(lotNumberAddress, detailAddress, addressType);
         address.initMember(member);
+        member.getAddresses().add(address);
         return address;
     }
 
     public String getAddressInfo(){
         return lotNumberAddress + " " + detailAddress;
+    }
+
+    public void updateAddressType(AddressType addressType){
+        this.addressType = addressType;
     }
 
 }

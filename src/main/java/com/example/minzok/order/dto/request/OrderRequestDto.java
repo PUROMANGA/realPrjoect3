@@ -8,5 +8,11 @@ public class OrderRequestDto {
     private Long storeId;
     private Long menuId;
     private int quantity;
+
+    public OrderRequestDto(Long storeId, Long menuId, int quantity) {
+        this.storeId = storeId;
+        this.menuId = menuId;
+        this.quantity = quantity;
+    }
 }
 
