@@ -21,7 +21,7 @@ import java.util.Map;
 @RequiredArgsConstructor
 public class MemberController {
 
-    private final MemberServㅂㅂㅂice memberService;
+    private final MemberService memberService;
 
     @GetMapping("/me")
     public ResponseEntity<MyMemberResponseDto> findMeByLoginUser(@AuthenticationPrincipal MyUserDetail myUserDetail){
