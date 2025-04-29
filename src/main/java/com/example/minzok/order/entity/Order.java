@@ -34,27 +34,28 @@ public class Order extends BaseEntity {
     @OneToMany(mappedBy = "order", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<OrderMenu> orderMenus = new ArrayList<>();
 
-    private int totalPrice;
+    private Long totalPrice;
     private LocalDateTime orderTime;
     private LocalDateTime statusChangedTime;
 
     @Enumerated(EnumType.STRING)
     private OrderStatus orderStatus;
 
-    public Order(Member member, Store store, List<OrderMenu> orderMenus){
+    public Order(Member member, Store store){
         this.member = member;
         this.store = store;
+        this.orderMenus = new ArrayList<>();
         this.orderTime = LocalDateTime.now();
         this.statusChangedTime = this.orderTime; // 처음 주문 시 동일하다.
-        this.orderStatus = OrderStatus.WAITING;
+        this.orderStatus = OrderStatus.WAITING;  // 필수로 WAITING으로 초기화를 해줘야 한다.
         calculateTotalPrice();
     }
 
     // 총 금액 계산 로직 추가
-    private void calculateTotalPrice() {
-        this.totalPrice = orderMenus.stream()
-                .mapToInt(om ->
-                        Math.toIntExact(om.getMenu().getPrice() * om.getQuantity()))
+    public void calculateTotalPrice() {
+        this.totalPrice = (long) orderMenus.stream()
+                .mapToLong(om ->
+                        om.getMenu().getPrice() * om.getQuantity())
                 .sum();
     }
 
@@ -68,4 +69,5 @@ public class Order extends BaseEntity {
         this.orderStatus = orderStatus;
         this.statusChangedTime = LocalDateTime.now();
     }
+
 }

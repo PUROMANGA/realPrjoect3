@@ -21,7 +21,7 @@ public class BlackListToken extends BaseEntity {
     @Column(nullable = false)
     private LocalDateTime expireDate;
 
-    public BlackListToken() {
+    protected BlackListToken() {
     }
 
     private BlackListToken(String token, LocalDateTime expireDate) {

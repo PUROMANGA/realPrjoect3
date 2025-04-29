@@ -4,6 +4,7 @@ import com.example.minzok.auth.service.BlackListTokenService;
 import com.example.minzok.auth.service.MyUserDetailService;
 import com.example.minzok.global.error.CustomRuntimeException;
 import com.example.minzok.global.error.ExceptionCode;
+import com.example.minzok.global.error.authEntryPoint.CustomAuthenticationException;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.ExpiredJwtException;
 import io.jsonwebtoken.JwtException;
@@ -11,13 +12,14 @@ import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
-import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.security.access.AccessDeniedException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.filter.OncePerRequestFilter;
 import com.example.minzok.global.jwt.JwtUtil;
-import com.example.minzok.global.jwt.MyUserDetail;
+import com.example.minzok.auth.entity.MyUserDetail;
 
 import java.io.IOException;
 import java.util.List;
@@ -58,16 +60,16 @@ public class SecurityFilter extends OncePerRequestFilter {
             String token = jwtUtil.substringToken(authToken);
 
             if (!jwtUtil.validateToken(token)) {
-                throw new CustomRuntimeException(ExceptionCode.TOKEN_INVALID);
+                throw new CustomAuthenticationException(ExceptionCode.TOKEN_INVALID);
             }
 
             if (blackListTokenService.isTokenBlacklisted(authToken)) {
-                throw new CustomRuntimeException(ExceptionCode.TOKEN_BLACKLISTED);
+                throw new CustomAuthenticationException(ExceptionCode.TOKEN_BLACKLISTED);
             }
 
             Claims claims = jwtUtil.extractClaims(token);
 
-            String email = claims.get("email", String.class);
+            String email = claims.getSubject();
             MyUserDetail myUserDetail1 = myUserDetailService.loadUserByUsername(email);
 
             UsernamePasswordAuthenticationToken authentication =
@@ -77,11 +79,13 @@ public class SecurityFilter extends OncePerRequestFilter {
 
             filterChain.doFilter(request, response);
         } catch (ExpiredJwtException e) {
-            throw new CustomRuntimeException(ExceptionCode.TOKEN_EXPIRED);
-        } catch (JwtException | IllegalArgumentException e) {
-            response.sendError(HttpServletResponse.SC_UNAUTHORIZED, "JWT 오류: " + e.getMessage());
+            throw new CustomAuthenticationException(ExceptionCode.TOKEN_EXPIRED);
+        } catch (CustomAuthenticationException e) {
+            throw e;
+        } catch (AuthenticationException | AccessDeniedException e) {
+            throw e;
         } catch (Exception e) {
-            response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, "인증 처리 중 서버 오류 발생");
+            throw new CustomAuthenticationException(ExceptionCode.INTERNAL_SERVER_ERROR);
         }
     }
 }

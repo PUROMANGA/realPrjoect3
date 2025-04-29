@@ -3,10 +3,9 @@ package com.example.minzok.store.entity;
 import com.example.minzok.global.base_entity.BaseEntity;
 import com.example.minzok.member.entity.Member;
 import com.example.minzok.menu.Entity.Menu;
-import com.example.minzok.store.dto.StoreRequestDto;
+import com.example.minzok.store.dto.StoreModifyDto;
 import jakarta.persistence.*;
 import lombok.*;
-import org.springframework.web.bind.annotation.PostMapping;
 
 import java.time.LocalTime;
 import java.util.ArrayList;
@@ -78,11 +77,12 @@ public class Store extends BaseEntity {
         this.storeStatus = storeStatus;
     }
 
-    public void update(StoreRequestDto storeRequestDto) {
-        this.storeName = storeRequestDto.getStoreName();
-        this.storeContent = storeRequestDto.getStoreContent();
-        this.openTime = storeRequestDto.getOpenTime();
-        this.closeTime = storeRequestDto.getCloseTime();
-        this.minimumOrderAmount = storeRequestDto.getMinimumOrderAmount();
+    public void update(StoreModifyDto storeModifyDto) {
+        this.storeName = storeModifyDto.getStoreName();
+        this.storeContent = storeModifyDto.getStoreContent();
+        this.openTime = storeModifyDto.getOpenTime();
+        this.closeTime = storeModifyDto.getCloseTime();
+        this.minimumOrderAmount = storeModifyDto.getMinimumOrderAmount();
+        this.storeStatus = storeModifyDto.getStoreStatus();
     }
 }

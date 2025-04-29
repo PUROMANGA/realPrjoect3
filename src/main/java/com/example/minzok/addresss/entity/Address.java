@@ -10,10 +10,7 @@ import java.time.LocalDate;
 
 @Getter
 @Entity
-@Table(name = "address", uniqueConstraints = @UniqueConstraint(
-        columnNames = {"member_id", "address_type"},
-        name = "uk_member_address_type")
-)
+@Table(name = "address")
 public class Address extends BaseEntity {
 
     @Id
@@ -49,6 +46,7 @@ public class Address extends BaseEntity {
     public static Address of(String lotNumberAddress, String detailAddress, AddressType addressType, Member member ){
         Address address = new Address(lotNumberAddress, detailAddress, addressType);
         address.initMember(member);
+        member.getAddresses().add(address);
         return address;
     }
 

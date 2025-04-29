@@ -22,10 +22,6 @@ public class Review extends BaseEntity {
     @Column(nullable = false)
     private int rating;
 
-//    @ManyToOne
-//    @JoinColumn(name = "menu_id")
-//    private Menu menu;
-
     @ManyToOne
     @JoinColumn(name = "member_id")
     private Member member;
@@ -38,13 +34,15 @@ public class Review extends BaseEntity {
     @JoinColumn(name = "order_id")
     private Order order;
 
-    public Review(String contents, int rating) {
+    public Review(Member member, Store store, Order order, String contents, int rating) {
+        this.member = member;
+        this.store = store;
+        this.order = order;
         this.contents = contents;
         this.rating = rating;
     }
 
     public Review() {
-
     }
 
     public void updateReview(Long id, String contents, int rating) {

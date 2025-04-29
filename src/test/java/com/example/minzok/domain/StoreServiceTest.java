@@ -6,8 +6,7 @@ import com.example.minzok.global.error.ExceptionCode;
 import com.example.minzok.member.entity.Member;
 import com.example.minzok.member.enums.UserRole;
 import com.example.minzok.member.repository.MemberRepository;
-import com.example.minzok.store.dto.StoreRequestDto;
-import com.example.minzok.store.dto.StoreResponseDto;
+import com.example.minzok.store.dto.*;
 import com.example.minzok.store.entity.Store;
 import com.example.minzok.store.entity.StoreStatus;
 import com.example.minzok.store.handler.StoreServiceHandler;
@@ -36,6 +35,8 @@ import java.util.Optional;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.*;
 import static org.mockito.BDDMockito.given;
+import static org.mockito.BDDMockito.willReturn;
+import static org.mockito.Mockito.doCallRealMethod;
 import static org.mockito.Mockito.verify;
 
 
@@ -66,13 +67,32 @@ public class StoreServiceTest {
             15000
     );
 
-    Member member = Member.of(
-            "example@email.com",
+    StoreModifyDto storeModifyDto = new StoreModifyDto(
+            "둘이먹다 하나가 죽은 호식이치킨",
+            "정말 죽어서 경찰서 갔다왔습니다.",
+            LocalTime.parse("09:00"),
+            LocalTime.parse("23:00"),
+            15000,
+            StoreStatus.OPEN
+    );
+
+    Member userMember = Member.of(
+            "example1@email.com",
             "pw1234",
             UserRole.USER,
             "SAM",
             "nickname",
             LocalDate.of(1995, 4, 24)
+    );
+
+    Member managerMember = new Member(
+            "example2@email.com",
+            "pw1234",
+            UserRole.MANAGER,
+            "SAM",
+            "nickname",
+            LocalDate.of(1995, 4, 24),
+            1
     );
 
     Store store = new Store(
@@ -83,7 +103,7 @@ public class StoreServiceTest {
             LocalTime.parse("23:00"),
             15000,
             StoreStatus.OPEN,
-            member
+            managerMember
     );
 
     Long storeId = 1L;
@@ -97,14 +117,11 @@ public class StoreServiceTest {
     public void cantFindMemberDuringPostingStore(){
 
         //given
-
-        String email = "example@email.com";
-
         given(memberRepository.findMemberByEmail(anyString())).willReturn(Optional.empty());
 
         //when
         CustomNullPointerException exception = assertThrows(CustomNullPointerException.class, () -> {
-            storeService.createStoreService(storeRequestDto, member.getEmail());
+            storeService.createStoreService(storeRequestDto, managerMember.getEmail());
         });
 
         //then
@@ -120,12 +137,12 @@ public class StoreServiceTest {
     public void limitStore(){
 
         //given
-        given(memberRepository.findMemberByEmail(anyString())).willReturn(Optional.of(member));
-        given(storeRepository.countByEmail(anyString())).willReturn(4);
+        given(memberRepository.findMemberByEmail(anyString())).willReturn(Optional.of(managerMember));
+        given(storeRepository.countByMemberEmail(anyString())).willReturn(4);
 
         //when
         CustomRuntimeException exception = assertThrows(CustomRuntimeException.class, () -> {
-            storeService.createStoreService(storeRequestDto, member.getEmail());
+            storeService.createStoreService(storeRequestDto, managerMember.getEmail());
         });
 
         //then
@@ -137,21 +154,18 @@ public class StoreServiceTest {
      */
 
     @Test
-    @DisplayName("등록하려는 유저가 권한이 USER일 경우")
-    public void userCantHaveAuth(){
+    @DisplayName("member의 countStore가 1 안올라감")
+    public void dontUpCountStoreInMember(){
 
         //given
-        given(memberRepository.findMemberByEmail(anyString())).willReturn(Optional.of(member));
-        given(storeRepository.countByEmail(anyString())).willReturn(3);
-        member.setUserRole(UserRole.USER);
+
+        int before = managerMember.getStoreCount();
 
         //when
-        CustomRuntimeException exception = assertThrows(CustomRuntimeException.class, () -> {
-            storeService.createStoreService(storeRequestDto, member.getEmail());
-        });
+        managerMember.increaseStoreCount();
 
         //then
-        assertEquals(ExceptionCode.NO_HAVE_PERMISSION.getMessage(), exception.getMessage());
+        assertNotEquals(managerMember.getStoreCount(), before);
     }
 
     /**
@@ -163,13 +177,12 @@ public class StoreServiceTest {
     public void canPostStore() {
 
         //given
-        given(memberRepository.findMemberByEmail(anyString())).willReturn(Optional.of(member));
-        given(storeRepository.countByEmail(anyString())).willReturn(3);
-        given(storeRepository.save(any(Store.class))).willReturn(store);
-        member.setUserRole(UserRole.MANAGER);
+        given(memberRepository.findMemberByEmail(anyString())).willReturn(Optional.of(managerMember));
+        given(storeRepository.countByMemberEmail(anyString())).willReturn(0);
+        given(storeServiceHandler.changeStoreStatus(any(Store.class))).willReturn(store);
 
         //when
-        StoreResponseDto result = storeService.createStoreService(storeRequestDto, member.getEmail());
+        StoreMemberDto result = storeService.createStoreService(storeRequestDto, managerMember.getEmail());
 
         //then
 
@@ -189,10 +202,28 @@ public class StoreServiceTest {
         given(storeRepository.save(any(Store.class))).willReturn(store);
 
         //when
-        StoreResponseDto result = storeService.patchStore(storeRequestDto, storeId, member.getEmail());
+        StoreResponseDto result = storeService.patchStore(storeModifyDto, storeId, managerMember.getEmail());
 
         //then
         assertNotNull(result);
+    }
+
+    /**
+     * deleteStoreService : 실패 테스트
+     */
+
+    @Test
+    @DisplayName("member의 countStore가 1 안 내려감")
+    public void decreaseStoreCount() {
+
+        //given
+
+        int count = managerMember.getStoreCount();
+        //when
+        managerMember.decreaseStoreCount();
+
+        //then
+        assertNotEquals(count, managerMember);
     }
 
     /**
@@ -201,15 +232,15 @@ public class StoreServiceTest {
 
     @Test
     @DisplayName("deleteStoreService 전체 흐름을 테스트 합니다")
-    public void deleteStoreServiceAllSteramTest() {
+    public void deleteStoreServiceAllStreamTest() {
 
         //given
+        given(memberRepository.findMemberByEmail(anyString())).willReturn(Optional.of(managerMember));
         given(storeServiceHandler.foundStoreAndException(anyLong(), anyString())).willReturn((store));
-        given(storeRepository.save(any(Store.class))).willReturn(store);
+        doCallRealMethod().when(storeServiceHandler).deleteStoreStatus(any(Store.class));
 
         //when
-        storeService.deleteStoreService(storeId, member.getEmail());
-
+        storeService.deleteStoreService(storeId, managerMember.getEmail());
         verify(storeRepository).save(storeCaptor.capture());
         Store savedStore = storeCaptor.getValue();
 
@@ -223,7 +254,7 @@ public class StoreServiceTest {
 
     @Test
     @DisplayName("키워드로 검색했는데 키워드에 해당하는 검색 결과가 없을 때")
-    public void cantFindSerchResult() {
+    public void cantFindSearchResult() {
 
         String keyword = "치킨";
         Pageable pageable = PageRequest.of(0, 10);
@@ -248,7 +279,7 @@ public class StoreServiceTest {
 
     @Test
     @DisplayName("키워드로 검색했는데 키워드에 해당하는 검색 결과가 없을 때")
-    public void canFindSerchResult() {
+    public void canFindSearchResult() {
 
         String keyword = "치킨";
         Pageable pageable = PageRequest.of(0, 10);
@@ -260,7 +291,7 @@ public class StoreServiceTest {
 
         //when
 
-        Slice<StoreResponseDto> result = storeService.findStorePage(keyword, pageable);
+        Slice<OnlyStoreResponseDto> result = storeService.findStorePage(keyword, pageable);
 
         //then
         assertNotNull(result);

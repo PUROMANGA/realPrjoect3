@@ -2,19 +2,18 @@ package com.example.minzok.store.controller;
 
 
 import com.example.minzok.member.repository.MemberRepository;
-import com.example.minzok.store.dto.StoreRequestDto;
-import com.example.minzok.store.dto.StoreResponseDto;
+import com.example.minzok.store.dto.*;
 import com.example.minzok.store.service.StoreServiceImpl;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.apache.coyote.Response;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Slice;
 import org.springframework.data.web.PageableDefault;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
-import com.example.minzok.global.jwt.MyUserDetail;
+import com.example.minzok.auth.entity.MyUserDetail;
 
 import static org.springframework.data.domain.Sort.Direction.DESC;
 
@@ -37,9 +36,9 @@ public class StoreController {
      */
 
     @PostMapping
-    public ResponseEntity<StoreResponseDto> createStore(@RequestBody StoreRequestDto storeRequestDto,
-                                                        @AuthenticationPrincipal MyUserDetail myUserDetail) {
-        StoreResponseDto createStore = storeService.createStoreService(storeRequestDto, myUserDetail.getUsername());
+    public ResponseEntity<StoreMemberDto> createStore(@RequestBody @Validated StoreRequestDto storeRequestDto,
+                                                      @AuthenticationPrincipal MyUserDetail myUserDetail) {
+        StoreMemberDto createStore = storeService.createStoreService(storeRequestDto, myUserDetail.getUsername());
         return ResponseEntity.ok(createStore);
     }
 
@@ -52,10 +51,10 @@ public class StoreController {
      */
 
     @PatchMapping ("/{storeId}")
-    public ResponseEntity<StoreResponseDto> patchStore(@RequestBody StoreRequestDto storeRequestDto,
+    public ResponseEntity<StoreResponseDto> patchStore(@RequestBody @Validated StoreModifyDto storeModifyDto,
                                                        @PathVariable Long storeId,
                                                        @AuthenticationPrincipal MyUserDetail myUserDetail) {
-        return ResponseEntity.ok(storeService.patchStore(storeRequestDto,storeId, myUserDetail.getUsername()));
+        return ResponseEntity.ok(storeService.patchStore(storeModifyDto, storeId, myUserDetail.getUsername()));
     }
 
     /**
@@ -66,10 +65,10 @@ public class StoreController {
      */
 
     @DeleteMapping("/{storeId}")
-    public ResponseEntity<Void> deleteStore(@PathVariable Long storeId,
+    public ResponseEntity<String> deleteStore(@PathVariable Long storeId,
                                                         @AuthenticationPrincipal MyUserDetail myUserDetail) {
         storeService.deleteStoreService(storeId, myUserDetail.getUsername());
-        return ResponseEntity.ok().build();
+        return ResponseEntity.ok("가게 삭제가 완료되었습니다.");
     }
 
     /**
@@ -80,7 +79,7 @@ public class StoreController {
      */
 
     @GetMapping
-    public ResponseEntity<Slice<StoreResponseDto>> findStorePage
+    public ResponseEntity<Slice<OnlyStoreResponseDto>> findStorePage
             (@RequestParam String keyword,
              @PageableDefault(size = 10, sort = "creatTime", direction = DESC) Pageable pageable) {
         return ResponseEntity.ok(storeService.findStorePage(keyword, pageable));
@@ -98,5 +97,4 @@ public class StoreController {
      @PageableDefault(size = 10, sort = "creatTime", direction = DESC)Pageable pageable) {
         return ResponseEntity.ok(storeService.findOneStore(storeId, pageable));
     }
-
 }
