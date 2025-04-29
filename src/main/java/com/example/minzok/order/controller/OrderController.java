@@ -47,4 +47,13 @@ public class OrderController {
         return ResponseEntity.ok(response);
     }
 
+    // 주문 삭제
+    @DeleteMapping("/{orderId}")
+    public ResponseEntity<Void> deleteOrder(
+            @PathVariable Long orderId,
+            @AuthenticationPrincipal MyUserDetail myUserDetail
+    ) {
+        orderService.deleteOrder(orderId, myUserDetail.getMemberId());
+        return ResponseEntity.noContent().build();
+    }
 }

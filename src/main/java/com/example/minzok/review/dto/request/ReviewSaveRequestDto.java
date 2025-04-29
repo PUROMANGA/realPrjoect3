@@ -15,7 +15,5 @@ public class ReviewSaveRequestDto {
 
     @NotBlank(message = "리뷰 내용을 입력 해 주세요.")
     private String contents;
-    private Long orderId;
-    private Long storeId;
 
 }

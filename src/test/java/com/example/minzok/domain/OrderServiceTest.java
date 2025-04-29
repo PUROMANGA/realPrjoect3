@@ -55,6 +55,7 @@ public class OrderServiceTest {
     private Store store;
     private Menu menu;
     private OrderRequestDto orderRequestDto;
+    private Order order;
 
     @BeforeEach
     void setUp() {
@@ -136,7 +137,7 @@ public class OrderServiceTest {
     void createOrder_영업시간이아님() {
         // Given
         store.setOpenTime(LocalTime.of(10, 0)); // 오전 10시
-        store.setCloseTime(LocalTime.of(18, 0)); // 오후 6시
+        store.setCloseTime(LocalTime.of(10, 0)); // 오전 10시, 시간 주입 방법 확인 후 추가.
         when(memberRepository.findById(1L)).thenReturn(Optional.of(member));
         when(storeRepository.findById(1L)).thenReturn(Optional.of(store));
         when(menuRepository.findById(1L)).thenReturn(Optional.of(menu));
@@ -167,6 +168,7 @@ public class OrderServiceTest {
         assertEquals(OrderStatus.CONFIRM.name(), response.getOrderStatus());
         assertNotNull(response.getStatusChangedTime());
     }
+
     // 주문 상세 조회 테스트
     @Test
     void getOrderDetail_성공() {
