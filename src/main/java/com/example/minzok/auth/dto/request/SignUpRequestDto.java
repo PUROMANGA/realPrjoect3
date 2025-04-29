@@ -29,7 +29,6 @@ public class SignUpRequestDto {
     @NotBlank
     private String nickname;
 
-    @NotBlank
     private LocalDate birth;
 
     @NotBlank

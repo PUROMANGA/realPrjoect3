@@ -8,7 +8,7 @@ import com.example.minzok.addresss.repository.AddressRepository;
 import com.example.minzok.global.error.CustomNullPointerException;
 import com.example.minzok.global.error.CustomRuntimeException;
 import com.example.minzok.global.error.ExceptionCode;
-import com.example.minzok.global.jwt.MyUserDetail;
+import com.example.minzok.auth.entity.MyUserDetail;
 import com.example.minzok.member.entity.Member;
 import com.example.minzok.member.repository.MemberRepository;
 import lombok.RequiredArgsConstructor;
@@ -80,8 +80,6 @@ public class AddressServiceImpl implements AddressService {
         for (Address address : addressList) {
             address.updateAddressType(AddressType.NORMAL);
         }
-
-        addressRepository.flush();
 
         selected.updateAddressType(AddressType.DEFAULT);
 

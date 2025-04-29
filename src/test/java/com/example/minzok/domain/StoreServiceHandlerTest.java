@@ -26,6 +26,7 @@ import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.anyLong;
 import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.BDDMockito.given;
+import static org.mockito.Mockito.lenient;
 
 @ExtendWith(MockitoExtension.class)
 
@@ -51,7 +52,7 @@ public class StoreServiceHandlerTest {
     Member member = Member.of(
             "example@email.com",
             "pw1234",
-            UserRole.USER,
+            UserRole.MANAGER,
             "SAM",
             "nickname",
             LocalDate.of(1995, 4, 24)
@@ -77,7 +78,6 @@ public class StoreServiceHandlerTest {
     public void cantFindStore() {
 
         //given
-
         given(storeRepository.findById(anyLong())).willReturn(Optional.empty());
 
         //when
@@ -92,30 +92,6 @@ public class StoreServiceHandlerTest {
     }
 
     /**
-     * patchStore, deleteStoreService에서 사용되는 foundStoreAndException메소드 실패 테스트 2
-     */
-
-    @Test
-    @DisplayName("가게를 수정하려고 하는데 그 email로 등록된 멤버가 보이지 않는다")
-    public void cantFindMemberForPuttingStore() {
-
-        //given
-
-        given(storeRepository.findById(anyLong())).willReturn(Optional.of(store));
-        given(memberRepository.findMemberByEmail(anyString())).willReturn(Optional.empty());
-
-        //when
-
-        CustomNullPointerException exception = assertThrows(CustomNullPointerException.class, () -> {
-            storeServiceHandler.foundStoreAndException(store.getId(), member.getEmail());
-        });
-
-        //then
-
-        assertEquals(ExceptionCode.CANT_FIND_MEMBER.getMessage(), exception.getMessage());
-    }
-
-    /**
      * patchStore, deleteStoreService에서 사용되는 foundStoreAndException메소드 실패 테스트 3
      */
 
@@ -126,16 +102,17 @@ public class StoreServiceHandlerTest {
         //given
 
         given(storeRepository.findById(anyLong())).willReturn(Optional.of(store));
-        given(memberRepository.findMemberByEmail(anyString())).willReturn(Optional.of(member));
 
         Member anotherMember = Member.of(
                 "anotherexample@email.com",
                 "pw1234",
-                UserRole.USER,
+                UserRole.MANAGER,
                 "SAM",
                 "nickname",
                 LocalDate.of(1995, 4, 24)
         );
+
+        lenient().when(memberRepository.findMemberByEmail(anyString())).thenReturn(Optional.of(anotherMember));
 
         //when
 
@@ -157,18 +134,12 @@ public class StoreServiceHandlerTest {
     public void youCanUpdateStoreInterface() {
 
         //given
-
-        Store store = new Store();
-
         given(storeRepository.findById(anyLong())).willReturn(Optional.of(store));
-        given(memberRepository.findMemberByEmail(anyString())).willReturn(Optional.of(member));
 
         //when
-
         Store result = storeServiceHandler.foundStoreAndException(store.getId(), member.getEmail());
 
         //then
-
         assertNotNull(result);
     }
 

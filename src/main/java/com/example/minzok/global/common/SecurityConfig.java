@@ -3,6 +3,8 @@ package com.example.minzok.global.common;
 import com.example.minzok.auth.entity.BlackListToken;
 import com.example.minzok.auth.service.BlackListTokenService;
 import com.example.minzok.auth.service.MyUserDetailService;
+import com.example.minzok.global.error.authEntryPoint.CustomAccessDeniedHandler;
+import com.example.minzok.global.error.authEntryPoint.CustomAuthenticationEntryPoint;
 import com.example.minzok.global.jwt.JwtUtil;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
@@ -10,12 +12,14 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configurers.AuthorizeHttpRequestsConfigurer;
+import org.springframework.security.config.annotation.web.configurers.ExceptionHandlingConfigurer;
 import org.springframework.security.config.annotation.web.configurers.LogoutConfigurer;
 import org.springframework.security.config.annotation.web.configurers.SessionManagementConfigurer;
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.security.web.access.intercept.AuthorizationFilter;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
 @Configuration
@@ -23,6 +27,8 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 @RequiredArgsConstructor
 public class SecurityConfig {
 
+    private final CustomAccessDeniedHandler customAccessDeniedHandler;
+    private final CustomAuthenticationEntryPoint customAuthenticationEntryPoint;
     private final JwtUtil jwtUtil;
     private final MyUserDetailService myUserDetailService;
     private final BlackListTokenService blackListTokenService;
@@ -33,11 +39,13 @@ public class SecurityConfig {
                 .csrf(csrf -> csrf.disable())
                 .sessionManagement(this::configureSession)
                 .authorizeHttpRequests(this::configureAuthorization)
+                .exceptionHandling(this::configureExceptionHandling)
+                .logout(logout->logout.disable())
                 .addFilterBefore(new SecurityFilter(
                         jwtUtil,
                         myUserDetailService,
                         blackListTokenService
-                ), UsernamePasswordAuthenticationFilter.class)
+                ), AuthorizationFilter.class)
                 .build();
     }
 
@@ -47,23 +55,16 @@ public class SecurityConfig {
 
     private void configureAuthorization(AuthorizeHttpRequestsConfigurer<HttpSecurity>.AuthorizationManagerRequestMatcherRegistry auth) {
         auth
-                .requestMatchers("/login", "/signup").permitAll()
-                .requestMatchers("/profile","/stores").hasAnyRole("MANAGER", "ADMIN")
-                .requestMatchers("/").hasAnyRole("USER", "ADMIN")
-                .requestMatchers("/admin/**").hasRole("ADMIN")
+                .requestMatchers("/login", "/signup","logout", "/error").permitAll()
+                .requestMatchers("/stores/**").hasRole("MANAGER")
                 .anyRequest().authenticated();
     }
 
-//    private void configureLogout(LogoutConfigurer<HttpSecurity> logout) {
-//        logout.logoutUrl("/logout")
-//                .logoutSuccessHandler((request, response, authentication) -> {
-//                    response.setStatus(200);
-//                    response.sendRedirect("/login");
-//                })
-//                .invalidateHttpSession(true)
-//                .deleteCookies("JSESSIONID")
-//                .clearAuthentication(true);
-//    }
+    private void configureExceptionHandling(ExceptionHandlingConfigurer<HttpSecurity> exceptionHandling) {
+        exceptionHandling
+                .authenticationEntryPoint(customAuthenticationEntryPoint)
+                .accessDeniedHandler(customAccessDeniedHandler);
+    }
 
     @Bean
     public PasswordEncoder passwordEncoder() {

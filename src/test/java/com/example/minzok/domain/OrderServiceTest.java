@@ -28,6 +28,7 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.test.util.ReflectionTestUtils;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.util.List;
 import java.util.Optional;
@@ -114,7 +115,6 @@ public class OrderServiceTest {
         assertEquals(1L, response.getOrderId());
         assertEquals(30000L, response.getTotalPrice());
         assertEquals(OrderStatus.WAITING.name(), response.getOrderStatus());
-
     }
 
     // 최소 주문 금액 미달 테스트
@@ -135,6 +135,7 @@ public class OrderServiceTest {
     // 영업 시간이 아닐 때 주문 테스트
     @Test
     void createOrder_영업시간이아님() {
+
         // Given
         store.setOpenTime(LocalTime.of(10, 0)); // 오전 10시
         store.setCloseTime(LocalTime.of(10, 0)); // 오전 10시, 시간 주입 방법 확인 후 추가.
