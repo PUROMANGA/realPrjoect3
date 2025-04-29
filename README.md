@@ -119,3 +119,251 @@
 ## 테스트 코드(커버리지)
 
 ![image](https://github.com/user-attachments/assets/0631bf47-cf06-40b3-b721-8e1125fc3733)
+
+
+
+
+└─src
+    ├─main
+    │  ├─java
+    │  │  └─com
+    │  │      └─example
+    │  │          └─minzok
+    │  │              │  MinzokApplication.java
+    │  │              │
+    │  │              ├─addresss
+    │  │              │  ├─controller
+    │  │              │  │      AddressController.java
+    │  │              │  │
+    │  │              │  ├─dto
+    │  │              │  │      AddressRequestDto.java
+    │  │              │  │      AddressResponseDto.java
+    │  │              │  │
+    │  │              │  ├─entity
+    │  │              │  │      Address.java
+    │  │              │  │
+    │  │              │  ├─enums
+    │  │              │  │      AddressType.java
+    │  │              │  │
+    │  │              │  ├─repository
+    │  │              │  │      AddressRepository.java
+    │  │              │  │
+    │  │              │  └─service
+    │  │              │          AddressService.java
+    │  │              │          AddressServiceImpl.java
+    │  │              │
+    │  │              ├─auth
+    │  │              │  ├─controller
+    │  │              │  │      AuthController.java
+    │  │              │  │
+    │  │              │  ├─dto
+    │  │              │  │  ├─request
+    │  │              │  │  │      LoginRequestDto.java
+    │  │              │  │  │      SignUpRequestDto.java
+    │  │              │  │  │
+    │  │              │  │  └─response
+    │  │              │  │          TokenResponseDto.java
+    │  │              │  │
+    │  │              │  ├─entity
+    │  │              │  │      BlackListToken.java
+    │  │              │  │      MyUserDetail.java
+    │  │              │  │      RefreshToken.java
+    │  │              │  │
+    │  │              │  ├─repository
+    │  │              │  │      BlackListTokenRepository.java
+    │  │              │  │      RefreshTokenRepository.java
+    │  │              │  │
+    │  │              │  └─service
+    │  │              │          AuthService.java
+    │  │              │          BlackListTokenService.java
+    │  │              │          MyUserDetailService.java
+    │  │              │          RefreshTokenService.java
+    │  │              │
+    │  │              ├─global
+    │  │              │  ├─base_entity
+    │  │              │  │      BaseEntity.java
+    │  │              │  │
+    │  │              │  ├─common
+    │  │              │  │      QueryDslConfig.java
+    │  │              │  │      SecurityConfig.java
+    │  │              │  │      SecurityFilter.java
+    │  │              │  │
+    │  │              │  ├─error
+    │  │              │  │  │  CustomErrorResponse.java
+    │  │              │  │  │  CustomExceptionHandler.java
+    │  │              │  │  │  CustomNullPointerException.java
+    │  │              │  │  │  CustomRuntimeException.java
+    │  │              │  │  │  ErrorCode.java
+    │  │              │  │  │  ExceptionCode.java
+    │  │              │  │  │
+    │  │              │  │  └─authEntryPoint
+    │  │              │  │          CustomAccessDeniedHandler.java
+    │  │              │  │          CustomAuthenticationEntryPoint.java
+    │  │              │  │          CustomAuthenticationException.java
+    │  │              │  │
+    │  │              │  └─jwt
+    │  │              │          JwtUtil.java
+    │  │              │
+    │  │              ├─member
+    │  │              │  ├─controller
+    │  │              │  │      MemberController.java
+    │  │              │  │
+    │  │              │  ├─dto
+    │  │              │  │  ├─request
+    │  │              │  │  │      MemberDeleteRequestDto.java
+    │  │              │  │  │      MemberUpdateRequestDto.java
+    │  │              │  │  │
+    │  │              │  │  └─response
+    │  │              │  │          MemberStoreOrderCountDto.java
+    │  │              │  │          MyMemberResponseDto.java
+    │  │              │  │          OtherMemberResponseDto.java
+    │  │              │  │
+    │  │              │  ├─entity
+    │  │              │  │      Member.java
+    │  │              │  │
+    │  │              │  ├─enums
+    │  │              │  │      UserRole.java
+    │  │              │  │
+    │  │              │  ├─repository
+    │  │              │  │      MemberRepository.java
+    │  │              │  │
+    │  │              │  └─service
+    │  │              │          MemberService.java
+    │  │              │          MemberServiceImpl.java
+    │  │              │
+    │  │              ├─menu
+    │  │              │  ├─common
+    │  │              │  │      MenuHandler.java
+    │  │              │  │
+    │  │              │  ├─Controller
+    │  │              │  │      MenuController.java
+    │  │              │  │
+    │  │              │  ├─Dto
+    │  │              │  │  ├─Request
+    │  │              │  │  │      MenuChangeStauts.java
+    │  │              │  │  │      MenuRequestDto.java
+    │  │              │  │  │
+    │  │              │  │  └─Response
+    │  │              │  │          MenuResponseDto.java
+    │  │              │  │
+    │  │              │  ├─Entity
+    │  │              │  │      Menu.java
+    │  │              │  │      MenuStatus.java
+    │  │              │  │
+    │  │              │  ├─Repository
+    │  │              │  │      MenuRepository.java
+    │  │              │  │
+    │  │              │  └─Service
+    │  │              │          MenuService.java
+    │  │              │
+    │  │              ├─order
+    │  │              │  ├─aop
+    │  │              │  │      OrderLogging.java
+    │  │              │  │      OrderLoggingAspect.java
+    │  │              │  │
+    │  │              │  ├─controller
+    │  │              │  │      OrderController.java
+    │  │              │  │
+    │  │              │  ├─dto
+    │  │              │  │  ├─request
+    │  │              │  │  │      OrderRequestDto.java
+    │  │              │  │  │      OrderStatusRequestDto.java
+    │  │              │  │  │
+    │  │              │  │  └─response
+    │  │              │  │          OrderDetailResponseDto.java
+    │  │              │  │          OrderResponseDto.java
+    │  │              │  │          OrderStatusResponseDto.java
+    │  │              │  │
+    │  │              │  ├─entity
+    │  │              │  │      Order.java
+    │  │              │  │      OrderMenu.java
+    │  │              │  │      OrderStatus.java
+    │  │              │  │
+    │  │              │  ├─repository
+    │  │              │  │      OrderMenuRepository.java
+    │  │              │  │      OrderRepository.java
+    │  │              │  │
+    │  │              │  └─service
+    │  │              │          OrderService.java
+    │  │              │
+    │  │              ├─review
+    │  │              │  ├─controller
+    │  │              │  │      ReviewController.java
+    │  │              │  │
+    │  │              │  ├─dto
+    │  │              │  │  ├─request
+    │  │              │  │  │      ReviewSaveRequestDto.java
+    │  │              │  │  │      ReviewUpdateRequestDto.java
+    │  │              │  │  │
+    │  │              │  │  └─response
+    │  │              │  │          ReviewResponseDto.java
+    │  │              │  │
+    │  │              │  ├─entity
+    │  │              │  │      Review.java
+    │  │              │  │
+    │  │              │  ├─repository
+    │  │              │  │      ReviewRepository.java
+    │  │              │  │
+    │  │              │  └─service
+    │  │              │          ReviewService.java
+    │  │              │
+    │  │              └─store
+    │  │                  ├─common
+    │  │                  │      Common.java
+    │  │                  │
+    │  │                  ├─controller
+    │  │                  │      StoreController.java
+    │  │                  │
+    │  │                  ├─dto
+    │  │                  │      OnlyStoreResponseDto.java
+    │  │                  │      StoreMemberDto.java
+    │  │                  │      StoreModifyDto.java
+    │  │                  │      StoreRequestDto.java
+    │  │                  │      StoreResponseDto.java
+    │  │                  │
+    │  │                  ├─entity
+    │  │                  │      Store.java
+    │  │                  │      StoreFactory.java
+    │  │                  │      StoreStatus.java
+    │  │                  │
+    │  │                  ├─handler
+    │  │                  │      StoreServiceHandler.java
+    │  │                  │
+    │  │                  ├─repository
+    │  │                  │      CustomStoreRepository.java
+    │  │                  │      StoreRepository.java
+    │  │                  │      StoreRepositoryImpl.java
+    │  │                  │
+    │  │                  └─service
+    │  │                          StoreService.java
+    │  │                          StoreServiceImpl.java
+    │  │
+    │  └─resources
+    │          application.properties
+    │
+    └─test
+        └─java
+            └─com
+                └─example
+                    └─minzok
+                        │  MinzokApplicationTests.java
+                        │
+                        ├─address
+                        │      AddressServiceTest.java
+                        │
+                        ├─auth
+                        │  └─service
+                        │          AuthServiceTest.java
+                        │
+                        ├─domain
+                        │      MenuServiceHandlerTest.java
+                        │      MenuServiceTest.java
+                        │      OrderServiceTest.java
+                        │      ReviewServiceTest.java
+                        │      StoreServiceHandlerTest.java
+                        │      StoreServiceTest.java
+                        │
+                        └─member
+                            └─service
+                                    MemberServiceTest.java
+
